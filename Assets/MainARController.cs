@@ -1,11 +1,16 @@
 ﻿
 using System.Collections.Generic;
 using GoogleARCore;
-using GoogleARCore.Examples.Common;
 using UnityEngine;
+using deVoid.Utils;
 
 /// <summary>
-/// Controls the HelloAR example.
+/// Signal that is fired when a an anchor is created at the positon of a user tap
+/// </summary>
+public class AnchorCreated : ASignal<Anchor, TrackableHit>{}
+
+/// <summary>
+/// Controls the app.
 /// </summary>
 public class MainARController : MonoBehaviour
 {
@@ -20,24 +25,9 @@ public class MainARController : MonoBehaviour
     public GameObject DetectedPlanePrefab;
 
     /// <summary>
-    /// A model to place when a raycast from a user touch hits a plane.
-    /// </summary>
-    public GameObject AndyPlanePrefab;
-
-    /// <summary>
-    /// A model to place when a raycast from a user touch hits a feature point.
-    /// </summary>
-    public GameObject AndyPointPrefab;
-
-    /// <summary>
     /// A gameobject parenting UI for displaying the "searching for planes" snackbar.
     /// </summary>
     public GameObject SearchingForPlaneUI;
-
-    /// <summary>
-    /// The rotation in degrees need to apply to model when the Andy model is placed.
-    /// </summary>
-    private const float k_ModelRotation = 180.0f;
 
     /// <summary>
     /// A list to hold all planes ARCore is tracking in the current frame. This object is used across
@@ -94,30 +84,12 @@ public class MainARController : MonoBehaviour
                 Debug.Log("Hit at back of the current DetectedPlane");
             }
             else
-            {
-                // Choose the Andy model for the Trackable that got hit.
-                GameObject prefab;
-                if (hit.Trackable is FeaturePoint)
-                {
-                    prefab = AndyPointPrefab;
-                }
-                else
-                {
-                    prefab = AndyPlanePrefab;
-                }
-
-                // Instantiate Andy model at the hit pose.
-                var andyObject = Instantiate(prefab, hit.Pose.position, hit.Pose.rotation);
-
-                // Compensate for the hitPose rotation facing away from the raycast (i.e. camera).
-                andyObject.transform.Rotate(0, k_ModelRotation, 0, Space.Self);
-
+            {                
                 // Create an anchor to allow ARCore to track the hitpoint as understanding of the physical
                 // world evolves.
                 var anchor = hit.Trackable.CreateAnchor(hit.Pose);
-
-                // Make Andy model a child of the anchor.
-                andyObject.transform.parent = anchor.transform;
+                // Fire off signal with anchor and hit object for other scripts to listen for
+                Signals.Get<AnchorCreated>().Dispatch(anchor, hit);
             }
         }
     }

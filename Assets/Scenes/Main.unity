@@ -238,6 +238,7 @@ GameObject:
   m_Component:
   - component: {fileID: 627916102}
   - component: {fileID: 627916104}
+  - component: {fileID: 627916103}
   m_Layer: 0
   m_Name: MainARController
   m_TagString: Untagged
@@ -258,6 +259,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &627916103
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 627916101}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 588e30f1c03294a698ed840730bff47a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cubeGeneratorPrefab: {fileID: 1304755837678826, guid: 984d2c34feed347bf90fc7f58db16d7d,
+    type: 2}
 --- !u!114 &627916104
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -271,10 +285,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FirstPersonCamera: {fileID: 896679035}
   DetectedPlanePrefab: {fileID: 1654175882956584, guid: 6a35c744e5010405c847fad90282d2be,
-    type: 2}
-  AndyPlanePrefab: {fileID: 1304755837678826, guid: 984d2c34feed347bf90fc7f58db16d7d,
-    type: 2}
-  AndyPointPrefab: {fileID: 1190091649889860, guid: b27e8d7fe70df464188ea5dcf2af0bb3,
     type: 2}
   SearchingForPlaneUI: {fileID: 1133631540}
 --- !u!20 &896679035 stripped
