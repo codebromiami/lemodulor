@@ -33,13 +33,21 @@ public class CubeGenerator : MonoBehaviour {
 		foreach(var bc in cubes){
 			if(bc == null)
 				continue;
-
-			if(bc.a.position.y < 0){
+			// transform the world position of this transform to the local space of bc
+			if(bc.a.position.y < this.transform.position.y){
 				// if i'm 10 meters tall and located at -1 then the visible section of me is going to be 4
 				// if 10 meters tall and locate at +1 then the visible section of me is going to be 6
-				bc.GetComponentInChildren<Renderer>().material.color = Color.gray;
-				bc.a.position -= new Vector3(0, bc.a.position.y, 0);
-				bc.b.position -= new Vector3(0, bc.b.position.y, 0);
+				float val = Random.Range(0f,1f);
+				Color col = val > 0.5f ? Color.white : Color.black;
+				Debug.Log(val);
+				bc.GetComponentInChildren<Renderer>().material.color = col;
+				bc.a.position = new Vector3(0, this.transform.position.y, 0);
+				bc.b.position = new Vector3(0, this.transform.position.y, 0);
+			}else{
+				float val = Random.Range(0f,1f);
+				Color col = val > 0.5f ? Color.blue : Color.red;
+				Debug.Log(val);
+				bc.GetComponentInChildren<Renderer>().material.color = col;
 			}
 		}
 	}

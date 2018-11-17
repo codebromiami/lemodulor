@@ -51,10 +51,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a721bc3e3b244ed4b6c0503079d9a23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sizeMin: 0.01
-  sizeMax: 0.1
+  scale: 0.01
+  min: 1
   max: 10
-  maxPos: 0.1
-  localMin: 0.01
-  localMax: 0.1
+  radius: 10
+  count: 10
   cubes: []
