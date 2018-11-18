@@ -60,4 +60,23 @@ public static class LeModular {
 		72788.0f,
 		117773.5f
 	};
+
+	public static float GetClosest(float value){
+		
+		float a = 0;
+		float b = 0;
+		foreach(float f in redSeries){
+			if(value > f){
+				a = f;
+				continue;
+			}else{
+				b = f;
+				break;
+			}
+		}
+		// Debug.LogFormat("value: {0} a: {1} b: {2}", value, a, b);
+		a = Mathf.Abs(value - a);
+		b = Mathf.Abs(value - b);
+		return a > b ? b : a;
+	}
 }
