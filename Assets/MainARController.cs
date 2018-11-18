@@ -4,11 +4,15 @@ using GoogleARCore;
 using UnityEngine;
 using deVoid.Utils;
 
+#if UNITY_EDITOR
+    // Set up touch input propagation while using Instant Preview in the editor.
+    using Input = GoogleARCore.InstantPreviewInput;
+#endif
+
 /// <summary>
 /// Signal that is fired when a an anchor is created at the positon of a user tap
 /// </summary>
 public class AnchorCreated : ASignal<Anchor, TrackableHit>{}
-
 /// <summary>
 /// Controls the app.
 /// </summary>

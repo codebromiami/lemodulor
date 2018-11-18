@@ -34,6 +34,7 @@ public class CreateScreen : MonoBehaviour {
 		lastAnchor = anchor;
 		if(lastGo)
             Destroy(lastGo);
+
 		// Choose the Andy model for the Trackable that got hit.
 		GameObject prefab = cubeGeneratorPrefab;
 		
@@ -43,8 +44,9 @@ public class CreateScreen : MonoBehaviour {
 		// Compensate for the hitPose rotation facing away from the raycast (i.e. camera).
 		lastGo.transform.Rotate(0, k_ModelRotation, 0, Space.Self);
 
-		// Make GameObject a child of the anchor.
-		lastGo.transform.parent = anchor.transform;
+		// Make GameObject a child of the anchor, we test here because our test script can't put a transform in the anchor
+		if(anchor)
+			lastGo.transform.parent = anchor.transform;
 	}
 
 	private void OnDisable() {
