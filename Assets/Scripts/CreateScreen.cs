@@ -47,6 +47,8 @@ public class CreateScreen : MonoBehaviour {
 		// Make GameObject a child of the anchor, we test here because our test script can't put a transform in the anchor
 		if(anchor)
 			lastGo.transform.parent = anchor.transform;
+		else
+			lastGo.transform.parent = this.transform;
 	}
 
 	private void OnDisable() {
