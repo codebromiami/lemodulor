@@ -4,25 +4,21 @@ using UnityEngine;
 
 public class CubeGenerator : MonoBehaviour {
 
-	public float scale = 0.01f;	// A scale to be applied accross all measures
-	public float min = 1f; 	// Their min width or height
-	float Min {get{return min * scale;}}	
-	public float max = 10f; // Their max width or height
-	float Max {get{return max * scale;}}	
-	public float radius = 10f; // How far from zero their a transform can be placed
-	float Radius {get{return radius * scale;}} 
-	public int count = 10;// The maximum number of cubes to be placed
+	public float Min = 1f; 	// Their min width or height
+	public float Max = 10f; // Their max width or height
+	public float Radius = 10f; // How far from zero their a transform can be placed
+	public int num = 10;// The maximum number of cubes to be placed
 	public List<BonedCube> cubes = new List<BonedCube>();	// A list to retrieve the cubes from
+	public List<string> alphabet = new List<string>(){"a","b","c","d","e","f","h","i","j","k","l","m","n","o","p","q","r","s","t","v","w","x","y","z"};
 	
 	public static Vector3 RandomVector(float min, float max){
 		return new Vector3(Random.Range(min,max),Random.Range(min,max), Random.Range(min,max));
 	}
 
-	public void Start(){
+	public IEnumerator Start(){
 				
-		count = Random.Range(1, count);	
-
-		while(cubes.Count < count){
+		num = Random.Range(1, num);	
+		while(cubes.Count < num){
 			var bc = BonedCube.Make();	
 			bc.transform.SetParent(this.transform);	// The cubes are children of this transform so they can be placed on a ground plane in AR
 			bc.a.transform.position = this.transform.position + RandomVector(Radius * -1, Radius);
@@ -30,6 +26,7 @@ public class CubeGenerator : MonoBehaviour {
 			cubes.Add(bc);
 		}
 
+		int count = 0;
 		foreach(var bc in cubes){
 			if(bc == null)
 				continue;
@@ -47,7 +44,14 @@ public class CubeGenerator : MonoBehaviour {
 				Color col = val > 0.5f ? Color.blue : Color.red;
 				bc.GetComponentInChildren<Renderer>().material.color = col;
 			}
+
+			var modulorAgent = bc.gameObject.AddComponent<ModulorAgent>();
+			modulorAgent.bc = bc;
+			modulorAgent.id = alphabet[count];
+			count++;
 		}
+		yield return new WaitForSecondsRealtime(0.1f);
+		this.transform.localScale = new Vector3(0.01f,0.01f,0.01f);
 	}
 
 	public void Reset(){

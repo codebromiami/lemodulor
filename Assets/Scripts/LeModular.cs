@@ -75,8 +75,28 @@ public static class LeModular {
 			}
 		}
 		// Debug.LogFormat("value: {0} a: {1} b: {2}", value, a, b);
-		a = Mathf.Abs(value - a);
-		b = Mathf.Abs(value - b);
-		return a > b ? b : a;
+		float c = Mathf.Abs(value - a);
+		float d = Mathf.Abs(value - b);
+		return c > d ? b : a;
+	}
+
+	public static Vector2 Divisions(float value){
+		Dictionary<float,float> divs = new Dictionary<float, float>();
+		foreach(float f in redSeries){
+			float divisions = value / f;
+			if(divisions > 0)
+				divs.Add(divisions,f);
+		}
+		float a = 0;
+		float b = 0;
+		foreach(var entry in divs){
+			
+			if(entry.Key > b){
+				a = entry.Key;
+				b = entry.Value;
+				Debug.Log(entry.Key);
+			}
+		}
+		return new Vector2(a,b);
 	}
 }
