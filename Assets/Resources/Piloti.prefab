@@ -106,3 +106,5 @@ MonoBehaviour:
   dGos: []
   length: 1
   width: 1
+  pilotiWidth: 0.5
+  pilotiHeight: 0.5

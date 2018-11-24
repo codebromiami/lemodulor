@@ -43,7 +43,10 @@ public class Pilotis : MonoBehaviour {
 	private void Update() {
 
 		meshFilter.transform.localScale = new Vector3(length, width,1);
-
+		
+		// if the length is less than the piloti width
+		// if the width is less than the piloti width
+		
 		if(aGos.Count < divisor){
 			var go = (GameObject)Resources.Load<GameObject>("Cylinder");
 			go = Instantiate(go,this.transform);
@@ -137,18 +140,18 @@ public class Pilotis : MonoBehaviour {
 		
 		if(!Application.isPlaying)
 			return;
-
+		float scale = 0.01f;
 		Gizmos.color = Color.blue;
 		Gizmos.DrawLine(a,b);
-		Gizmos.DrawCube(a, Vector3.one * 0.1f);
+		Gizmos.DrawCube(a, Vector3.one * scale);
 		Gizmos.color = Color.red;
 		Gizmos.DrawLine(b,c);
-		Gizmos.DrawCube(b, Vector3.one * 0.1f);
+		Gizmos.DrawCube(b, Vector3.one * scale);
 		Gizmos.color = Color.yellow;
 		Gizmos.DrawLine(c,d);
-		Gizmos.DrawCube(c, Vector3.one * 0.1f);
+		Gizmos.DrawCube(c, Vector3.one * scale);
 		Gizmos.color = Color.green;
 		Gizmos.DrawLine(d,a);
-		Gizmos.DrawCube(d, Vector3.one * 0.1f);
+		Gizmos.DrawCube(d, Vector3.one * scale);
 	}
 }

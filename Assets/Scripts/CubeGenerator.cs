@@ -30,6 +30,12 @@ public class CubeGenerator : MonoBehaviour {
 		foreach(var bc in cubes){
 			if(bc == null)
 				continue;
+			
+			// Add ModulorAgent script that will handle it's building behaviour
+			var modulorAgent = bc.gameObject.AddComponent<ModulorAgent>();
+			modulorAgent.bc = bc;
+			modulorAgent.id = alphabet[count];
+
 			// transform the world position of this transform to the local space of bc
 			if(bc.a.position.y < this.transform.position.y){
 				// if i'm 10 meters tall and located at -1 then the visible section of me is going to be 4
@@ -39,15 +45,14 @@ public class CubeGenerator : MonoBehaviour {
 				bc.GetComponentInChildren<Renderer>().material.color = col;
 				bc.a.position = new Vector3(bc.a.transform.position.x, this.transform.position.y, bc.a.transform.position.z);
 				bc.b.position = new Vector3(bc.b.transform.position.x, this.transform.position.y, bc.b.transform.position.z);
+				modulorAgent.offGround = false;
 			}else{
 				float val = Random.Range(0f,1f);
 				Color col = val > 0.5f ? Color.blue : Color.red;
 				bc.GetComponentInChildren<Renderer>().material.color = col;
+				modulorAgent.offGround = true;
 			}
 
-			var modulorAgent = bc.gameObject.AddComponent<ModulorAgent>();
-			modulorAgent.bc = bc;
-			modulorAgent.id = alphabet[count];
 			count++;
 		}
 		yield return new WaitForSecondsRealtime(0.1f);

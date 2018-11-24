@@ -13,5 +13,6 @@ public class ModulorAgentEditor : Editor {
 			return;
 		Handles.color = Color.blue;
 		Handles.Label(modulorAgent.bc.a.position, modulorAgent.id);            
+		Handles.DrawCube(0,modulorAgent.transform.InverseTransformPoint(modulorAgent.center), Quaternion.identity, 0.1f);
 	}
 }
