@@ -10,7 +10,7 @@ public class CubeGenerator : MonoBehaviour {
 	public int num = 10;// The maximum number of cubes to be placed
 	public List<BonedCube> cubes = new List<BonedCube>();	// A list to retrieve the cubes from
 	public List<string> alphabet = new List<string>(){"a","b","c","d","e","f","h","i","j","k","l","m","n","o","p","q","r","s","t","v","w","x","y","z"};
-	
+	public bool init = false;
 	public static Vector3 RandomVector(float min, float max){
 		return new Vector3(Random.Range(min,max),Random.Range(min,max), Random.Range(min,max));
 	}
@@ -57,6 +57,7 @@ public class CubeGenerator : MonoBehaviour {
 		}
 		yield return new WaitForSecondsRealtime(0.1f);
 		this.transform.localScale = new Vector3(0.01f,0.01f,0.01f);
+		init = true;
 	}
 
 	public void Reset(){

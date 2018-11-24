@@ -8,7 +8,7 @@ public class ModulorAgent : MonoBehaviour {
 	public BonedCube bc;
 	public Vector3 center = Vector3.zero;
 	public bool offGround;
-	
+	public float height;
 	// Use this for initialization
 	void Start () {
 
@@ -23,12 +23,19 @@ public class ModulorAgent : MonoBehaviour {
 		// get the center of the volume
 		GetComponentInChildren<SkinnedMeshRenderer>().updateWhenOffscreen = true;
 		center = GetComponentInChildren<SkinnedMeshRenderer>().bounds.center;
+		
+		// Instantiate piloti if the volume is off the ground
 		if(offGround){
 			var piloti = Resources.Load<GameObject>("piloti");
-			piloti = Instantiate(piloti, center, Quaternion.identity, this.transform);
+			var pos = center;
+			pos.y -= bc.height/2;
+			piloti = Instantiate(piloti, pos, Quaternion.identity, this.transform);
 			var pilotiScript = piloti.GetComponent<Pilotis>();
 			pilotiScript.length = bc.width;
 			pilotiScript.width = bc.length;
+			var ground = bc.a.position;
+			ground.y = 0;
+			height = Vector3.Distance(bc.a.position, ground);
 		}
 	}
 	

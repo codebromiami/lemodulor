@@ -19,9 +19,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4907491585274002}
-  - component: {fileID: 114361399362782318}
+  - component: {fileID: 114633986380748922}
   m_Layer: 0
-  m_Name: Pilotis
+  m_Name: Piloti
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -77,7 +77,7 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1543895219636324}
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &114361399362782318
+--- !u!114 &114633986380748922
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -85,7 +85,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1528458613335462}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 519f2980d8d4542e1849995d7141ee65, type: 3}
+  m_Script: {fileID: 11500000, guid: d3848f280e5694b65a00288fb83f410a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   meshFilter: {fileID: 33382049664003272}
@@ -95,7 +95,7 @@ MonoBehaviour:
   d: {x: 0, y: 0, z: 0}
   xDist: 0
   zDist: 0
-  divisor: 3
+  divisor: 1
   xDivision: 0
   xRemainder: 0
   zDivision: 0

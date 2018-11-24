@@ -1,7 +1,24 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
+public static class FloatHelper
+{
+	public static float Truncate(this float value, int digits)
+	{
+		string thing = value.ToString();
+		thing = thing.Substring(0,digits);
+		float result = 0;
+		if(float.TryParse(thing, out result)){
+			Debug.Log(result);
+		}else{
+			Debug.Log("Fail");
+		}
+		return result;
+	}
+}
+	
 public class Pilotis : MonoBehaviour {
 
 	public MeshFilter meshFilter;
@@ -31,9 +48,18 @@ public class Pilotis : MonoBehaviour {
 
 	public float pilotiWidth = 0.5f;
 	public float pilotiHeight = 0.5f;
-
-	private void Start() {
-
+	public bool update = true;
+	
+	public static float Round(float value, int degits) {
+		string a = "{0:";
+		for(int i = 0; i < degits; i++){
+			a += "0";
+		}
+		a += "}";
+		string b = string.Format("{0:000}", value);
+		float c = float.Parse(b);
+		Debug.Log(value + " " + b + " " + c);
+		return c;
 	}
 
 	public void Create(float length, float width){
@@ -42,10 +68,8 @@ public class Pilotis : MonoBehaviour {
 
 	private void Update() {
 
+
 		meshFilter.transform.localScale = new Vector3(length, width,1);
-		
-		// if the length is less than the piloti width
-		// if the width is less than the piloti width
 		
 		if(aGos.Count < divisor){
 			var go = (GameObject)Resources.Load<GameObject>("Cylinder");
@@ -70,7 +94,9 @@ public class Pilotis : MonoBehaviour {
 			go = Instantiate(go,this.transform);
 			dGos.Add(go);
 		}
-		
+		// if the length is less than the piloti width
+		// if the width is less than the piloti width
+
 		// Get the four corners of the plane
 		a = meshFilter.transform.TransformPoint(meshFilter.mesh.vertices[0]);
 		b = meshFilter.transform.TransformPoint(meshFilter.mesh.vertices[2]);
@@ -91,23 +117,20 @@ public class Pilotis : MonoBehaviour {
 		float z = (zDivision /2);
 
 		foreach (GameObject go in aGos)
-		{
-			
-			go.transform.position = a + new Vector3(x, 0, 0);
-			var localPosition = go.transform.localPosition;
-			localPosition.y = pilotiHeight * -1;
-			go.transform.localPosition = localPosition;
-			go.transform.localScale = new Vector3(pilotiWidth, pilotiHeight, pilotiWidth);
+		{	
+			var pilotiScript = go.GetComponent<PilotiAgent>();
+			if(!pilotiScript.set){
+				pilotiScript.Build(this, a + new Vector3(x, 0, 0));
+			}
 			x += xDivision;
 		}
 
 		foreach (GameObject go in bGos)
 		{
-			go.transform.position = b + new Vector3(0, 0,z);
-			var localPosition = go.transform.localPosition;
-			localPosition.y = pilotiHeight * -1;
-			go.transform.localPosition = localPosition;
-			go.transform.localScale = new Vector3(pilotiWidth, pilotiHeight, pilotiWidth);
+			var pilotiScript = go.GetComponent<PilotiAgent>();
+			if(!pilotiScript.set){
+				pilotiScript.Build(this, b + new Vector3(0, 0,z));
+			}
 			z += zDivision;
 		}
 
@@ -115,11 +138,10 @@ public class Pilotis : MonoBehaviour {
 
 		foreach (GameObject go in cGos)
 		{
-			go.transform.position = a + new Vector3(0,0,z);
-			var localPosition = go.transform.localPosition;
-			localPosition.y = pilotiHeight * -1;
-			go.transform.localPosition = localPosition;
-			go.transform.localScale = new Vector3(pilotiWidth, pilotiHeight, pilotiWidth);
+			var pilotiScript = go.GetComponent<PilotiAgent>();
+			if(!pilotiScript.set){
+				pilotiScript.Build(this, a + new Vector3(0,0,z));
+			}
 			z += zDivision;
 		}
 
@@ -127,11 +149,10 @@ public class Pilotis : MonoBehaviour {
 
 		foreach (GameObject go in dGos)
 		{
-			go.transform.position = d + new Vector3(x, 0,0);
-			var localPosition = go.transform.localPosition;
-			localPosition.y = pilotiHeight * -1;
-			go.transform.localPosition = localPosition;
-			go.transform.localScale = new Vector3(pilotiWidth, pilotiHeight, pilotiWidth);
+			var pilotiScript = go.GetComponent<PilotiAgent>();
+			if(!pilotiScript.set){
+				pilotiScript.Build(this, d + new Vector3(x, 0,0));
+			}
 			x += xDivision;
 		}
 	}
