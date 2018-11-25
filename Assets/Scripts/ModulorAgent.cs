@@ -31,8 +31,14 @@ public class ModulorAgent : MonoBehaviour {
 			pos.y -= bc.height/2;
 			piloti = Instantiate(piloti, pos, Quaternion.identity, this.transform);
 			var pilotiScript = piloti.GetComponent<Pilotis>();
+			// get the shortest side
 			pilotiScript.length = bc.width;
 			pilotiScript.width = bc.length;
+			var a = pilotiScript.length > pilotiScript.width ? pilotiScript.width : pilotiScript.length;	// get the shortet side
+			a *= 0.1f;
+			pilotiScript.pilotiWidth = a;
+			pilotiScript.width -= a;
+			pilotiScript.length -= a;
 			var ground = bc.a.position;
 			ground.y = 0;
 			height = Vector3.Distance(bc.a.position, ground);

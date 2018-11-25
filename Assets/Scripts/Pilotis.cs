@@ -47,16 +47,14 @@ public class Pilotis : MonoBehaviour {
 	public float width = 1;
 
 	public float pilotiWidth = 0.5f;
-	public float pilotiHeight = 0.5f;
-	public bool update = true;
-	
-	public static float Round(float value, int degits) {
+	// format a string a to centain number of digits, then parse the string to find a float value, hilarious
+	public static float Round(float value, int digits) {
 		string a = "{0:";
-		for(int i = 0; i < degits; i++){
+		for(int i = 0; i < digits; i++){
 			a += "0";
 		}
 		a += "}";
-		string b = string.Format("{0:000}", value);
+		string b = string.Format(a, value);
 		float c = float.Parse(b);
 		Debug.Log(value + " " + b + " " + c);
 		return c;

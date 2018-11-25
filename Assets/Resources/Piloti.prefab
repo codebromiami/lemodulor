@@ -95,7 +95,7 @@ MonoBehaviour:
   d: {x: 0, y: 0, z: 0}
   xDist: 0
   zDist: 0
-  divisor: 1
+  divisor: 3
   xDivision: 0
   xRemainder: 0
   zDivision: 0
@@ -108,3 +108,4 @@ MonoBehaviour:
   width: 1
   pilotiWidth: 0.5
   pilotiHeight: 0.5
+  update: 1
