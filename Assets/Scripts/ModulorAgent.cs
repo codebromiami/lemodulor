@@ -9,6 +9,7 @@ public class ModulorAgent : MonoBehaviour {
 	public Vector3 center = Vector3.zero;
 	public bool offGround;
 	public float height;
+	public List<float> storeys = new List<float>();
 	// Use this for initialization
 	void Start () {
 
@@ -42,7 +43,19 @@ public class ModulorAgent : MonoBehaviour {
 			var ground = bc.a.position;
 			ground.y = 0;
 			height = Vector3.Distance(bc.a.position, ground);
+			}
+			List<float> floors = LeModular.Combination(bc.height);
+			var floorBC = BonedCube.Make();
+			floorBC.transform.SetParent(this.transform);
+			floorBC.a.transform.position = this.bc.a.transform.position;
+			floorBC.Set(bc.length, bc.width, 0.1f);
+			foreach(var floor in floors){
+				floorBC = BonedCube.Make();
+				floorBC.transform.SetParent(this.transform);
+				floorBC.a.transform.position = this.bc.a.transform.position + new Vector3(0, floor, 0);
+				floorBC.Set(bc.length, bc.width, 0.1f);
 		}
+		bc.GetComponentInChildren<SkinnedMeshRenderer>().enabled = false;
 	}
 	
 	// Update is called once per frame

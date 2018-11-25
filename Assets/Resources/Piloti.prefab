@@ -104,8 +104,6 @@ MonoBehaviour:
   bGos: []
   cGos: []
   dGos: []
-  length: 1
-  width: 1
-  pilotiWidth: 0.5
-  pilotiHeight: 0.5
-  update: 1
+  length: 9.57
+  width: 5.67
+  pilotiWidth: 0.63000005

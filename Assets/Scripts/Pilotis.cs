@@ -11,7 +11,7 @@ public static class FloatHelper
 		thing = thing.Substring(0,digits);
 		float result = 0;
 		if(float.TryParse(thing, out result)){
-			Debug.Log(result);
+			// Debug.Log(result);
 		}else{
 			Debug.Log("Fail");
 		}
