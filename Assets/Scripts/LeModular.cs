@@ -80,7 +80,7 @@ public static class LeModular {
 		return c > d ? b : a;
 	}
 
-	public static List<float> Combination(float distance){
+	public static List<float> Divisions(float distance){
 		float threshold = 0.6f;
 		//find combination that will fall within a threshold of the distance
 		List<float> possibilities = new List<float>();
@@ -88,30 +88,10 @@ public static class LeModular {
 		{
 			if((i + threshold) < distance){
 				possibilities.Add(i);
-				Debug.Log(distance + " possibility " + i);
+				// Debug.Log(distance + " possibility " + i);
 			}	
 		}
 
 		return possibilities;
-	}
-
-	public static Vector2 Divisions(float value){
-		Dictionary<float,float> divs = new Dictionary<float, float>();
-		foreach(float f in redSeries){
-			float divisions = value / f;
-			if(divisions > 0)
-				divs.Add(divisions,f);
-		}
-		float a = 0;
-		float b = 0;
-		foreach(var entry in divs){
-			
-			if(entry.Key > b){
-				a = entry.Key;
-				b = entry.Value;
-				// Debug.Log(entry.Key);
-			}
-		}
-		return new Vector2(a,b);
 	}
 }

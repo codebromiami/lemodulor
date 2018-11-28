@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4029874656585910}
   - component: {fileID: 95372781007179892}
   - component: {fileID: 114320432043147656}
+  - component: {fileID: 65887496943909778}
   m_Layer: 0
   m_Name: boned-cube
   m_TagString: Untagged
@@ -158,6 +159,18 @@ Transform:
   m_Father: {fileID: 4181461613995930}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &65887496943909778
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1147726870971696}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 0
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!95 &95372781007179892
 Animator:
   serializedVersion: 3

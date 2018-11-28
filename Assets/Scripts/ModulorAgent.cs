@@ -43,19 +43,39 @@ public class ModulorAgent : MonoBehaviour {
 			var ground = bc.a.position;
 			ground.y = 0;
 			height = Vector3.Distance(bc.a.position, ground);
-			}
-			List<float> floors = LeModular.Combination(bc.height);
-			var floorBC = BonedCube.Make();
-			floorBC.transform.SetParent(this.transform);
-			floorBC.a.transform.position = this.bc.a.transform.position;
-			floorBC.Set(bc.length, bc.width, 0.1f);
-			foreach(var floor in floors){
+		}
+
+		List<float> floors = LeModular.Divisions(bc.height);
+		var floorBC = BonedCube.Make();
+		floorBC.transform.SetParent(this.transform);
+		floorBC.a.transform.position = this.bc.a.transform.position;
+		floorBC.Set(bc.length, bc.width, 0.1f);
+		var _floors = BuildFloors(floors);
+		if(_floors != null){
+			foreach(var floor in _floors){
 				floorBC = BonedCube.Make();
 				floorBC.transform.SetParent(this.transform);
 				floorBC.a.transform.position = this.bc.a.transform.position + new Vector3(0, floor, 0);
 				floorBC.Set(bc.length, bc.width, 0.1f);
+			}
 		}
+		var boxCollider = bc.GetComponentInChildren<BoxCollider>();
+		boxCollider.enabled = true;
+		boxCollider.center = center;
+		boxCollider.size = new Vector3(bc.width, bc.length, bc.height);
 		bc.GetComponentInChildren<SkinnedMeshRenderer>().enabled = false;
+	}
+
+	List<float> BuildFloors(List<float> floors){
+		// get random number that is the =< the size of the list
+		int a = Random.Range(0, floors.Count);
+		int b = Random.Range(floors.Count - a, floors.Count);
+		Debug.Log(string.Format("{0} a {1} b {2}", id, a, b));
+		if(a + b > floors.Count){
+			Debug.Log(string.Format("! a {0} b {1}", a, b));
+			return BuildFloors(floors);
+		}
+		return floors.GetRange(a,b);;
 	}
 	
 	// Update is called once per frame

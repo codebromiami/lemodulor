@@ -38,4 +38,9 @@ public class PilotiAgent : MonoBehaviour {
 		// 	}
 		// }
 	}
+
+	void OnTriggerEnter(Collider other)
+	{
+		Destroy(this.gameObject);
+	}
 }
