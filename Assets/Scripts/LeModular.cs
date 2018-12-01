@@ -70,10 +70,10 @@ public static class LeModular {
 		else
 		{
 			index = ~index;
-			if (0 < index)
-				 Debug.Log(string.Format("list[{0}] = {1}", index - 1, redSeries[index - 1]));
-			 
-			 Debug.Log(string.Format("list[{0}] = {1}", index, redSeries[index]));
+			if (0 < index){
+				//  Debug.Log(string.Format("list[{0}] = {1}", index - 1, redSeries[index - 1]));
+			}
+			//  Debug.Log(string.Format("list[{0}] = {1}", index, redSeries[index]));
 		}
 		return redSeries[index];
 	}

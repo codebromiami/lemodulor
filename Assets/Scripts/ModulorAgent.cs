@@ -10,6 +10,11 @@ public class ModulorAgent : MonoBehaviour {
 	public bool offGround;
 	public float height;
 	public List<float> storeys = new List<float>();
+	public BoxCollider boxCollider;
+	public Rigidbody rb;
+	public Bounds bounds;
+	public SkinnedMeshRenderer skinnedMesh;
+	public List<Vector3> topVs = new List<Vector3>();
 	// Use this for initialization
 	void Start () {
 
@@ -22,11 +27,25 @@ public class ModulorAgent : MonoBehaviour {
 		bc.Set(length,width,height);
 		
 		// get the center of the volume
-		GetComponentInChildren<SkinnedMeshRenderer>().updateWhenOffscreen = true;
-		center = GetComponentInChildren<SkinnedMeshRenderer>().bounds.center;
-		
-		return;
+		skinnedMesh = GetComponentInChildren<SkinnedMeshRenderer>();
+		skinnedMesh.updateWhenOffscreen = true;
+		bounds = skinnedMesh.bounds;
+		center = bounds.center;
+		topVs.Add(bounds.center);
 
+		topVs.Add(bounds.center + new Vector3(width/2,height/2,length/2));
+		topVs.Add(bounds.center + new Vector3(-width/2,height/2,length/2));
+		topVs.Add(bounds.center + new Vector3(width/2,height/2,-length/2));
+		topVs.Add(bounds.center + new Vector3(-width/2,height/2,-length/2));
+		boxCollider = bc.gameObject.AddComponent<BoxCollider>();
+		boxCollider.enabled = true;
+		boxCollider.isTrigger = true;
+		boxCollider.center = center;
+		boxCollider.size = new Vector3(bc.width, bc.height, bc.length);
+		rb = bc.gameObject.AddComponent<Rigidbody>();
+		rb.isKinematic = true;
+
+		return;
 		// Instantiate piloti if the volume is off the ground
 		if(offGround){
 			var piloti = Resources.Load<GameObject>("piloti");
@@ -62,10 +81,7 @@ public class ModulorAgent : MonoBehaviour {
 				floorBC.Set(bc.length, bc.width, 0.1f);
 			}
 		}
-		var boxCollider = bc.GetComponentInChildren<BoxCollider>();
-		boxCollider.enabled = true;
-		boxCollider.center = center;
-		boxCollider.size = new Vector3(bc.width, bc.length, bc.height);
+
 		// bc.GetComponentInChildren<SkinnedMeshRenderer>().enabled = false;
 	}
 
@@ -80,7 +96,16 @@ public class ModulorAgent : MonoBehaviour {
 		}
 		return floors.GetRange(a,b);;
 	}
-	
+	private void OnTriggerEnter(Collider other)
+	{
+
+		Debug.Log(string.Format("{0} has collided with {1}", id, other.gameObject.name));
+	}
+
+	// private void OnTriggerStay(Collider other)
+	// {
+	// 	Debug.Log("Modulor Agent  On Trigger Stay");
+	// }
 	// Update is called once per frame
 	void Update () {
 		
@@ -88,6 +113,8 @@ public class ModulorAgent : MonoBehaviour {
 
 	private void OnDrawGizmos() {
 		
-
+		foreach(var vec in topVs){
+			Gizmos.DrawCube(this.transform.TransformPoint(vec), Vector3.one * 0.01f);
+		}
 	}
 }
