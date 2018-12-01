@@ -1,11 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using ProceduralToolkit;
 
 public class CubeGenerator : MonoBehaviour {
 
-	public float Min = 1f; 	// Their min width or height
-	public float Max = 10f; // Their max width or height
+	public float minXZ = 1f; 	// Their min width or height
+	public float maxXZ = 10f; // Their max width or height
+	public float maxHeight = 5;
 	public float Radius = 10f; // How far from zero their a transform can be placed
 	public int num = 10;// The maximum number of cubes to be placed
 	public List<BonedCube> cubes = new List<BonedCube>();	// A list to retrieve the cubes from
@@ -15,14 +17,16 @@ public class CubeGenerator : MonoBehaviour {
 		return new Vector3(Random.Range(min,max),Random.Range(min,max), Random.Range(min,max));
 	}
 
+	public MeshFilter meshfilter;
+
 	public IEnumerator Start(){
-				
+		
 		num = Random.Range(1, num);	
 		while(cubes.Count < num){
 			var bc = BonedCube.Make();	
 			bc.transform.SetParent(this.transform);	// The cubes are children of this transform so they can be placed on a ground plane in AR
-			bc.a.transform.position = this.transform.position + RandomVector(Radius * -1, Radius);
-			bc.Set(Random.Range(Min, Max),Random.Range(Min, Max),Random.Range(Min, Max));
+			bc.a.transform.position = this.transform.position + new Vector3(LeModular.GetClosest(Random.Range(minXZ, maxXZ)),LeModular.GetClosest(Random.Range((maxHeight * -1), maxHeight)),LeModular.GetClosest(Random.Range(minXZ, maxXZ)));
+			bc.Set(Random.Range(minXZ, maxXZ),Random.Range(minXZ, maxXZ),Random.Range(minXZ, maxXZ));
 			cubes.Add(bc);
 		}
 

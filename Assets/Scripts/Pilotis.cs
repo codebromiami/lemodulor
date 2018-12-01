@@ -8,6 +8,8 @@ public static class FloatHelper
 	public static float Truncate(this float value, int digits)
 	{
 		string thing = value.ToString();
+		if(digits > thing.Length)
+			digits = thing.Length;
 		thing = thing.Substring(0,digits);
 		float result = 0;
 		if(float.TryParse(thing, out result)){

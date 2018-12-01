@@ -14,17 +14,19 @@ public class ModulorAgent : MonoBehaviour {
 	void Start () {
 
 		this.gameObject.name = id;
-
+		
 		// Set the size of the volume to the closest measurement contained in the red series
-		float length = LeModular.GetClosest(bc.length);
-		float width = LeModular.GetClosest(bc.width);
-		float height = LeModular.GetClosest(bc.height);
+		float length = LeModular.GetClosest(bc.length * 100) / 100;
+		float width = LeModular.GetClosest(bc.width * 100) / 100;
+		float height = LeModular.GetClosest(bc.height * 100) / 100;
 		bc.Set(length,width,height);
 		
 		// get the center of the volume
 		GetComponentInChildren<SkinnedMeshRenderer>().updateWhenOffscreen = true;
 		center = GetComponentInChildren<SkinnedMeshRenderer>().bounds.center;
 		
+		return;
+
 		// Instantiate piloti if the volume is off the ground
 		if(offGround){
 			var piloti = Resources.Load<GameObject>("piloti");
@@ -37,6 +39,7 @@ public class ModulorAgent : MonoBehaviour {
 			pilotiScript.width = bc.length;
 			var a = pilotiScript.length > pilotiScript.width ? pilotiScript.width : pilotiScript.length;	// get the shortet side
 			a *= 0.1f;
+			a = Mathf.Clamp(a, 0.1f, 0.75f);
 			pilotiScript.pilotiWidth = a;
 			pilotiScript.width -= a;
 			pilotiScript.length -= a;
@@ -63,7 +66,7 @@ public class ModulorAgent : MonoBehaviour {
 		boxCollider.enabled = true;
 		boxCollider.center = center;
 		boxCollider.size = new Vector3(bc.width, bc.length, bc.height);
-		bc.GetComponentInChildren<SkinnedMeshRenderer>().enabled = false;
+		// bc.GetComponentInChildren<SkinnedMeshRenderer>().enabled = false;
 	}
 
 	List<float> BuildFloors(List<float> floors){

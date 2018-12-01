@@ -63,21 +63,19 @@ public static class LeModular {
 
 	public static float GetClosest(float value){
 		
-		float a = 0;
-		float b = 0;
-		foreach(float f in redSeries){
-			if(value > f){
-				a = f;
-				continue;
-			}else{
-				b = f;
-				break;
-			}
+		int index = redSeries.BinarySearch(value);
+    	if (0 <= index){
+        Debug.Log(string.Format("Found value {0} at list[{1}]", value, index));
 		}
-		// Debug.LogFormat("value: {0} a: {1} b: {2}", value, a, b);
-		float c = Mathf.Abs(value - a);
-		float d = Mathf.Abs(value - b);
-		return c > d ? b : a;
+		else
+		{
+			index = ~index;
+			if (0 < index)
+				 Debug.Log(string.Format("list[{0}] = {1}", index - 1, redSeries[index - 1]));
+			 
+			 Debug.Log(string.Format("list[{0}] = {1}", index, redSeries[index]));
+		}
+		return redSeries[index];
 	}
 
 	public static List<float> Divisions(float distance){
