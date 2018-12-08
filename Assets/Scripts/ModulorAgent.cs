@@ -2,6 +2,52 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public class BoundingPoints {
+
+	public BoundingPoints(Vector3 center, Vector3 size){
+
+		yPositive.Add(center + new Vector3(size.x/2, size.y/2, size.z/2));
+		yPositive.Add(center + new Vector3(-size.x/2, size.y/2, size.z/2));
+		yPositive.Add(center + new Vector3(size.x/2, size.y/2, -size.z/2));
+		yPositive.Add(center + new Vector3(-size.x/2, size.y/2, -size.z/2));
+		yNegative.Add(center + new Vector3(size.x/2, -size.y/2, size.z/2));
+		yNegative.Add(center + new Vector3(-size.x/2, -size.y/2, size.z/2));
+		yNegative.Add(center + new Vector3(size.x/2, -size.y/2, -size.z/2));
+		yNegative.Add(center + new Vector3(-size.x/2, -size.y/2, -size.z/2));		
+		xPositive.Add(center + new Vector3(size.x/2, size.y/2, -size.z/2));
+		xPositive.Add(center + new Vector3(size.x/2, size.y/2, size.z/2));
+		xPositive.Add(center + new Vector3(size.x/2, -size.y/2, -size.z/2));
+		xPositive.Add(center + new Vector3(size.x/2, -size.y/2, size.z/2));
+		xNegative.Add(center + new Vector3(-size.x/2, size.y/2, -size.z/2));
+		xNegative.Add(center + new Vector3(-size.x/2, size.y/2, size.z/2));
+		xNegative.Add(center + new Vector3(-size.x/2, -size.y/2, -size.z/2));
+		xNegative.Add(center + new Vector3(-size.x/2, -size.y/2, size.z/2));
+		zPositive.Add(center + new Vector3(-size.x/2, size.y/2, size.z/2));
+		zPositive.Add(center + new Vector3(-size.x/2, -size.y/2, size.z/2));
+		zPositive.Add(center + new Vector3(size.x/2, size.y/2, size.z/2));
+		zPositive.Add(center + new Vector3(size.x/2, -size.y/2, size.z/2));
+		zNegative.Add(center + new Vector3(-size.x/2, size.y/2, -size.z/2));
+		zNegative.Add(center + new Vector3(-size.x/2, -size.y/2, -size.z/2));
+		zNegative.Add(center + new Vector3(size.x/2, size.y/2, -size.z/2));
+		zNegative.Add(center + new Vector3(size.x/2, -size.y/2, -size.z/2));
+		// all.AddRange(tops);
+		// all.AddRange(bottoms);
+		all.AddRange(xPositive);
+		all.AddRange(xNegative);
+		all.AddRange(zPositive);
+		all.AddRange(zNegative);
+		
+	}
+	public List<Vector3> all = new List<Vector3>();
+
+	public List<Vector3> yPositive = new List<Vector3>();
+	public List<Vector3> yNegative = new List<Vector3>();
+	public List<Vector3> xPositive = new List<Vector3>();
+	public List<Vector3> xNegative = new List<Vector3>();
+	public List<Vector3> zPositive = new List<Vector3>();
+	public List<Vector3> zNegative = new List<Vector3>();
+}
+
 public class ModulorAgent : MonoBehaviour {
 
 	public string id;
@@ -14,29 +60,33 @@ public class ModulorAgent : MonoBehaviour {
 	public Rigidbody rb;
 	public Bounds bounds;
 	public SkinnedMeshRenderer skinnedMesh;
-	public List<Vector3> topVs = new List<Vector3>();
+	public BoundingPoints boundingPoints;
+	public List<ModulorAgent> modulorAgents = new List<ModulorAgent>();
+	public bool showPoints = false;
+	public Dictionary<ModulorAgent, List<Vector3>> intersectingPoints = new Dictionary<ModulorAgent, List<Vector3>>();
+	public bool showIntersectingPoints = false;
+
 	// Use this for initialization
-	void Start () {
+	IEnumerator Start () {
 
 		this.gameObject.name = id;
 		
+		// showPoints = true;
+		showIntersectingPoints = true;
+
 		// Set the size of the volume to the closest measurement contained in the red series
 		float length = LeModular.GetClosest(bc.length * 100) / 100;
 		float width = LeModular.GetClosest(bc.width * 100) / 100;
 		float height = LeModular.GetClosest(bc.height * 100) / 100;
 		bc.Set(length,width,height);
 		
-		// get the center of the volume
+		// Find all the bounding points
 		skinnedMesh = GetComponentInChildren<SkinnedMeshRenderer>();
 		skinnedMesh.updateWhenOffscreen = true;
 		bounds = skinnedMesh.bounds;
 		center = bounds.center;
-		topVs.Add(bounds.center);
-
-		topVs.Add(bounds.center + new Vector3(width/2,height/2,length/2));
-		topVs.Add(bounds.center + new Vector3(-width/2,height/2,length/2));
-		topVs.Add(bounds.center + new Vector3(width/2,height/2,-length/2));
-		topVs.Add(bounds.center + new Vector3(-width/2,height/2,-length/2));
+		boundingPoints = new BoundingPoints(center, new Vector3(width, height, length));
+		// Add box collider and rigidbody to generate collisions
 		boxCollider = bc.gameObject.AddComponent<BoxCollider>();
 		boxCollider.enabled = true;
 		boxCollider.isTrigger = true;
@@ -44,9 +94,31 @@ public class ModulorAgent : MonoBehaviour {
 		boxCollider.size = new Vector3(bc.width, bc.height, bc.length);
 		rb = bc.gameObject.AddComponent<Rigidbody>();
 		rb.isKinematic = true;
+		yield return new WaitUntil(()=> modulorAgents.Count > 0);
+		// Iterate through our bounding points to see if any of them are within the bounds of another agent
+		foreach(Vector3 point in boundingPoints.all){
+			foreach (ModulorAgent agent in modulorAgents)
+			{
+				if(agent.bounds.Contains(point)){
+					if(intersectingPoints.ContainsKey(agent)){
+						intersectingPoints[agent].Add(point);
+						Debug.Log("Added");
+					}else{
+						List<Vector3> points = new List<Vector3>();
+						points.Add(point);
+						intersectingPoints.Add(agent, points);
+						Debug.Log("Created");
 
-		return;
-		// Instantiate piloti if the volume is off the ground
+					}
+				}else{
+					Debug.Log("Does not contain");
+				}
+			}
+		}
+		// TODO: refactor what's below
+		var refactor = false;
+		if(refactor){
+			// Instantiate piloti if the volume is off the ground
 		if(offGround){
 			var piloti = Resources.Load<GameObject>("piloti");
 			var pos = center;
@@ -83,6 +155,8 @@ public class ModulorAgent : MonoBehaviour {
 		}
 
 		// bc.GetComponentInChildren<SkinnedMeshRenderer>().enabled = false;
+		}
+		
 	}
 
 	List<float> BuildFloors(List<float> floors){
@@ -98,23 +172,29 @@ public class ModulorAgent : MonoBehaviour {
 	}
 	private void OnTriggerEnter(Collider other)
 	{
-
-		Debug.Log(string.Format("{0} has collided with {1}", id, other.gameObject.name));
-	}
-
-	// private void OnTriggerStay(Collider other)
-	// {
-	// 	Debug.Log("Modulor Agent  On Trigger Stay");
-	// }
-	// Update is called once per frame
-	void Update () {
-		
+		var go = other.gameObject;
+		var modulorAgent = go.GetComponent<ModulorAgent>();
+		if(modulorAgent){
+			this.modulorAgents.Add(modulorAgent);
+		}else{
+			Debug.LogWarning(string.Format("No ModulorAgent script attached to gameObject {0} that collided with gameObject {1}.", go.name, this.id));
+		}
 	}
 
 	private void OnDrawGizmos() {
 		
-		foreach(var vec in topVs){
-			Gizmos.DrawCube(this.transform.TransformPoint(vec), Vector3.one * 0.01f);
+		if(showPoints){
+			foreach(var vec in boundingPoints.all){
+				Gizmos.DrawCube(this.transform.TransformPoint(vec), Vector3.one * 0.01f);
+			}
+		}
+
+		if(showIntersectingPoints){
+			foreach(List<Vector3> value in intersectingPoints.Values){
+				foreach(Vector3 point in value){
+					Gizmos.DrawCube(this.transform.TransformPoint(point), Vector3.one * 0.01f);
+				}	
+			}
 		}
 	}
 }
