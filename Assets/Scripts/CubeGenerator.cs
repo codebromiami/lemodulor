@@ -46,6 +46,7 @@ public class CubeGenerator : MonoBehaviour {
 				// if 10 meters tall and locate at +1 then the visible section of me is going to be 6
 				float val = Random.Range(0f,1f);
 				Color col = val > 0.5f ? Color.white : Color.black;
+				col.a = 0.5f;
 				bc.GetComponentInChildren<Renderer>().material.color = col;
 				bc.a.position = new Vector3(bc.a.transform.position.x, this.transform.position.y, bc.a.transform.position.z);
 				bc.b.position = new Vector3(bc.b.transform.position.x, this.transform.position.y, bc.b.transform.position.z);
@@ -53,6 +54,7 @@ public class CubeGenerator : MonoBehaviour {
 			}else{
 				float val = Random.Range(0f,1f);
 				Color col = val > 0.5f ? Color.blue : Color.red;
+				col.a = 0.5f;
 				bc.GetComponentInChildren<Renderer>().material.color = col;
 				modulorAgent.offGround = true;
 			}

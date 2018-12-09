@@ -1,51 +1,108 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+[System.Serializable]
 public class BoundingPoints {
 
 	public BoundingPoints(Vector3 center, Vector3 size){
 
-		yPositive.Add(center + new Vector3(size.x/2, size.y/2, size.z/2));
-		yPositive.Add(center + new Vector3(-size.x/2, size.y/2, size.z/2));
-		yPositive.Add(center + new Vector3(size.x/2, size.y/2, -size.z/2));
+		// Add these clockwise so we can reason about them easier
+		// Below a and b are the changing components { (-a,-b),(-a,+b),(+a,+b),(+a,-b)} }
 		yPositive.Add(center + new Vector3(-size.x/2, size.y/2, -size.z/2));
-		yNegative.Add(center + new Vector3(size.x/2, -size.y/2, size.z/2));
-		yNegative.Add(center + new Vector3(-size.x/2, -size.y/2, size.z/2));
-		yNegative.Add(center + new Vector3(size.x/2, -size.y/2, -size.z/2));
+		yPositive.Add(center + new Vector3(-size.x/2, size.y/2, size.z/2));
+		yPositive.Add(center + new Vector3(size.x/2, size.y/2, size.z/2));
+		yPositive.Add(center + new Vector3(size.x/2, size.y/2, -size.z/2));
+
 		yNegative.Add(center + new Vector3(-size.x/2, -size.y/2, -size.z/2));		
+		yNegative.Add(center + new Vector3(-size.x/2, -size.y/2, size.z/2));
+		yNegative.Add(center + new Vector3(size.x/2, -size.y/2, size.z/2));
+		yNegative.Add(center + new Vector3(size.x/2, -size.y/2, -size.z/2));
+
+		xPositive.Add(center + new Vector3(size.x/2, -size.y/2, -size.z/2));
 		xPositive.Add(center + new Vector3(size.x/2, size.y/2, -size.z/2));
 		xPositive.Add(center + new Vector3(size.x/2, size.y/2, size.z/2));
-		xPositive.Add(center + new Vector3(size.x/2, -size.y/2, -size.z/2));
 		xPositive.Add(center + new Vector3(size.x/2, -size.y/2, size.z/2));
+
+		xNegative.Add(center + new Vector3(-size.x/2, -size.y/2, -size.z/2));
 		xNegative.Add(center + new Vector3(-size.x/2, size.y/2, -size.z/2));
 		xNegative.Add(center + new Vector3(-size.x/2, size.y/2, size.z/2));
-		xNegative.Add(center + new Vector3(-size.x/2, -size.y/2, -size.z/2));
 		xNegative.Add(center + new Vector3(-size.x/2, -size.y/2, size.z/2));
-		zPositive.Add(center + new Vector3(-size.x/2, size.y/2, size.z/2));
+
 		zPositive.Add(center + new Vector3(-size.x/2, -size.y/2, size.z/2));
+		zPositive.Add(center + new Vector3(-size.x/2, size.y/2, size.z/2));
 		zPositive.Add(center + new Vector3(size.x/2, size.y/2, size.z/2));
 		zPositive.Add(center + new Vector3(size.x/2, -size.y/2, size.z/2));
-		zNegative.Add(center + new Vector3(-size.x/2, size.y/2, -size.z/2));
+
 		zNegative.Add(center + new Vector3(-size.x/2, -size.y/2, -size.z/2));
+		zNegative.Add(center + new Vector3(-size.x/2, size.y/2, -size.z/2));
 		zNegative.Add(center + new Vector3(size.x/2, size.y/2, -size.z/2));
 		zNegative.Add(center + new Vector3(size.x/2, -size.y/2, -size.z/2));
-		// all.AddRange(tops);
-		// all.AddRange(bottoms);
-		all.AddRange(xPositive);
-		all.AddRange(xNegative);
-		all.AddRange(zPositive);
-		all.AddRange(zNegative);
 		
+		List<Vector3> tmpVectors = new List<Vector3>();
+		
+		tmpVectors.AddRange(xPositive);
+		tmpVectors.AddRange(xNegative);
+		tmpVectors.AddRange(zPositive);
+		tmpVectors.AddRange(zNegative);
+		
+		foreach (Vector3 vector in tmpVectors)
+		{
+			if(!all.Contains(vector)){
+				all.Add(vector);
+			}	
+		}
+		// Create edges between the top and bottom plane
+		Edge edge = new Edge(yPositive[0], yNegative[0]);
+		edges.Add(edge);
+		edge = new Edge(yPositive[1], yNegative[1]);
+		edges.Add(edge);
+		edge = new Edge(yPositive[2], yNegative[2]);
+		edges.Add(edge);
+		edge = new Edge(yPositive[3], yNegative[3]);
+		edges.Add(edge);
+		//Create edges for the top and bottom planes
+		for (int i = 0; i < yPositive.Count; i++)
+		{
+			if(i < yPositive.Count - 1){
+				edge = new Edge(yPositive[i], yPositive[i+1]);
+				edges.Add(edge);
+			}else{
+				edge = new Edge(yPositive[i], yPositive[0]);
+				edges.Add(edge);
+			}
+		}
+		for (int i = 0; i < yNegative.Count; i++)
+		{
+			if(i < yNegative.Count - 1){
+				edge = new Edge(yNegative[i], yNegative[i+1]);
+				edges.Add(edge);
+			}else{
+				edge = new Edge(yNegative[i], yNegative[0]);
+				edges.Add(edge);
+			}
+		}
 	}
-	public List<Vector3> all = new List<Vector3>();
 
+	public List<Vector3> all = new List<Vector3>();
+	
 	public List<Vector3> yPositive = new List<Vector3>();
 	public List<Vector3> yNegative = new List<Vector3>();
 	public List<Vector3> xPositive = new List<Vector3>();
 	public List<Vector3> xNegative = new List<Vector3>();
 	public List<Vector3> zPositive = new List<Vector3>();
 	public List<Vector3> zNegative = new List<Vector3>();
+
+	public List<Edge> edges = new List<Edge>();	
+}
+
+public struct Edge {
+
+	public Edge(Vector3 a, Vector3 b){
+		this.a = a;
+		this.b = b;
+	}
+	public Vector3 a;
+	public Vector3 b;
 }
 
 public class ModulorAgent : MonoBehaviour {
@@ -60,19 +117,21 @@ public class ModulorAgent : MonoBehaviour {
 	public Rigidbody rb;
 	public Bounds bounds;
 	public SkinnedMeshRenderer skinnedMesh;
-	public BoundingPoints boundingPoints;
+	[SerializeField] public BoundingPoints boundingPoints;
 	public List<ModulorAgent> modulorAgents = new List<ModulorAgent>();
 	public bool showPoints = false;
 	public Dictionary<ModulorAgent, List<Vector3>> intersectingPoints = new Dictionary<ModulorAgent, List<Vector3>>();
 	public bool showIntersectingPoints = false;
+	public bool showEdges = false;
 
 	// Use this for initialization
 	IEnumerator Start () {
 
 		this.gameObject.name = id;
 		
-		// showPoints = true;
+		showPoints = true;
 		showIntersectingPoints = true;
+		showEdges = true;
 
 		// Set the size of the volume to the closest measurement contained in the red series
 		float length = LeModular.GetClosest(bc.length * 100) / 100;
@@ -95,6 +154,7 @@ public class ModulorAgent : MonoBehaviour {
 		rb = bc.gameObject.AddComponent<Rigidbody>();
 		rb.isKinematic = true;
 		yield return new WaitUntil(()=> modulorAgents.Count > 0);
+		yield return new WaitForSecondsRealtime(0.1f);
 		// Iterate through our bounding points to see if any of them are within the bounds of another agent
 		foreach(Vector3 point in boundingPoints.all){
 			foreach (ModulorAgent agent in modulorAgents)
@@ -102,16 +162,13 @@ public class ModulorAgent : MonoBehaviour {
 				if(agent.bounds.Contains(point)){
 					if(intersectingPoints.ContainsKey(agent)){
 						intersectingPoints[agent].Add(point);
-						Debug.Log("Added");
 					}else{
 						List<Vector3> points = new List<Vector3>();
 						points.Add(point);
 						intersectingPoints.Add(agent, points);
-						Debug.Log("Created");
-
 					}
 				}else{
-					Debug.Log("Does not contain");
+					//
 				}
 			}
 		}
@@ -183,17 +240,26 @@ public class ModulorAgent : MonoBehaviour {
 
 	private void OnDrawGizmos() {
 		
+		Vector3 size = Vector3.one * 0.0025f;
+
+		Gizmos.color = Color.red;
 		if(showPoints){
-			foreach(var vec in boundingPoints.all){
-				Gizmos.DrawCube(this.transform.TransformPoint(vec), Vector3.one * 0.01f);
+			foreach(var point in boundingPoints.all){
+				Gizmos.DrawCube(this.transform.TransformPoint(point), size);
 			}
 		}
-
+		Gizmos.color = Color.yellow;
 		if(showIntersectingPoints){
 			foreach(List<Vector3> value in intersectingPoints.Values){
 				foreach(Vector3 point in value){
-					Gizmos.DrawCube(this.transform.TransformPoint(point), Vector3.one * 0.01f);
+					Gizmos.DrawCube(this.transform.TransformPoint(point), size);
 				}	
+			}
+		}
+		Gizmos.color = Color.blue;
+		if(showEdges){
+			foreach(Edge edge in boundingPoints.edges){
+				Gizmos.DrawLine(this.transform.TransformPoint(edge.a), this.transform.TransformPoint(edge.b));
 			}
 		}
 	}
