@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using ProceduralToolkit;
 [System.Serializable]
 public class BoundingPoints {
 
@@ -91,18 +92,32 @@ public class BoundingPoints {
 	public List<Vector3> xNegative = new List<Vector3>();
 	public List<Vector3> zPositive = new List<Vector3>();
 	public List<Vector3> zNegative = new List<Vector3>();
-
+	public Dictionary<Vector3, List<Edge>> edgeDict = new Dictionary<Vector3, List<Edge>>();
 	public List<Edge> edges = new List<Edge>();	
 }
 
-public struct Edge {
-
-	public Edge(Vector3 a, Vector3 b){
-		this.a = a;
-		this.b = b;
+public class Level{
+	
+	public static List<float> levels = new List<float>();
+	float yComponent;
+	public List<Vector3> points = new List<Vector3>();
+	public List<Vertex> vertexPoints = new List<Vertex>();
+	public List<Vertex> convexVertexes = new List<Vertex>();
+	public List<Vector3> GetPointsFromVertexes(){
+		
+		List<Vector3> tmpList = new List<Vector3>();
+		foreach (Vertex vertex in convexVertexes)
+		{
+			tmpList.Add(vertex.position);
+		}
+		return tmpList;
 	}
-	public Vector3 a;
-	public Vector3 b;
+	public Level(Vector3 point){
+		yComponent = point.y;
+		levels.Add(yComponent);
+		points.Add(point);
+	}
+
 }
 
 public class ModulorAgent : MonoBehaviour {
@@ -120,17 +135,22 @@ public class ModulorAgent : MonoBehaviour {
 	[SerializeField] public BoundingPoints boundingPoints;
 	public List<ModulorAgent> modulorAgents = new List<ModulorAgent>();
 	public bool showPoints = false;
-	public Dictionary<ModulorAgent, List<Vector3>> intersectingPoints = new Dictionary<ModulorAgent, List<Vector3>>();
-	public bool showIntersectingPoints = false;
+	public Dictionary<ModulorAgent, List<Vector3>> encapsulatedPoints = new Dictionary<ModulorAgent, List<Vector3>>();
+	public bool showEncapsulatedPoints = false;
 	public bool showEdges = false;
+	public List<Vector3> intersectionPoints = new List<Vector3>();
+	public List<Edge> intersectionEdges =new List<Edge>();
+	public static List<Vector3> all = new List<Vector3>();
 
+	public bool init = false;
+	public bool triggerStay = false;
 	// Use this for initialization
 	IEnumerator Start () {
 
 		this.gameObject.name = id;
 		
 		showPoints = true;
-		showIntersectingPoints = true;
+		showEncapsulatedPoints = true;
 		showEdges = true;
 
 		// Set the size of the volume to the closest measurement contained in the red series
@@ -153,29 +173,70 @@ public class ModulorAgent : MonoBehaviour {
 		boxCollider.size = new Vector3(bc.width, bc.height, bc.length);
 		rb = bc.gameObject.AddComponent<Rigidbody>();
 		rb.isKinematic = true;
-		yield return new WaitUntil(()=> modulorAgents.Count > 0);
-		yield return new WaitForSecondsRealtime(0.1f);
+		yield return new WaitUntil(()=> triggerStay);
+		CubeGenerator.Instance.ready++;
+		Debug.Log(string.Format("Modulor Agent {0} Agent List Count{1}",id, modulorAgents.Count));
 		// Iterate through our bounding points to see if any of them are within the bounds of another agent
-		foreach(Vector3 point in boundingPoints.all){
+		CubeGenerator.Instance.agentDict[this].AddRange(boundingPoints.all);
+		
+ 		foreach(Vector3 point in boundingPoints.all){
 			foreach (ModulorAgent agent in modulorAgents)
 			{
 				if(agent.bounds.Contains(point)){
-					if(intersectingPoints.ContainsKey(agent)){
-						intersectingPoints[agent].Add(point);
+					if(encapsulatedPoints.ContainsKey(agent)){
+						encapsulatedPoints[agent].Add(point);
 					}else{
 						List<Vector3> points = new List<Vector3>();
 						points.Add(point);
-						intersectingPoints.Add(agent, points);
+						encapsulatedPoints.Add(agent, points);
 					}
 				}else{
 					//
 				}
 			}
 		}
+		
+
+		foreach(var entry in this.encapsulatedPoints){	
+			foreach(var edge in boundingPoints.edges){
+				if(!entry.Value.Contains(edge.v1.position) & !entry.Value.Contains(edge.v2.position)){
+					continue;
+				}
+				var dir = edge.v2.position - edge.v1.position;
+				dir.Normalize();
+				Ray ray = new Ray(edge.v1.position,dir);
+				float distance = 0;
+				
+				if(entry.Key.bounds.IntersectRay(ray, out distance)){
+					Vector3 point = ray.origin + ray.direction * distance;
+					intersectionPoints.Add(point);
+					intersectionEdges.Add(new Edge(ray.origin, point));
+				}
+			}
+		}
+		
+		foreach (Vector3 vector in boundingPoints.all)
+		{
+			Vector3 worldPoint = this.transform.TransformPoint(vector);
+			if(!CubeGenerator.Instance.points.Contains(worldPoint)){
+				CubeGenerator.Instance.points.Add(worldPoint);
+			}
+		}
+
+		foreach (Vector3 vector in intersectionPoints)
+		{
+			Vector3 worldPoint = this.transform.TransformPoint(vector);
+			if(!CubeGenerator.Instance.points.Contains(worldPoint)){
+				CubeGenerator.Instance.points.Add(worldPoint);
+			}
+		}
+
+		// bc.GetComponentInChildren<SkinnedMeshRenderer>().enabled = false;
+
 		// TODO: refactor what's below
 		var refactor = false;
 		if(refactor){
-			// Instantiate piloti if the volume is off the ground
+		// Instantiate piloti if the volume is off the ground
 		if(offGround){
 			var piloti = Resources.Load<GameObject>("piloti");
 			var pos = center;
@@ -210,8 +271,7 @@ public class ModulorAgent : MonoBehaviour {
 				floorBC.Set(bc.length, bc.width, 0.1f);
 			}
 		}
-
-		// bc.GetComponentInChildren<SkinnedMeshRenderer>().enabled = false;
+		
 		}
 		
 	}
@@ -236,8 +296,19 @@ public class ModulorAgent : MonoBehaviour {
 		}else{
 			Debug.LogWarning(string.Format("No ModulorAgent script attached to gameObject {0} that collided with gameObject {1}.", go.name, this.id));
 		}
+		// Debug.Log(string.Format("id {0} on trigger enter {0}", id, other.gameObject.name));
+
 	}
 
+	private void OnTriggerStay(Collider other)
+	{
+		// Debug.Log(string.Format("id {0} on trigger stay {0}", id, other.gameObject.name));
+		triggerStay = true;
+	}
+
+	
+
+	
 	private void OnDrawGizmos() {
 		
 		Vector3 size = Vector3.one * 0.0025f;
@@ -249,8 +320,8 @@ public class ModulorAgent : MonoBehaviour {
 			}
 		}
 		Gizmos.color = Color.yellow;
-		if(showIntersectingPoints){
-			foreach(List<Vector3> value in intersectingPoints.Values){
+		if(showEncapsulatedPoints){
+			foreach(List<Vector3> value in encapsulatedPoints.Values){
 				foreach(Vector3 point in value){
 					Gizmos.DrawCube(this.transform.TransformPoint(point), size);
 				}	
@@ -259,8 +330,24 @@ public class ModulorAgent : MonoBehaviour {
 		Gizmos.color = Color.blue;
 		if(showEdges){
 			foreach(Edge edge in boundingPoints.edges){
-				Gizmos.DrawLine(this.transform.TransformPoint(edge.a), this.transform.TransformPoint(edge.b));
+				Gizmos.DrawLine(this.transform.TransformPoint(edge.v1.position), this.transform.TransformPoint(edge.v2.position));
 			}
 		}
+		Gizmos.color = Color.magenta;
+		foreach(Vector3 point in intersectionPoints){
+			Gizmos.DrawCube(this.transform.TransformPoint(point), size);
+		}	
+		Gizmos.color = Color.blue;
+		foreach(Edge edge in intersectionEdges){
+			Gizmos.DrawLine(this.transform.TransformPoint(edge.v1.position), this.transform.TransformPoint(edge.v2.position));
+		}
+		Gizmos.color = Color.white;
+		foreach(Vector3 point in all){
+			Gizmos.DrawCube(point, size);
+		}	
+
+		
+
+		
 	}
 }
