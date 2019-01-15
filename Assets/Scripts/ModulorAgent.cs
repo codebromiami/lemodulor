@@ -175,7 +175,7 @@ public class ModulorAgent : MonoBehaviour {
 		rb.isKinematic = true;
 		yield return new WaitUntil(()=> triggerStay);
 		CubeGenerator.Instance.ready++;
-		Debug.Log(string.Format("Modulor Agent {0} Agent List Count{1}",id, modulorAgents.Count));
+		// Debug.Log(string.Format("Modulor Agent {0} Agent List Count{1}",id, modulorAgents.Count));
 		// Iterate through our bounding points to see if any of them are within the bounds of another agent
 		CubeGenerator.Instance.agentDict[this].AddRange(boundingPoints.all);
 		

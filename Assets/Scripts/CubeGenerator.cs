@@ -82,21 +82,44 @@ public class CubeGenerator : MonoBehaviour {
 		}
 		yield return new WaitUntil(()=> ready == cubes.Count);
 		yield return new WaitForSeconds(0.5f);
-
+		Dictionary<float, Level> tmpLevels = new Dictionary<float,Level>();
+		List<float> heights = new List<float>();
 		foreach (Vector3 point in CubeGenerator.Instance.points)
 		{
-			if(!levels.ContainsKey(point.y)){
-				levels.Add(point.y,new Level(point));
-				levels[point.y].vertexPoints.Add(new Vertex(point));
+			if(!tmpLevels.ContainsKey(point.y)){
+				tmpLevels.Add(point.y,new Level(point));
+				tmpLevels[point.y].vertexPoints.Add(new Vertex(point));
 			}else{
-				levels[point.y].points.Add(point);
-				levels[point.y].vertexPoints.Add(new Vertex(point));
+				tmpLevels[point.y].points.Add(point);
+				tmpLevels[point.y].vertexPoints.Add(new Vertex(point));
 			}	
+		}
+		heights.AddRange(tmpLevels.Keys);
+		heights.Sort();
+		foreach(var f in heights){
+			Debug.Log(string.Format("Level {0}", f));
+		}
+		var tmpHeights = new List<float>();
+		for(int i = 0; i < heights.Count; i++){
+			if(i < heights.Count -1 && heights[i] != -1.1f){
+				var dif = heights[i +1] - heights[i];
+				if(dif > 0.6){
+					if(tmpLevels.ContainsKey(heights[i])){
+						levels.Add(heights[i],tmpLevels[heights[i]]);
+					}
+				}else{
+					if(tmpLevels.ContainsKey(heights[i])){
+						tmpLevels[heights[i]].vertexPoints.AddRange(tmpLevels[heights[i +1]].vertexPoints);
+						levels.Add(heights[i],tmpLevels[heights[i]]);
+						heights[i+1] = 1.1f;
+					}
+				}
+			}
 		}
 		indexLevels.AddRange(levels.Values);
 		foreach(var entry in levels){
 			entry.Value.convexVertexes = JarvisMarchAlgorithm.GetConvexHull(entry.Value.vertexPoints);
-			// Debug.Log(string.Format("Levels {0}", entry.Key));
+			Debug.Log(string.Format("Merged Levels {0}", entry.Key));
 		}
 		foreach (var item in indexLevels)
 		{
@@ -114,7 +137,7 @@ public class CubeGenerator : MonoBehaviour {
 			lr.startWidth = 0.1f;
 			lr.endWidth = 0.1f;
 		}
-		this.transform.localScale = Vector3.one * scale;
+		// this.transform.localScale = Vector3.one * scale;
 		// Debug.Log(string.Format("Ready {0}", cubes.Count));
 	}
 
