@@ -1,14 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using deVoid.Utils;
 
 public class Pointer : MonoBehaviour {
+
+	public class OnPointer : ASignal<Vector3>{}
 
 	// Use this for initialization
 	void Start () {
 		
 	}
-	
 	// Update is called once per frame
 	void Update () {
 		if(Input.GetMouseButton(0)){
@@ -26,13 +28,14 @@ public class Pointer : MonoBehaviour {
 			Ray ray = cam.ScreenPointToRay(mousePos);
 			if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask))
 			{
-				Debug.DrawLine(ray.origin, hit.point, Color.yellow);
-				Debug.Log("Did Hit");
+				Signals.Get<OnPointer>().Dispatch(hit.point);
+				Debug.DrawLine(ray.origin, hit.point, Color.blue);
+				// Debug.Log("Did Hit");
 			}
 			else
 			{
-				Debug.DrawRay(ray.origin,ray.direction * 100 , Color.white);
-				Debug.Log("Did not Hit");
+				// Debug.DrawRay(ray.origin,ray.direction * 100 , Color.red);
+				// Debug.Log("Did not Hit");
 			}
 		}
 	}
