@@ -271,8 +271,11 @@ MonoBehaviour:
   - 44985.5
   - 72788
   - 117773.5
-  measure: 0
+  seriesChoice: 1
   distance: 0
+  index: 0
+  indexValue: 0
+  closest: 0
   divs: []
 --- !u!108 &1453104987
 Light:

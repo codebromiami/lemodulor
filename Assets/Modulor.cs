@@ -60,12 +60,12 @@ public class Modulor : MonoBehaviour {
 		117773.5f
 	};
 	public enum series {blue, red};
-	series seriesChoice = series.blue;
-	public float measure;
+	public series seriesChoice = series.blue;
 	public float distance;
-	public List<float> divs;
 	public int index;
-	public float value;
+	public float indexValue;
+	public float closest;
+	public List<float> divs;
 
 	private List<float> seriesList;
 	private void Update()
@@ -73,16 +73,20 @@ public class Modulor : MonoBehaviour {
 		
 		seriesList = seriesChoice == series.red ? redSeries : blueSeries; 
 		divs = new List<float>();
-		measure = 0;
+		indexValue = 0;
 		for(int i = 0; i < seriesList.Count; i++){
-			measure = seriesList[i];
-			if(measure >= distance){
+			indexValue = seriesList[i];
+			if(indexValue >= distance){
+				index = seriesList.IndexOf(indexValue);
 				break;
 			}
 		}
-		index = seriesList.BinarySearch(distance);
-		index = ~index;
-		value = seriesList[index];
+		if(index > 0){
+			float a = seriesList[index -1];
+			float b = seriesList[index];
+			float c = a + indexValue / 2;
+			closest = Mathf.Abs(distance - a) < Mathf.Abs(distance - b) ? a : b;
+		}
 	}
 
 	private void OnGUI()
