@@ -32,7 +32,6 @@ public class Modulor : MonoBehaviour {
 		58886.7f,
 		95280.7f
 	};
-
 	public List<float> blueSeries = new List<float>(){
 		1.1f,
 		1.8f,
@@ -60,27 +59,50 @@ public class Modulor : MonoBehaviour {
 		72788.0f,
 		117773.5f
 	};
-
+	public enum series {blue, red};
+	series seriesChoice = series.blue;
 	public float measure;
 	public float distance;
 	public List<float> divs;
-	
+	public int index;
+	public float value;
+
+	private List<float> seriesList;
 	private void Update()
 	{
+		
+		seriesList = seriesChoice == series.red ? redSeries : blueSeries; 
 		divs = new List<float>();
 		measure = 0;
-		for(int i = 0; i < redSeries.Count; i++){
-			measure = redSeries[i];
+		for(int i = 0; i < seriesList.Count; i++){
+			measure = seriesList[i];
 			if(measure >= distance){
 				break;
 			}
 		}
+		index = seriesList.BinarySearch(distance);
+		index = ~index;
+		value = seriesList[index];
 	}
 
 	private void OnGUI()
 	{
-		if(GUILayout.Button("")){
+		if(GUILayout.Button("Calculate")){
 			
 		}
 	}
+
+	
+	// private static void SearchAndInsert(List<string> list, 
+    //     string insert, DinoComparer dc)
+    // {
+    //     Console.WriteLine("\nBinarySearch and Insert \"{0}\":", insert);
+
+    //     int index = list.BinarySearch(insert, dc);
+
+    //     if (index < 0)
+    //     {
+    //         list.Insert(~index, insert);
+    //     }
+    // }
 }
