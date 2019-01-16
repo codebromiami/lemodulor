@@ -16,7 +16,7 @@ public class Piloti : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
+		
 		distance = 0;
 
 		if(points != null & points.Count > 0){
