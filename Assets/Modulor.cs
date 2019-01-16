@@ -63,28 +63,27 @@ public class Modulor : MonoBehaviour {
 	public series seriesChoice = series.blue;
 	public float distance;
 	public int index;
-	public float indexValue;
+	public float value;
 	public float closest;
-	public List<float> divs;
+	public List<float> divs = new List<float>();
 
 	private List<float> seriesList;
-	private void Update()
-	{
+	
+	private void Update() {	
 		
 		seriesList = seriesChoice == series.red ? redSeries : blueSeries; 
-		divs = new List<float>();
-		indexValue = 0;
+		value = 0;
 		for(int i = 0; i < seriesList.Count; i++){
-			indexValue = seriesList[i];
-			if(indexValue >= distance){
-				index = seriesList.IndexOf(indexValue);
+			value = seriesList[i];
+			if(value >= distance){
+				index = seriesList.IndexOf(value);
 				break;
 			}
 		}
 		if(index > 0){
 			float a = seriesList[index -1];
 			float b = seriesList[index];
-			float c = a + indexValue / 2;
+			float c = a + value / 2;
 			closest = Mathf.Abs(distance - a) < Mathf.Abs(distance - b) ? a : b;
 		}
 	}
@@ -92,18 +91,15 @@ public class Modulor : MonoBehaviour {
 	private void OnGUI()
 	{
 		if(GUILayout.Button("Calculate")){
-			
+			//
 		}
 	}
-
 	
 	// private static void SearchAndInsert(List<string> list, 
     //     string insert, DinoComparer dc)
     // {
     //     Console.WriteLine("\nBinarySearch and Insert \"{0}\":", insert);
-
     //     int index = list.BinarySearch(insert, dc);
-
     //     if (index < 0)
     //     {
     //         list.Insert(~index, insert);
