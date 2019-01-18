@@ -4,6 +4,17 @@ using UnityEngine;
 
 public class Modulor : MonoBehaviour {
 
+	[System.Serializable]
+	public class KeyPair{
+		public KeyPair(float size, float fit){
+			this.size = size;
+			this.count = fit / size;
+			this.remainder = fit % size;
+		}
+		public float size;
+		public float count;
+		public float remainder;
+	}
 	public List<float> redSeries = new List<float>(){
 		0.6f,
 		0.9f,
@@ -62,17 +73,36 @@ public class Modulor : MonoBehaviour {
 	public enum series {blue, red};
 	public series seriesChoice = series.blue;
 	public float distance;
-	public int index;
-	public float value;
 	public float closest;
-	public List<float> divs = new List<float>();
+	public List<KeyPair> divs = new List<KeyPair>();
 
 	private List<float> seriesList;
 	
 	private void Update() {	
 		
 		seriesList = seriesChoice == series.red ? redSeries : blueSeries; 
-		value = 0;
+		closest = GetClosestFromList(seriesList);
+		// within closest how many combinations can we find
+		divs = GetPossibilities(seriesList, closest);
+	}
+
+	public List<KeyPair> GetPossibilities(List<float> list, float value){
+
+		List<KeyPair> values = new List<KeyPair>();
+		for(int i = 0; i < list.Count; i++){
+			if(list[i] <= value){
+				values.Add(new KeyPair(list[i], closest));
+			}else{
+				break;
+			}
+		}
+		return values;
+	}
+
+	public float GetClosestFromList(List<float> list){
+
+		int index = 0;
+		float value = 0;
 		for(int i = 0; i < seriesList.Count; i++){
 			value = seriesList[i];
 			if(value >= distance){
@@ -80,12 +110,21 @@ public class Modulor : MonoBehaviour {
 				break;
 			}
 		}
+		float closest = 0;
 		if(index > 0){
-			float a = seriesList[index -1];
-			float b = seriesList[index];
-			float c = a + value / 2;
-			closest = Mathf.Abs(distance - a) < Mathf.Abs(distance - b) ? a : b;
+			float a = list[index -1];
+			float b = list[index];
+			closest = GetClosest(a,b, distance);
 		}
+		return closest;
+	}
+
+	public float GetHalfway(float a, float b){
+		return a + b / 2;
+	}
+
+	public float GetClosest(float a, float b, float c){
+		 return Mathf.Abs(c - a) < Mathf.Abs(c - b) ? a : b;
 	}
 
 	private void OnGUI()
