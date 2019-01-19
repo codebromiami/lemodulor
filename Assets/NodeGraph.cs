@@ -4,11 +4,9 @@ using UnityEngine;
 
 public class NodeGraph : MonoBehaviour {
 
-	public Node parentNode;
-
+		
 	private void Update()
 	{
-		if(parentNode != null)
-			parentNode.Update();	
+		
 	}
 }
