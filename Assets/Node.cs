@@ -7,13 +7,17 @@ public class Node : MonoBehaviour {
 
 	public class NodeStart : ASignal <Node> {};
 
-	public string id = "";
+	public string id = "Node";
 	public int divs = 0;
 	public Node parentNode;
 	public List<Node> childNodes;
 	public float size = 1;
+	public GameObject meshGo;
+
 	private void Start()
 	{
+		id += parentNode ? " " + parentNode.childNodes.IndexOf(this).ToString(): "";
+		gameObject.name = id;
 		Signals.Get<NodeStart>().Dispatch(this);
 	}
 
@@ -25,14 +29,17 @@ public class Node : MonoBehaviour {
 	void Update()
 	{	
 		if(divs > 0){
+			
 			if(divs > childNodes.Count){
 				while(divs > childNodes.Count){
-					var go = GameObject.CreatePrimitive(PrimitiveType.Cube);
+					var go = new GameObject();
 					go.transform.SetParent(this.transform);
 					go.transform.localPosition = Vector3.zero;
 					var node = go.AddComponent<Node>();
 					childNodes.Add(node);
 					node.parentNode = this;
+					node.meshGo = GameObject.CreatePrimitive(PrimitiveType.Cube);
+					node.meshGo.transform.SetParent(node.transform);
 					// Debug.Log("Added child");
 				}
 			}else if(divs < childNodes.Count){
@@ -42,7 +49,7 @@ public class Node : MonoBehaviour {
 					childNodes.RemoveAt(childNodes.Count-1);
 					// Debug.Log("Removed child");
 				}
-			}			
+			}		
 		}
 		// Apply scale based child count
 		if(childNodes != null){
@@ -57,7 +64,9 @@ public class Node : MonoBehaviour {
 				// }
 				foreach (Node item in childNodes)
 				{
-					item.transform.localScale = Vector3.one * item.size;
+					var scale = item.meshGo.transform.localScale;
+					scale.x = item.size;
+					item.meshGo.transform.localScale = scale;
 				}
 				foreach (Node item in childNodes)
 				{
@@ -72,6 +81,9 @@ public class Node : MonoBehaviour {
 				}
 			}	
 		}
+
+		if(meshGo)
+			if(divs > 0) meshGo.SetActive(false); else meshGo.SetActive(true);
 	}
 
 	private void OnGUI()
