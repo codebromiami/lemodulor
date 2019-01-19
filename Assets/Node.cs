@@ -11,9 +11,7 @@ public class Node : MonoBehaviour {
 	public int divs = 0;
 	public Node parentNode;
 	public List<Node> childNodes;
-	public float scale = 0;
-	public float margin = 0;
-
+	public float size = 1;
 	private void Start()
 	{
 		Signals.Get<NodeStart>().Dispatch(this);
@@ -51,21 +49,25 @@ public class Node : MonoBehaviour {
 			if(childNodes.Count > 0){
 				foreach (Node item in childNodes)
 				{
-					item.scale = scale / divs;
+					item.size = size / divs;
+				}
+				// foreach (Node item in childNodes)
+				// {
+				// 	item.scale -= margin / (divs + 1);
+				// }
+				foreach (Node item in childNodes)
+				{
+					item.transform.localScale = Vector3.one * item.size;
 				}
 				foreach (Node item in childNodes)
 				{
-					item.scale -= margin / (divs + 1);
-				}
-				foreach (Node item in childNodes)
-				{
-					item.transform.localScale = Vector3.one * item.scale;
-				}
-				foreach (Node item in childNodes)
-				{
+
 					var pos = item.transform.localPosition;
 					int index = childNodes.IndexOf(item);
-					pos.x = ((scale / divs) * index) + margin;
+					float a = size /2;
+					float b = a / divs;
+					float offset = a - b;
+					pos.x = (item.size * index) - offset;
 					item.transform.localPosition = pos;
 				}
 			}	
