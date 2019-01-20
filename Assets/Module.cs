@@ -61,25 +61,90 @@ public class Module : MonoBehaviour {
 			if(childNodes.Count > 0){
 				foreach (Module item in childNodes)
 				{
-					item.size = size / divs;
+					switch(divAxis){
+						case axis.x:
+						item.size.x = size.x / divs;
+						break;
+						case axis.y:
+						item.size.y = size.y / divs;
+						break;
+						case axis.z:
+						item.size.z = size.z / divs;
+						break;
+					}
 				}
 				margin = Mathf.Clamp(margin,0f, (size.x / divs) - 0.01f);	// 0.01 because if we use the exact value the model doesn't render properly
-				foreach (Module item in childNodes)
-				{
+				foreach (Module item in childNodes) {
 					var scale = item.meshGo.transform.localScale;
-					scale.x = item.size.x;
-					scale.x -= margin;
+					switch(divAxis){
+						case axis.x:
+							scale.x = item.size.x;
+							scale.y = size.y;
+							scale.z = size.z;
+							scale.x -= margin;
+						break;
+						case axis.y:
+							scale.x = size.x;
+							scale.y = item.size.y;
+							scale.z = size.z;
+							scale.y -= margin;
+						break;
+						case axis.z:
+							scale.x = size.x;
+							scale.y = size.y;
+							scale.z = item.size.z;
+							scale.z -= margin;
+						break;					
+					}
 					item.meshGo.transform.localScale = scale;
 				}
 				foreach (Module item in childNodes)
 				{
 					var pos = item.transform.localPosition;
 					int index = childNodes.IndexOf(item);
-					float a = size.x /2;
-					float b = a / divs;
-					float offset = a - b;
-					pos.x = (item.size.x * index) - offset;
+					float a = 0;
+					float b = 0;
+					float offset = 0;
+					switch(divAxis){
+						case axis.x:
+							a = size.x /2;
+							b = a / divs;
+							offset = a - b;
+							pos.x = (item.size.x * index) - offset;	
+						break;
+						case axis.y:
+							a = size.y /2;
+							b = a / divs;
+							offset = a - b;
+							pos.y = (item.size.y * index) - offset;	
+						break;
+						case axis.z:
+							a = size.z /2;
+							b = a / divs;
+							offset = a - b;
+							pos.z = (item.size.z * index) - offset;	
+						break;					
+					}
 					item.transform.localPosition = pos;
+				}
+				if(parentNode){
+					foreach (Module item in childNodes)
+					{
+						switch(divAxis){
+							case axis.x:
+								size.y = parentNode.size.y;
+								size.z = parentNode.size.z;
+							break;
+							case axis.y:
+								size.x = parentNode.size.x;
+								size.z = parentNode.size.z;
+							break;
+							case axis.z:
+								size.x = parentNode.size.x;
+								size.y = parentNode.size.y;
+							break;					
+						}
+					}
 				}
 			}	
 		}
