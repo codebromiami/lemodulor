@@ -6,12 +6,13 @@ using deVoid.Utils;
 public class Module : MonoBehaviour {
 
 	public class ModuleStart : ASignal <Module> {};
-	public Vector3 subdivisions = Vector3.zero;
+	public enum axis {x,y,z}
+	public axis divAxis = axis.x;
 	public string id = "Node";
 	public int divs = 0;
 	public Module parentNode;
 	public List<Module> childNodes;
-	public float size = 1;
+	public Vector3 size = Vector3.one;
 	public GameObject meshGo;
 	public float margin = 0; // how much space on each side to leave between the next
 	
@@ -62,11 +63,11 @@ public class Module : MonoBehaviour {
 				{
 					item.size = size / divs;
 				}
-				margin = Mathf.Clamp(margin,0f, (size / divs) - 0.01f);	// 0.01 because if we use the exact value the model doesn't render properly
+				margin = Mathf.Clamp(margin,0f, (size.x / divs) - 0.01f);	// 0.01 because if we use the exact value the model doesn't render properly
 				foreach (Module item in childNodes)
 				{
 					var scale = item.meshGo.transform.localScale;
-					scale.x = item.size;
+					scale.x = item.size.x;
 					scale.x -= margin;
 					item.meshGo.transform.localScale = scale;
 				}
@@ -74,10 +75,10 @@ public class Module : MonoBehaviour {
 				{
 					var pos = item.transform.localPosition;
 					int index = childNodes.IndexOf(item);
-					float a = size /2;
+					float a = size.x /2;
 					float b = a / divs;
 					float offset = a - b;
-					pos.x = (item.size * index) - offset;
+					pos.x = (item.size.x * index) - offset;
 					item.transform.localPosition = pos;
 				}
 			}	

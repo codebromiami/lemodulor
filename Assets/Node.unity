@@ -200,7 +200,7 @@ GameObject:
   - component: {fileID: 1319433466}
   - component: {fileID: 1319433465}
   m_Layer: 0
-  m_Name: Node
+  m_Name: Module
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -217,14 +217,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6691f3fc509a249438d3f42108404f45, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  subdivisions: {x: 0, y: 0, z: 0}
-  id: Node
-  divs: 0
-  parentNode: {fileID: 0}
-  childNodes: []
+  divAxis: 1
+  id: Module
+  divs: 2
+  parentModule: {fileID: 0}
+  subModules: []
   size: 1
   meshGo: {fileID: 0}
   margin: 0
+  bounds: {x: 0, y: 0, z: 0}
 --- !u!4 &1319433466
 Transform:
   m_ObjectHideFlags: 0
