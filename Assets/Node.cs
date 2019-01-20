@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using deVoid.Utils;
 
-public class Node : MonoBehaviour {
+public class Module : MonoBehaviour {
 
-	public class NodeStart : ASignal <Node> {};
+	public class ModuleStart : ASignal <Module> {};
 
 	public string id = "Node";
 	public int divs = 0;
-	public Node parentNode;
-	public List<Node> childNodes;
+	public Module parentNode;
+	public List<Module> childNodes;
 	public float size = 1;
 	public GameObject meshGo;
 
@@ -18,7 +18,7 @@ public class Node : MonoBehaviour {
 	{
 		id += parentNode ? " " + parentNode.childNodes.IndexOf(this).ToString(): "";
 		gameObject.name = id;
-		Signals.Get<NodeStart>().Dispatch(this);
+		Signals.Get<ModuleStart>().Dispatch(this);
 	}
 
 	public void OnDestroy()
@@ -35,7 +35,7 @@ public class Node : MonoBehaviour {
 					var go = new GameObject();
 					go.transform.SetParent(this.transform);
 					go.transform.localPosition = Vector3.zero;
-					var node = go.AddComponent<Node>();
+					var node = go.AddComponent<Module>();
 					childNodes.Add(node);
 					node.parentNode = this;
 					node.meshGo = GameObject.CreatePrimitive(PrimitiveType.Cube);
@@ -55,21 +55,17 @@ public class Node : MonoBehaviour {
 		// Apply scale based child count
 		if(childNodes != null){
 			if(childNodes.Count > 0){
-				foreach (Node item in childNodes)
+				foreach (Module item in childNodes)
 				{
 					item.size = size / divs;
 				}
-				// foreach (Node item in childNodes)
-				// {
-				// 	item.scale -= margin / (divs + 1);
-				// }
-				foreach (Node item in childNodes)
+				foreach (Module item in childNodes)
 				{
 					var scale = item.meshGo.transform.localScale;
 					scale.x = item.size;
 					item.meshGo.transform.localScale = scale;
 				}
-				foreach (Node item in childNodes)
+				foreach (Module item in childNodes)
 				{
 					var pos = item.transform.localPosition;
 					int index = childNodes.IndexOf(item);

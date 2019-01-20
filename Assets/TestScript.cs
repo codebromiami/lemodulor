@@ -5,20 +5,20 @@ using deVoid.Utils;
 
 public class TestScript : MonoBehaviour {
 
-	public Node node;
+	public Module node;
 	
 	private void OnEnable()
 	{
 		
-		Signals.Get<Node.NodeStart>().AddListener(onNodeStart);
+		Signals.Get<Module.ModuleStart>().AddListener(onNodeStart);
 	}
 
 	private void OnDisable()
 	{
-		Signals.Get<Node.NodeStart>().RemoveListener(onNodeStart);
+		Signals.Get<Module.ModuleStart>().RemoveListener(onNodeStart);
 	}
 
-	public void onNodeStart(Node node){
+	public void onNodeStart(Module node){
 		
 	}
 
