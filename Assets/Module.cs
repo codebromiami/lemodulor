@@ -6,14 +6,15 @@ using deVoid.Utils;
 public class Module : MonoBehaviour {
 
 	public class ModuleStart : ASignal <Module> {};
-
+	public Vector3 subdivisions = Vector3.zero;
 	public string id = "Node";
 	public int divs = 0;
 	public Module parentNode;
 	public List<Module> childNodes;
 	public float size = 1;
 	public GameObject meshGo;
-
+	public float margin = 0; // how much space on each side to leave between the next
+	
 	private void Start()
 	{
 		id += parentNode ? " " + parentNode.childNodes.IndexOf(this).ToString(): "";
@@ -28,6 +29,8 @@ public class Module : MonoBehaviour {
 
 	void Update()
 	{	
+		// todo: switch statement to set the current axis count
+		
 		if(divs > 0){
 			
 			if(divs > childNodes.Count){
@@ -59,10 +62,12 @@ public class Module : MonoBehaviour {
 				{
 					item.size = size / divs;
 				}
+				margin = Mathf.Clamp(margin,0f, (size / divs) - 0.01f);	// 0.01 because if we use the exact value the model doesn't render properly
 				foreach (Module item in childNodes)
 				{
 					var scale = item.meshGo.transform.localScale;
 					scale.x = item.size;
+					scale.x -= margin;
 					item.meshGo.transform.localScale = scale;
 				}
 				foreach (Module item in childNodes)

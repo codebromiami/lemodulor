@@ -217,12 +217,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6691f3fc509a249438d3f42108404f45, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  subdivisions: {x: 0, y: 0, z: 0}
   id: Node
   divs: 0
   parentNode: {fileID: 0}
   childNodes: []
   size: 1
   meshGo: {fileID: 0}
+  margin: 0
 --- !u!4 &1319433466
 Transform:
   m_ObjectHideFlags: 0
