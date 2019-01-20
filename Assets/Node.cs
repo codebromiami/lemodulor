@@ -40,6 +40,7 @@ public class Node : MonoBehaviour {
 					node.parentNode = this;
 					node.meshGo = GameObject.CreatePrimitive(PrimitiveType.Cube);
 					node.meshGo.transform.SetParent(node.transform);
+					node.meshGo.transform.localPosition = Vector3.zero;
 					// Debug.Log("Added child");
 				}
 			}else if(divs < childNodes.Count){
@@ -70,7 +71,6 @@ public class Node : MonoBehaviour {
 				}
 				foreach (Node item in childNodes)
 				{
-
 					var pos = item.transform.localPosition;
 					int index = childNodes.IndexOf(item);
 					float a = size /2;
