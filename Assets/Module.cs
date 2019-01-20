@@ -145,6 +145,52 @@ public class Module : MonoBehaviour {
 							break;					
 						}
 					}
+					foreach (Module item in childNodes)
+					{
+						switch(parentNode.divAxis){
+							case axis.x:
+								size.x = parentNode.size.x / parentNode.divs;
+							break;
+							case axis.y:
+								size.y = parentNode.size.y / parentNode.divs;
+							break;
+							case axis.z:
+								size.z = parentNode.size.z / parentNode.divs;
+							break;					
+						}
+					}	
+					if(parentNode.parentNode){
+						foreach (Module item in childNodes)
+						{
+							switch(parentNode.parentNode.divAxis){
+								case axis.x:
+									size.x = parentNode.parentNode.size.x / parentNode.parentNode.divs;
+								break;
+								case axis.y:
+									size.y = parentNode.parentNode.size.y / parentNode.parentNode.divs;
+								break;
+								case axis.z:
+									size.z = parentNode.parentNode.size.z / parentNode.parentNode.divs;
+								break;					
+							}
+						}
+						if(parentNode.parentNode.parentNode){
+						foreach (Module item in childNodes)
+						{
+							switch(parentNode.parentNode.parentNode.divAxis){
+								case axis.x:
+									size.x = parentNode.parentNode.parentNode.size.x / parentNode.parentNode.parentNode.divs;
+								break;
+								case axis.y:
+									size.y = parentNode.parentNode.parentNode.size.y / parentNode.parentNode.parentNode.divs;
+								break;
+								case axis.z:
+									size.z = parentNode.parentNode.parentNode.size.z / parentNode.parentNode.parentNode.divs;
+								break;					
+							}
+						}
+					}
+					}
 				}
 			}	
 		}
