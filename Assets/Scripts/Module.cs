@@ -8,10 +8,10 @@ public class Module : MonoBehaviour {
 	public class ModuleStart : ASignal <Module> {};
 	public enum axis {x,y,z}
 	public axis divAxis = axis.x;
-	public string id = "Node";
+	public string id = "Module";
 	public int divs = 0;
 	public Module parentNode;
-	public List<Module> childNodes;
+	public List<Module> childNodes = new List<Module>();
 	public Vector3 size = Vector3.one;
 	public GameObject meshGo;
 	// public float margin = 0; // how much space on each side to leave between the next
@@ -31,31 +31,36 @@ public class Module : MonoBehaviour {
 	void Update()
 	{	
 		// todo: switch statement to set the current axis count
-		
-		if(divs > 0){
+		if(divs < 0)
+			divs = 0;
 			
-			if(divs > childNodes.Count){
-				while(divs > childNodes.Count){
-					var go = new GameObject();
-					go.transform.SetParent(this.transform);
-					go.transform.localPosition = Vector3.zero;
-					var node = go.AddComponent<Module>();
-					childNodes.Add(node);
-					node.parentNode = this;
-					node.meshGo = GameObject.CreatePrimitive(PrimitiveType.Cube);
-					node.meshGo.transform.SetParent(node.transform);
-					node.meshGo.transform.localPosition = Vector3.zero;
-					// Debug.Log("Added child");
+		if(divs > childNodes.Count){
+			while(divs > childNodes.Count){
+				var go = new GameObject();
+				go.transform.SetParent(this.transform);
+				go.transform.localPosition = Vector3.zero;
+				var node = go.AddComponent<Module>();
+				childNodes.Add(node);
+				node.parentNode = this;
+				var prefab = Resources.Load<GameObject>("Cube");
+				node.meshGo = GameObject.Instantiate(prefab);
+				var color = Random.ColorHSV();
+				node.meshGo.GetComponent<MeshRenderer>().material.color = color;
+				if(Random.value == 1){
+					node.meshGo.GetComponent<MeshRenderer>().enabled = false;
 				}
-			}else if(divs < childNodes.Count){
-				while(divs < childNodes.Count){
-					var node = childNodes[childNodes.Count-1];
-					GameObject.Destroy(node.gameObject);
-					childNodes.RemoveAt(childNodes.Count-1);
-					// Debug.Log("Removed child");
-				}
-			}		
-		}
+				node.meshGo.transform.SetParent(node.transform);
+				node.meshGo.transform.localPosition = Vector3.zero;
+				// Debug.Log("Added child");
+			}
+		}else if(divs < childNodes.Count){
+			while(divs < childNodes.Count){
+				var node = childNodes[childNodes.Count-1];
+				GameObject.Destroy(node.gameObject);
+				childNodes.RemoveAt(childNodes.Count-1);
+				// Debug.Log("Removed child");
+			}
+		}		
 		// Apply scale based child count
 		if(childNodes != null){
 			if(childNodes.Count > 0){
@@ -98,100 +103,27 @@ public class Module : MonoBehaviour {
 					}
 					item.meshGo.transform.localScale = scale;
 				}
+				// Set the size of the un effected axises to the values in the parent
 				if(parentNode){
-					foreach (Module item in childNodes)
-					{
-						switch(divAxis){
-							case axis.x:
-								size.y = parentNode.size.y;
-								size.z = parentNode.size.z;
-							break;
-							case axis.y:
-								size.x = parentNode.size.x;
-								size.z = parentNode.size.z;
-							break;
-							case axis.z:
-								size.x = parentNode.size.x;
-								size.y = parentNode.size.y;
-							break;					
-						}
-					}
 					foreach (Module item in childNodes)
 					{
 						switch(parentNode.divAxis){
 							case axis.x:
-								size.x = parentNode.size.x / parentNode.divs;
+								size.y = parentNode.size.y;
+								size.z = parentNode.size.z;
 							break;
 							case axis.y:
-								size.y = parentNode.size.y / parentNode.divs;
+								size.x = parentNode.size.x;
+								size.z = parentNode.size.z;
 							break;
 							case axis.z:
-								size.z = parentNode.size.z / parentNode.divs;
+								size.x = parentNode.size.x;
+								size.y = parentNode.size.y;
 							break;					
-						}
-					}	
-					if(parentNode.parentNode){
-						foreach (Module item in childNodes)
-						{
-							switch(parentNode.parentNode.divAxis){
-								case axis.x:
-									size.x = parentNode.parentNode.size.x / parentNode.parentNode.divs;
-								break;
-								case axis.y:
-									size.y = parentNode.parentNode.size.y / parentNode.parentNode.divs;
-								break;
-								case axis.z:
-									size.z = parentNode.parentNode.size.z / parentNode.parentNode.divs;
-								break;					
-							}
-						}
-						if(parentNode.parentNode.parentNode){
-							foreach (Module item in childNodes)
-							{
-								switch(parentNode.parentNode.parentNode.divAxis){
-									case axis.x:
-										size.x = parentNode.parentNode.parentNode.size.x / parentNode.parentNode.parentNode.divs;
-									break;
-									case axis.y:
-										size.y = parentNode.parentNode.parentNode.size.y / parentNode.parentNode.parentNode.divs;
-									break;
-									case axis.z:
-										size.z = parentNode.parentNode.parentNode.size.z / parentNode.parentNode.parentNode.divs;
-									break;					
-								}
-							}
-						}else{
-							foreach (Module item in childNodes)
-							{
-								switch(parentNode.parentNode.divAxis){
-									case axis.x:
-										size.x = parentNode.parentNode.size.x / parentNode.parentNode.divs;
-									break;
-									case axis.y:
-										size.y = parentNode.parentNode.size.y / parentNode.parentNode.divs;
-									break;
-									case axis.z:
-										size.z = parentNode.parentNode.size.z / parentNode.parentNode.divs;
-									break;					
-								}
-							}
-						}
-					}else{
-						foreach (Module item in childNodes) {
-							switch(parentNode.divAxis){
-								case axis.x:
-									size.x = parentNode.size.x / parentNode.divs;
-								break;
-								case axis.y:
-									size.y = parentNode.size.y / parentNode.divs;
-								break;
-								case axis.z:
-									size.z = parentNode.size.z / parentNode.divs;
-								break;					
-							}
 						}
 					}
 				}
+				// Effect position
 				foreach (Module item in childNodes)
 				{
 					var pos = item.transform.localPosition;
@@ -221,12 +153,91 @@ public class Module : MonoBehaviour {
 					}
 					item.transform.localPosition = pos;
 				}
-				
 			}	
 		}
-
 		if(meshGo)
 			if(divs > 0) meshGo.SetActive(false); else meshGo.SetActive(true);
+	}
+
+	public void Check(){
+
+		if(parentNode){
+			foreach (Module item in childNodes)
+			{
+				switch(parentNode.divAxis){
+					case axis.x:
+						size.x = parentNode.size.x / parentNode.divs;
+					break;
+					case axis.y:
+						size.y = parentNode.size.y / parentNode.divs;
+					break;
+					case axis.z:
+						size.z = parentNode.size.z / parentNode.divs;
+					break;					
+				}
+			}	
+			if(parentNode.parentNode){
+				foreach (Module item in childNodes)
+				{
+					switch(parentNode.parentNode.divAxis){
+						case axis.x:
+							size.x = parentNode.parentNode.size.x / parentNode.parentNode.divs;
+						break;
+						case axis.y:
+							size.y = parentNode.parentNode.size.y / parentNode.parentNode.divs;
+						break;
+						case axis.z:
+							size.z = parentNode.parentNode.size.z / parentNode.parentNode.divs;
+						break;					
+					}
+				}
+				if(parentNode.parentNode.parentNode){
+					foreach (Module item in childNodes)
+					{
+						switch(parentNode.parentNode.parentNode.divAxis){
+							case axis.x:
+								size.x = parentNode.parentNode.parentNode.size.x / parentNode.parentNode.parentNode.divs;
+							break;
+							case axis.y:
+								size.y = parentNode.parentNode.parentNode.size.y / parentNode.parentNode.parentNode.divs;
+							break;
+							case axis.z:
+								size.z = parentNode.parentNode.parentNode.size.z / parentNode.parentNode.parentNode.divs;
+							break;					
+						}
+					}
+				}else{
+					foreach (Module item in childNodes)
+					{
+						switch(parentNode.parentNode.divAxis){
+							case axis.x:
+								size.x = parentNode.parentNode.size.x / parentNode.parentNode.divs;
+							break;
+							case axis.y:
+								size.y = parentNode.parentNode.size.y / parentNode.parentNode.divs;
+							break;
+							case axis.z:
+								size.z = parentNode.parentNode.size.z / parentNode.parentNode.divs;
+							break;					
+						}
+					}
+				}
+			}else{
+				foreach (Module item in childNodes) {
+					switch(parentNode.divAxis){
+						case axis.x:
+							size.x = parentNode.size.x / parentNode.divs;
+						break;
+						case axis.y:
+							size.y = parentNode.size.y / parentNode.divs;
+						break;
+						case axis.z:
+							size.z = parentNode.size.z / parentNode.divs;
+						break;					
+					}
+				}
+			}
+		}
 	}
 
 	private void OnGUI()
