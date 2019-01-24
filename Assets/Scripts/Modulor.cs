@@ -70,10 +70,16 @@ public class Modulor : MonoBehaviour {
 		72788.0f,
 		117773.5f
 	};
+
 	public enum series {blue, red};
 	public series seriesChoice = series.blue;
 	public float distance;
 	public float closest;
+	public float remainder;
+	public float ab;
+	public float a;
+	public float b;
+	public int count;
 	public List<KeyPair> divs = new List<KeyPair>();
 
 	private List<float> seriesList;
@@ -81,9 +87,29 @@ public class Modulor : MonoBehaviour {
 	private void Update() {	
 		
 		seriesList = seriesChoice == series.red ? redSeries : blueSeries; 
-		closest = GetClosestFromList(seriesList);
+		closest = GetClosestFromList(seriesList, distance);
+		remainder = distance - closest;
 		// within closest how many combinations can we find
 		divs = GetPossibilities(seriesList, closest);
+		a = ab / 1.6180339887f;
+		b = a /  1.6180339887f;
+
+	}
+
+	public static Vector2 GetTwo(float length){
+		Vector2 goldenDivs = new Vector2();
+		goldenDivs.x = length / 1.6180339887f;
+		goldenDivs.y = goldenDivs.x /  1.6180339887f;
+		return goldenDivs;
+	}
+
+	public static List<float> GetList(float length, int count){
+		List<float> goldenDivs = new List<float>();
+		goldenDivs.Add(length / 1.6180339887f);
+		for(int i = 0; i < count; i++){
+			goldenDivs.Add(goldenDivs[goldenDivs.Count-1] / 1.6180339887f);
+		}
+		return goldenDivs;
 	}
 
 	public List<KeyPair> GetPossibilities(List<float> list, float value){
@@ -99,14 +125,14 @@ public class Modulor : MonoBehaviour {
 		return values;
 	}
 
-	public float GetClosestFromList(List<float> list){
+	public float GetClosestFromList(List<float> list, float distance){
 
 		int index = 0;
 		float value = 0;
-		for(int i = 0; i < seriesList.Count; i++){
-			value = seriesList[i];
+		for(int i = 0; i < list.Count; i++){
+			value = list[i];
 			if(value >= distance){
-				index = seriesList.IndexOf(value);
+				index = list.IndexOf(value);
 				break;
 			}
 		}
@@ -115,6 +141,9 @@ public class Modulor : MonoBehaviour {
 			float a = list[index -1];
 			float b = list[index];
 			closest = GetClosest(a,b, distance);
+			if(closest > distance){
+				closest = a;
+			}
 		}
 		return closest;
 	}
@@ -130,7 +159,9 @@ public class Modulor : MonoBehaviour {
 	private void OnGUI()
 	{
 		if(GUILayout.Button("Calculate")){
-			//
+			foreach(var i in GetList(distance, count)){
+				Debug.Log(i);
+			}
 		}
 	}
 	

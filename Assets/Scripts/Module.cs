@@ -14,6 +14,7 @@ public class Module : MonoBehaviour {
 	public List<Module> childNodes = new List<Module>();
 	public Vector3 size = Vector3.one;
 	public GameObject meshGo;
+	public Modulor leModulor;
 	// public float margin = 0; // how much space on each side to leave between the next
 	
 	private void Start()
@@ -21,6 +22,7 @@ public class Module : MonoBehaviour {
 		id += parentNode ? " " + parentNode.childNodes.IndexOf(this).ToString(): "";
 		gameObject.name = id;
 		Signals.Get<ModuleStart>().Dispatch(this);
+		// leModulor = gameObject.AddComponent<Modulor>();
 	}
 
 	public void OnDestroy()
@@ -60,25 +62,58 @@ public class Module : MonoBehaviour {
 				childNodes.RemoveAt(childNodes.Count-1);
 				// Debug.Log("Removed child");
 			}
-		}		
+		}
+		// Use Le Modulor to effect the private void OnTriggerStay(Collider other)
+		// size.x = leModulor.GetClosestFromList(leModulor.redSeries, size.x);
+		// size.y = leModulor.GetClosestFromList(leModulor.redSeries, size.y);
+		// size.z = leModulor.GetClosestFromList(leModulor.redSeries, size.z);
+
 		// Apply scale based child count
 		if(childNodes != null){
 			if(childNodes.Count > 0){
+				List<float> ms = new List<float>();
 				foreach (Module item in childNodes)
 				{
 					switch(divAxis){
 						case axis.x:
-						item.size.x = size.x / divs;
+						ms = Modulor.GetList(size.x,divs);
 						break;
 						case axis.y:
-						item.size.y = size.y / divs;
+						ms = Modulor.GetList(size.y,divs);
 						break;
 						case axis.z:
-						item.size.z = size.z / divs;
+						ms = Modulor.GetList(size.z,divs);
 						break;
 					}
 				}
-				// margin = Mathf.Clamp(margin,0f, (size.x / divs) - 0.01f);	// 0.01 because if we use the exact value the model doesn't render properly
+				for(int i = 0; i < childNodes.Count; i++){
+					
+					switch(divAxis){
+						case axis.x:
+						childNodes[i].size.x = ms[i];
+						break;
+						case axis.y:
+						childNodes[i].size.y = ms[i];
+						break;
+						case axis.z:
+						childNodes[i].size.z = ms[i];
+						break;
+					}
+				}
+				// foreach (Module item in childNodes)
+				// {
+				// 	switch(divAxis){
+				// 		case axis.x:
+				// 		item.size.x = size.x / divs;
+				// 		break;
+				// 		case axis.y:
+				// 		item.size.y = size.y / divs;
+				// 		break;
+				// 		case axis.z:
+				// 		item.size.z = size.z / divs;
+				// 		break;
+				// 	}
+				// }
 				foreach (Module item in childNodes) {
 					var scale = item.meshGo.transform.localScale;
 					switch(divAxis){
@@ -124,35 +159,71 @@ public class Module : MonoBehaviour {
 					}
 				}
 				// Effect position
+				// index 0 pos = index 1 scale / 2
+				// index 1 should be moved the scale of index 0 / 2
 				foreach (Module item in childNodes)
 				{
 					var pos = item.transform.localPosition;
 					int index = childNodes.IndexOf(item);
-					float a = 0;
-					float b = 0;
-					float offset = 0;
-					switch(divAxis){
-						case axis.x:
-							a = size.x /2;
-							b = a / divs;
-							offset = a - b;
-							pos.x = (item.size.x * index) - offset;	
-						break;
-						case axis.y:
-							a = size.y /2;
-							b = a / divs;
-							offset = a - b;
-							pos.y = (item.size.y * index) - offset;	
-						break;
-						case axis.z:
-							a = size.z /2;
-							b = a / divs;
-							offset = a - b;
-							pos.z = (item.size.z * index) - offset;	
-						break;					
+					if(index == 0){
+						switch(divAxis){
+							case axis.x:
+								pos.x = childNodes[1].size.x /2 * -1;
+							break;
+							case axis.y:
+								pos.y = childNodes[1].size.y /2 * -1;
+							break;
+							case axis.z:
+								pos.z = childNodes[1].size.z /2 * -1;
+							break;					
+						}
+					}else if(index == 1){
+						switch(divAxis){
+							case axis.x:
+								pos.x = childNodes[0].size.x /2;
+							break;
+							case axis.y:
+								pos.y = childNodes[0].size.y /2;
+							break;
+							case axis.z:
+								pos.z = childNodes[0].size.z /2;
+							break;					
+						}
+					}else{
+						Debug.LogError("Index should not be greater than 1");
 					}
 					item.transform.localPosition = pos;
 				}
+				// // Effect position
+				// foreach (Module item in childNodes)
+				// {
+				// 	var pos = item.transform.localPosition;
+				// 	int index = childNodes.IndexOf(item);
+				// 	float a = 0;
+				// 	float b = 0;
+				// 	float offset = 0;
+				// 	switch(divAxis){
+				// 		case axis.x:
+				// 			a = size.x /2;
+				// 			b = a / divs;
+				// 			offset = a - b;
+				// 			pos.x = (item.size.x * index) - offset;	
+				// 		break;
+				// 		case axis.y:
+				// 			a = size.y /2;
+				// 			b = a / divs;
+				// 			offset = a - b;
+				// 			pos.y = (item.size.y * index) - offset;	
+				// 		break;
+				// 		case axis.z:
+				// 			a = size.z /2;
+				// 			b = a / divs;
+				// 			offset = a - b;
+				// 			pos.z = (item.size.z * index) - offset;	
+				// 		break;					
+				// 	}
+				// 	item.transform.localPosition = pos;
+				// }
 			}	
 		}
 		if(meshGo)

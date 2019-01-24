@@ -8,6 +8,8 @@ public class TestScript : MonoBehaviour {
 	public Module module;
 	public int count = 0;
 	public int limit = 50;
+	public Modulor leModulor;
+	public List<Module> modules = new List<Module>();
 
 	private void OnEnable()
 	{
@@ -21,28 +23,30 @@ public class TestScript : MonoBehaviour {
 
 	public void onModuleStart(Module module)
 	{	
+		modules.Add(module);
 		if(count > limit)
 			return;
 
-		module.divAxis = (Module.axis)Random.Range(0,3);
-		module.divs = Random.Range(1,10);	
+		module.divAxis = Random.value < 0.3f ? module.divAxis = Module.axis.x : module.divAxis = Module.axis.y;
+		module.divAxis = Random.value > 0.6f ? module.divAxis = Module.axis.y : module.divAxis = Module.axis.z;
+		module.divs = Random.value < 0.5f ? 0 : 2;
 		count++;
 	}
 
 	public void Refresh(){
 		module.divs = 0;
 		count = 0;
-		float x = 226.0f;
-		float y = 226.0f;
-		float z = 20.4f;
-		module.size = new Vector3(x,y,z);
-		module.divs = Random.Range(1,10);
+		module.divAxis = Random.value < 0.3f ? module.divAxis = Module.axis.x : module.divAxis = Module.axis.y;
+		module.divAxis = Random.value > 0.6f ? module.divAxis = Module.axis.y : module.divAxis = Module.axis.z;
+		module.divs = Random.value < 0.5f ? 0 : 2;	
 	}
 
 	// Use this for initialization
 	void Start () {
 
-		module.divs = Random.Range(1,10);
+		module.divAxis = Random.value < 0.3f ? module.divAxis = Module.axis.x : module.divAxis = Module.axis.y;
+		module.divAxis = Random.value > 0.6f ? module.divAxis = Module.axis.y : module.divAxis = Module.axis.z;
+		module.divs = 2;
 	}
 	
 	// Update is called once per frame
@@ -51,5 +55,9 @@ public class TestScript : MonoBehaviour {
 		if(Input.GetKeyDown(KeyCode.Space)){
 			Refresh();
 		}
+		// int i = Random.Range(0,modules.Count -1);
+		// if(i > 0 | i < modules.Count){
+		// 	modules[i].divs = Random.Range(0,3);
+		// }
 	}
 }
