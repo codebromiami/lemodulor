@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using deVoid.Utils;
+using UnityEngine.Events;
 
 public class Module : MonoBehaviour {
 
@@ -15,11 +16,12 @@ public class Module : MonoBehaviour {
 	public Vector3 size = Vector3.one;
 	public GameObject meshGo;
 	public Modulor leModulor;
-	
+	public bool visible = true;
+
 	private void Start()
 	{
 		id += parentNode ? " " + parentNode.childNodes.IndexOf(this).ToString(): "";
-		gameObject.name = id;
+		gameObject.name += id;
 		List<Vector3> dirs = new List<Vector3>();
 		foreach(var dir in dirs){
 
@@ -60,7 +62,23 @@ public class Module : MonoBehaviour {
 				// Debug.Log("Removed child");
 			}
 		}
-	
+		// Set the size of the un effected axises to the values in the parent
+		if(parentNode){
+			switch(parentNode.divAxis){
+				case axis.x:
+					size.y = parentNode.size.y;
+					size.z = parentNode.size.z;
+				break;
+				case axis.y:
+					size.x = parentNode.size.x;
+					size.z = parentNode.size.z;
+				break;
+				case axis.z:
+					size.x = parentNode.size.x;
+					size.y = parentNode.size.y;
+				break;					
+			}
+		}
 		// Apply scale based child count
 		if(childNodes != null){
 			if(childNodes.Count > 0){
@@ -117,26 +135,24 @@ public class Module : MonoBehaviour {
 					}
 					item.meshGo.transform.localScale = scale;
 				}
-				// Set the size of the un effected axises to the values in the parent
-				if(parentNode){
-					foreach (Module item in childNodes)
-					{
-						switch(parentNode.divAxis){
-							case axis.x:
-								size.y = parentNode.size.y;
-								size.z = parentNode.size.z;
-							break;
-							case axis.y:
-								size.x = parentNode.size.x;
-								size.z = parentNode.size.z;
-							break;
-							case axis.z:
-								size.x = parentNode.size.x;
-								size.y = parentNode.size.y;
-							break;					
-						}
-					}
-				}
+				
+					// foreach (Module item in childNodes)
+					// {
+					// 	switch(parentNode.divAxis){
+					// 		case axis.x:
+					// 			size.y = parentNode.size.y;
+					// 			size.z = parentNode.size.z;
+					// 		break;
+					// 		case axis.y:
+					// 			size.x = parentNode.size.x;
+					// 			size.z = parentNode.size.z;
+					// 		break;
+					// 		case axis.z:
+					// 			size.x = parentNode.size.x;
+					// 			size.y = parentNode.size.y;
+					// 		break;					
+					// 	}
+					// }
 				// Effect position
 				// index 0 pos = index 1 scale / 2
 				// index 1 should be moved the scale of index 0 / 2
@@ -205,8 +221,16 @@ public class Module : MonoBehaviour {
 				// }
 			}	
 		}
-		if(meshGo)
-			if(divs > 0) meshGo.SetActive(false); else meshGo.SetActive(true);
+		if(meshGo){
+			if(divs > 0){
+				visible = false;
+			}
+		}
+		if(visible){
+			meshGo.SetActive(true);
+		}else{
+			meshGo.SetActive(false);
+		}
 	}
 
 	public void Check(){

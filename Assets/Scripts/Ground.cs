@@ -19,16 +19,16 @@ public class Ground : MonoBehaviour {
 		Signals.Get<Pointer.OnPointerUp>().RemoveListener(onPointerUp);
 	}
 
-	public void onPointer(Vector3 pos){
+	public void onPointer(RaycastHit hit){
 
-		points.Add(pos);
-		Debug.DrawRay(pos, Vector3.up, Color.blue);
+		points.Add(hit.point);
+		Debug.DrawRay(hit.point, Vector3.up, Color.blue);
 		Debug.Log("Did Hit");
 	}
 
-	public void onPointerUp(Vector3 pos){
+	public void onPointerUp(RaycastHit hit){
 		var go = new GameObject();
-		go.transform.position = pos;
+		go.transform.position = hit.point;
 		var script = go.AddComponent<Piloti>();
 		script.points = points;
 	}

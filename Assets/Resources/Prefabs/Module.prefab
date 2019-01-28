@@ -57,9 +57,10 @@ MonoBehaviour:
   divs: 0
   parentNode: {fileID: 0}
   childNodes: []
-  size: {x: 1, y: 1, z: 1}
+  size: {x: 2.26, y: 2.26, z: 2.26}
   meshGo: {fileID: 1053976482781502, guid: 163c9ddec9d7f4abfa94be3bf97b19ea, type: 2}
   leModulor: {fileID: 114655180974990650}
+  visible: 1
 --- !u!114 &114655180974990650
 MonoBehaviour:
   m_ObjectHideFlags: 1

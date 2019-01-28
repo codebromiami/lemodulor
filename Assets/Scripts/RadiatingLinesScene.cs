@@ -5,8 +5,6 @@ using deVoid.Utils;
 
 public class RadiatingLinesScene : MonoBehaviour {
 
-	public List<Vector3> points = new List<Vector3>();
-
 	private void OnEnable()
 	{
 		Signals.Get<Pointer.OnPointerDown>().AddListener(onPointerDown);
@@ -21,30 +19,32 @@ public class RadiatingLinesScene : MonoBehaviour {
 		Signals.Get<Pointer.OnPointerUp>().RemoveListener(onPointerUp);
 	}
 
-	public void onPointerDown(Vector3 pos){
-		points = new List<Vector3>();
-	}
+	public void onPointerDown(RaycastHit hit){
 
-	public void onPointer(Vector3 pos){
-
-		points.Add(pos);
-		Debug.DrawRay(pos, Vector3.up, Color.blue);
-		Debug.Log("Did Hit");
-	}
-
-	public void onPointerUp(Vector3 pos){
-		
+		var m = hit.collider.gameObject.GetComponentInParent<Module>();
 		var go = Resources.Load<GameObject>("Prefabs/RadiatingLines");
-		go = Instantiate(go);
 		var rl = go.GetComponent<RadiatingLines>();
-		rl.transform.transform.position = points[0];
-		rl.start = points[0];
-		rl.end = points[points.Count-1];
+		rl.axis = Module.axis.z;
+		rl.size = m.size;
+		rl.parentModule = m;
+		go = Instantiate(go,m.transform);
+	}
+
+	public void onPointer(RaycastHit hit){
+
+		
+	}
+
+	public void onPointerUp(RaycastHit hit){
+		
 	}
 
 	// Use this for initialization
 	void Start () {
-		
+		var go = Resources.Load<GameObject>("Prefabs/Module");
+		go = Instantiate(go);
+		var m = go.GetComponent<Module>();
+		m.divs = 2;
 	}
 	
 	// Update is called once per frame

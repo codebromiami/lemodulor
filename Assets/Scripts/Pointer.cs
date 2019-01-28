@@ -5,9 +5,9 @@ using deVoid.Utils;
 
 public class Pointer : MonoBehaviour {
 
-	public class OnPointerDown : ASignal<Vector3>{}
-	public class OnPointer : ASignal<Vector3>{}
-	public class OnPointerUp : ASignal<Vector3>{}
+	public class OnPointerDown : ASignal<RaycastHit>{}
+	public class OnPointer : ASignal<RaycastHit>{}
+	public class OnPointerUp : ASignal<RaycastHit>{}
 
 	// Use this for initialization
 	void Start () {
@@ -31,7 +31,7 @@ public class Pointer : MonoBehaviour {
 			Ray ray = cam.ScreenPointToRay(mousePos);
 			if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask))
 			{
-				Signals.Get<OnPointerDown>().Dispatch(hit.point);
+				Signals.Get<OnPointerDown>().Dispatch(hit);
 				Debug.DrawLine(ray.origin, hit.point, Color.blue);
 				// Debug.Log("Did Hit");
 			}
@@ -55,7 +55,8 @@ public class Pointer : MonoBehaviour {
 			Ray ray = cam.ScreenPointToRay(mousePos);
 			if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask))
 			{
-				Signals.Get<OnPointer>().Dispatch(hit.point);
+				Signals.Get<OnPointer>().Dispatch(hit);
+				
 				Debug.DrawLine(ray.origin, hit.point, Color.blue);
 				// Debug.Log("Did Hit");
 			}
@@ -79,7 +80,7 @@ public class Pointer : MonoBehaviour {
 			Ray ray = cam.ScreenPointToRay(mousePos);
 			if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask))
 			{
-				Signals.Get<OnPointerUp>().Dispatch(hit.point);
+				Signals.Get<OnPointerUp>().Dispatch(hit);
 				Debug.DrawLine(ray.origin, hit.point, Color.blue);
 				// Debug.Log("Did Hit");
 			}
