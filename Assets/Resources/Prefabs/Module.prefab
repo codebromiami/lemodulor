@@ -1,0 +1,135 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 1976748767207652}
+  m_IsPrefabAsset: 1
+--- !u!1 &1976748767207652
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4775008221309092}
+  - component: {fileID: 114610253835873186}
+  - component: {fileID: 114655180974990650}
+  m_Layer: 0
+  m_Name: Module
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4775008221309092
+Transform:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1976748767207652}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 6.4688454, y: 0.91115296, z: -3.5518293}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114610253835873186
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1976748767207652}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6691f3fc509a249438d3f42108404f45, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  divAxis: 0
+  id: Module
+  divs: 0
+  parentNode: {fileID: 0}
+  childNodes: []
+  size: {x: 1, y: 1, z: 1}
+  meshGo: {fileID: 1053976482781502, guid: 163c9ddec9d7f4abfa94be3bf97b19ea, type: 2}
+  leModulor: {fileID: 114655180974990650}
+--- !u!114 &114655180974990650
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1976748767207652}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a7196601f97d424880976026825c64c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  redSeries:
+  - 0.006
+  - 0.009
+  - 0.015
+  - 0.024
+  - 0.039
+  - 0.063
+  - 0.102
+  - 0.165
+  - 0.267
+  - 0.432
+  - 0.698
+  - 1.13
+  - 1.829
+  - 2.959
+  - 4.788
+  - 7.747
+  - 12.535
+  - 20.282
+  - 39.816
+  - 53.098
+  - 85.914
+  - 139.013
+  - 224.927
+  - 363.94
+  - 588.867
+  - 952.807
+  blueSeries:
+  - 0.011
+  - 0.018
+  - 0.03
+  - 0.048
+  - 0.078
+  - 0.126
+  - 0.204
+  - 0.33
+  - 0.534
+  - 0.863
+  - 1.397
+  - 2.26
+  - 3.658
+  - 5.918
+  - 9.576
+  - 15.494
+  - 25.069
+  - 40.563
+  - 65.633
+  - 106.196
+  - 171.829
+  - 278.025
+  - 449.855
+  - 727.88
+  - 1177.735
+  seriesChoice: 0
+  distance: 0
+  closest: 0
+  remainder: 0
+  ab: 0
+  a: 0
+  b: 0
+  count: 0
+  divs: []

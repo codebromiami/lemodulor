@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using deVoid.Utils;
 
-public class TestScript : MonoBehaviour {
+public class PanelExercise : MonoBehaviour {
 
 	public Module module;
-	public int count = 0;
-	public int limit = 50;
 	public Modulor leModulor;
 	public List<Module> modules = new List<Module>();
-
+	public float limit = 50;
+	
 	private void OnEnable()
 	{
 		Signals.Get<Module.ModuleStart>().AddListener(onModuleStart);
@@ -21,11 +20,20 @@ public class TestScript : MonoBehaviour {
 		Signals.Get<Module.ModuleStart>().RemoveListener(onModuleStart);
 	}
 
+	// Update is called once per frame
+	void Update () {
+		
+		if(Input.GetKeyDown(KeyCode.Space)){
+			StartCoroutine(Refresh());
+		}
+	}
+
 	public void onModuleStart(Module _module)
 	{	
 		modules.Add(_module);
-		if(count > limit)
+		if(modules.Count >= Random.Range(1, limit)){
 			return;
+		}
 
 		var rand = Random.value;
 		if(Random.value < 0.5f){
@@ -34,15 +42,11 @@ public class TestScript : MonoBehaviour {
 			_module.divAxis = Module.axis.y;	
 		}
 		_module.divs = 2;
-		Debug.Log(module.gameObject.name);
-		Debug.Log(module.size);
-		Debug.Log(module.transform.localPosition);
-		count++;
 	}
 
 	public IEnumerator Refresh(){
 		module.divs = 0;
-		count = 0;
+		modules = new List<Module>();
 		yield return new WaitForSeconds(0.1f);
 		var rand = Random.value;
 		if(Random.value < 0.5f){
@@ -52,21 +56,6 @@ public class TestScript : MonoBehaviour {
 		}
 		module.divs = 2;
 	}
-
-	// Use this for initialization
-	void Start () {
-
-	}
 	
-	// Update is called once per frame
-	void Update () {
-		
-		if(Input.GetKeyDown(KeyCode.Space)){
-			StartCoroutine(Refresh());
-		}
-		// int i = Random.Range(0,modules.Count -1);
-		// if(i > 0 | i < modules.Count){
-		// 	modules[i].divs = Random.Range(0,3);
-		// }
-	}
+
 }

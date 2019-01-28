@@ -137,8 +137,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a721bc3e3b244ed4b6c0503079d9a23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Min: 1
-  Max: 10
+  minXZ: 1
+  maxXZ: 10
+  maxHeight: 5
   Radius: 10
   num: 10
   cubes: []
@@ -167,3 +168,9 @@ MonoBehaviour:
   - x
   - y
   - z
+  ready: 0
+  points: []
+  meshfilter: {fileID: 0}
+  counter: 0
+  scale: 0.01
+  lrGos: []

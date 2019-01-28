@@ -15,14 +15,16 @@ public class Module : MonoBehaviour {
 	public Vector3 size = Vector3.one;
 	public GameObject meshGo;
 	public Modulor leModulor;
-	// public float margin = 0; // how much space on each side to leave between the next
 	
 	private void Start()
 	{
 		id += parentNode ? " " + parentNode.childNodes.IndexOf(this).ToString(): "";
 		gameObject.name = id;
+		List<Vector3> dirs = new List<Vector3>();
+		foreach(var dir in dirs){
+
+		}
 		Signals.Get<ModuleStart>().Dispatch(this);
-		// leModulor = gameObject.AddComponent<Modulor>();
 	}
 
 	public void OnDestroy()
@@ -44,13 +46,8 @@ public class Module : MonoBehaviour {
 				var node = go.AddComponent<Module>();
 				childNodes.Add(node);
 				node.parentNode = this;
-				var prefab = Resources.Load<GameObject>("Cube");
+				var prefab = Resources.Load<GameObject>("Prefabs/Cube");
 				node.meshGo = GameObject.Instantiate(prefab);
-				var color = Random.ColorHSV();
-				node.meshGo.GetComponent<MeshRenderer>().material.color = color;
-				if(Random.value == 1){
-					node.meshGo.GetComponent<MeshRenderer>().enabled = false;
-				}
 				node.meshGo.transform.SetParent(node.transform);
 				node.meshGo.transform.localPosition = Vector3.zero;
 				// Debug.Log("Added child");
@@ -63,11 +60,7 @@ public class Module : MonoBehaviour {
 				// Debug.Log("Removed child");
 			}
 		}
-		// Use Le Modulor to effect the private void OnTriggerStay(Collider other)
-		// size.x = leModulor.GetClosestFromList(leModulor.redSeries, size.x);
-		// size.y = leModulor.GetClosestFromList(leModulor.redSeries, size.y);
-		// size.z = leModulor.GetClosestFromList(leModulor.redSeries, size.z);
-
+	
 		// Apply scale based child count
 		if(childNodes != null){
 			if(childNodes.Count > 0){
@@ -100,20 +93,6 @@ public class Module : MonoBehaviour {
 						break;
 					}
 				}
-				// foreach (Module item in childNodes)
-				// {
-				// 	switch(divAxis){
-				// 		case axis.x:
-				// 		item.size.x = size.x / divs;
-				// 		break;
-				// 		case axis.y:
-				// 		item.size.y = size.y / divs;
-				// 		break;
-				// 		case axis.z:
-				// 		item.size.z = size.z / divs;
-				// 		break;
-				// 	}
-				// }
 				foreach (Module item in childNodes) {
 					var scale = item.meshGo.transform.localScale;
 					switch(divAxis){

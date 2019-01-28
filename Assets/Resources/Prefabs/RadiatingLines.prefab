@@ -1,0 +1,156 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 1041797804336288}
+  m_IsPrefabAsset: 1
+--- !u!1 &1041797804336288
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4246688908545732}
+  - component: {fileID: 114149284204322150}
+  - component: {fileID: 114432564944880774}
+  - component: {fileID: 114580713788360326}
+  m_Layer: 0
+  m_Name: RadiatingLines
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4246688908545732
+Transform:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1041797804336288}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114149284204322150
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1041797804336288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76b99e53a9903417084e82c11d868055, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  module: {fileID: 114432564944880774}
+  leModulor: {fileID: 114580713788360326}
+  modules: []
+  limit: 50
+  distance: 100
+  height: 2.26
+  width: 0.6
+  start: {x: 0, y: 0, z: 0}
+  end: {x: 1, y: 1, z: 1}
+--- !u!114 &114432564944880774
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1041797804336288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6691f3fc509a249438d3f42108404f45, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  divAxis: 0
+  id: Module
+  divs: 0
+  parentNode: {fileID: 0}
+  childNodes: []
+  size: {x: 0, y: 0, z: 0}
+  meshGo: {fileID: 1053976482781502, guid: 163c9ddec9d7f4abfa94be3bf97b19ea, type: 2}
+  leModulor: {fileID: 114580713788360326}
+--- !u!114 &114580713788360326
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1041797804336288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a7196601f97d424880976026825c64c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  redSeries:
+  - 0.6
+  - 0.9
+  - 1.5
+  - 2.4
+  - 3.9
+  - 6.3
+  - 10.2
+  - 16.5
+  - 26.7
+  - 43.2
+  - 69.8
+  - 113
+  - 182.9
+  - 295.9
+  - 478.8
+  - 774.7
+  - 1253.5
+  - 2028.2
+  - 3981.6
+  - 5309.8
+  - 8591.4
+  - 13901.3
+  - 22492.7
+  - 36394
+  - 58886.7
+  - 95280.7
+  blueSeries:
+  - 1.1
+  - 1.8
+  - 3
+  - 4.8
+  - 7.8
+  - 12.6
+  - 20.4
+  - 33
+  - 53.4
+  - 86.3
+  - 139.7
+  - 226
+  - 365.8
+  - 591.8
+  - 957.6
+  - 1549.4
+  - 2506.9
+  - 4056.3
+  - 6563.3
+  - 10619.6
+  - 17182.9
+  - 27802.5
+  - 44985.5
+  - 72788
+  - 117773.5
+  seriesChoice: 0
+  distance: 0
+  closest: 0
+  remainder: 0
+  ab: 0
+  a: 0
+  b: 0
+  count: 0
+  divs: []

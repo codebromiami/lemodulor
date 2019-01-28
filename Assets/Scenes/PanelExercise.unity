@@ -418,6 +418,7 @@ MonoBehaviour:
   module: {fileID: 1319433465}
   leModulor: {fileID: 1229303776}
   modules: []
+  limit: 50
 --- !u!4 &1446357526
 Transform:
   m_ObjectHideFlags: 0
