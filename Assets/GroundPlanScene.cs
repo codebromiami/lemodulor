@@ -13,7 +13,8 @@ public class GroundPlanScene : MonoBehaviour {
 	public Vector3 c = Vector3.zero;
 	public Vector3 d = Vector3.zero;
 	public bool ziggy = false;
-	
+	public bool rays = false;
+
 	private void OnEnable()
 	{
 		Signals.Get<Pointer.OnPointerDown>().AddListener(onPointerDown);
@@ -35,6 +36,7 @@ public class GroundPlanScene : MonoBehaviour {
 		b = Vector3.zero;
 		c = Vector3.zero;	
 		ziggy = false;
+		rays = false;
 	}
 
 	public void onPointer(RaycastHit hit){
@@ -84,7 +86,7 @@ public class GroundPlanScene : MonoBehaviour {
 		var pos = m.transform.position;
 		pos.y += closest /2;
 		m.transform.position = pos;
-		m.divs = 2;
+		rays = true;
 	}
 
 	public Vector3 GetHalfway(Vector3 a, Vector3 b){
@@ -117,5 +119,22 @@ public class GroundPlanScene : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		
+		if(rays){
+			foreach(var p in points){
+				var pos = p;
+				pos.y -= 1;
+				Ray ray = new Ray(pos, Vector3.up);
+				RaycastHit[] hits;
+				hits = Physics.RaycastAll(ray, 100);
+				Debug.Log(hits.Length);
+				foreach(var hit in hits){
+					var mod = hit.collider.gameObject.GetComponentInParent<Module>();
+					if(mod != null){
+						mod.divs = 2;
+						mod.hit = true;
+					}
+				}
+			}
+		}
 	}
 }

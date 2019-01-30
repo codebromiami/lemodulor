@@ -17,7 +17,7 @@ public class Module : MonoBehaviour {
 	public GameObject meshGo;
 	public Modulor leModulor;
 	public bool visible = true;
-
+	public bool hit = false;
 	private void Start()
 	{
 		id += parentNode ? " " + parentNode.childNodes.IndexOf(this).ToString(): "";
@@ -25,6 +25,12 @@ public class Module : MonoBehaviour {
 		List<Vector3> dirs = new List<Vector3>();
 		foreach(var dir in dirs){
 
+		}
+		if(!meshGo){
+			var prefab = Resources.Load<GameObject>("Prefabs/Cube");
+			meshGo = GameObject.Instantiate(prefab, this.transform);
+			meshGo.transform.localPosition = Vector3.zero;
+			meshGo.transform.localScale = size;
 		}
 		Signals.Get<ModuleStart>().Dispatch(this);
 	}
