@@ -8,6 +8,12 @@ public class GroundPlanScene : MonoBehaviour {
 	public List<Vector3> points = new List<Vector3>();
 	public float distance = 0;
 	public int density = 0;
+	public Vector3 a = Vector3.zero;
+	public Vector3 b = Vector3.zero;
+	public Vector3 c = Vector3.zero;
+	public Vector3 d = Vector3.zero;
+	public bool ziggy = false;
+	
 	private void OnEnable()
 	{
 		Signals.Get<Pointer.OnPointerDown>().AddListener(onPointerDown);
@@ -44,12 +50,6 @@ public class GroundPlanScene : MonoBehaviour {
 		// }
 	}
 
-	public Vector3 a = Vector3.zero;
-	public Vector3 b = Vector3.zero;
-	public Vector3 c = Vector3.zero;
-	public Vector3 d = Vector3.zero;
-	public bool ziggy = false;
-
 	public void onPointerUp(RaycastHit hit){
 
 		a = points[0];
@@ -76,6 +76,15 @@ public class GroundPlanScene : MonoBehaviour {
 		density = points.Count;
 		var go = Resources.Load<GameObject>("Prefabs/Module");
 		go = Instantiate(go,d,Quaternion.identity);
+		var m = go.GetComponent<Module>();
+		float closestA = Modulor.GetClosestFromList(Modulor.redSeries, distance);
+		float closestB = Modulor.GetClosestFromList(Modulor.blueSeries, distance);
+		float closest = Modulor.GetClosest(closestA,closestB, distance);
+		m.size = Vector3.one * closest;
+		var pos = m.transform.position;
+		pos.y += closest /2;
+		m.transform.position = pos;
+		m.divs = 2;
 	}
 
 	public Vector3 GetHalfway(Vector3 a, Vector3 b){

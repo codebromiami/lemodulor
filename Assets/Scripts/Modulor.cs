@@ -15,7 +15,7 @@ public class Modulor : MonoBehaviour {
 		public float count;
 		public float remainder;
 	}
-	public List<float> redSeries = new List<float>(){
+	public static List<float> redSeries = new List<float>(){
 		0.006f,
 		0.009f,
 		0.015f,
@@ -43,7 +43,7 @@ public class Modulor : MonoBehaviour {
 		588.867f,
 		952.807f
 	};
-	public List<float> blueSeries = new List<float>(){
+	public static List<float> blueSeries = new List<float>(){
 		0.011f,
 		0.018f,
 		0.030f,
@@ -125,7 +125,7 @@ public class Modulor : MonoBehaviour {
 		return values;
 	}
 
-	public float GetClosestFromList(List<float> list, float distance){
+	public static float GetClosestFromList(List<float> list, float distance){
 
 		int index = 0;
 		float value = 0;
@@ -151,8 +151,8 @@ public class Modulor : MonoBehaviour {
 	public float GetHalfway(float a, float b){
 		return a + b / 2;
 	}
-
-	public float GetClosest(float a, float b, float c){
+	
+	public static float GetClosest(float a, float b, float c){
 		 return Mathf.Abs(c - a) < Mathf.Abs(c - b) ? a : b;
 	}
 
