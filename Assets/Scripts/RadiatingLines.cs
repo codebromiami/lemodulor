@@ -11,6 +11,9 @@ public class RadiatingLines : MonoBehaviour {
 	public Module.axis axis = Module.axis.x;
 	public float limit = 50;
 	public Vector3 size;
+	public bool visibleEnds = false;
+	public Module startModule;
+	public Module endModule;
 
 	private void OnEnable()
 	{
@@ -31,6 +34,7 @@ public class RadiatingLines : MonoBehaviour {
      }
 
 	IEnumerator Start(){
+		
 		childModule.size = size;
 		childModule.parentNode = parentModule;
 		childModule.visible = false;
@@ -40,10 +44,8 @@ public class RadiatingLines : MonoBehaviour {
 		{
 			if(Random.value > 0.5){
 				module.visible = false;
-				Debug.Log("Not visible");
 			}else{
 				module.visible = true;
-				Debug.Log("Visible");
 			}
 		}
 	}
@@ -51,7 +53,43 @@ public class RadiatingLines : MonoBehaviour {
 	public void onModuleStart(Module _module)
 	{	
 		modules.Add(_module);
-		
+		if(visibleEnds){
+
+			if(!startModule)
+				startModule = _module;
+
+			if(!endModule)
+				endModule = _module;
+
+			float a = 0;
+			float b = 0;
+			float c = 0;
+			switch(axis){
+				case Module.axis.x:
+					a = _module.transform.position.x;
+					b = startModule.transform.position.x;
+					c = endModule.transform.position.x;
+				break;
+				case Module.axis.y:
+					a = _module.transform.position.y;
+					b = startModule.transform.position.y;
+					c = endModule.transform.position.y;
+				break;
+				case Module.axis.z:
+					a = _module.transform.position.z;
+					b = startModule.transform.position.z;
+					c = endModule.transform.position.z;
+				break;
+			}
+			if(a < b){
+				startModule = _module;
+			}
+			if(a > c){
+				endModule = _module;
+			}
+			startModule.visible = true;
+			endModule.visible = true;
+		}
 		if(modules.Count >= Random.Range(1, limit)){
 			return;
 		}

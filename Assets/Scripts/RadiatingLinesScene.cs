@@ -5,6 +5,8 @@ using deVoid.Utils;
 
 public class RadiatingLinesScene : MonoBehaviour {
 
+	public Module.axis axis;
+
 	private void OnEnable()
 	{
 		Signals.Get<Pointer.OnPointerDown>().AddListener(onPointerDown);
@@ -24,7 +26,8 @@ public class RadiatingLinesScene : MonoBehaviour {
 		var m = hit.collider.gameObject.GetComponentInParent<Module>();
 		var go = Resources.Load<GameObject>("Prefabs/RadiatingLines");
 		var rl = go.GetComponent<RadiatingLines>();
-		rl.axis = Module.axis.z;
+		rl.visibleEnds = true;
+		rl.axis = axis;
 		rl.size = m.size;
 		rl.parentModule = m;
 		go = Instantiate(go,m.transform);
