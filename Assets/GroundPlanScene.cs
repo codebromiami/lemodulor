@@ -7,7 +7,7 @@ public class GroundPlanScene : MonoBehaviour {
 
 	public List<Vector3> points = new List<Vector3>();
 	public float distance = 0;
-
+	public int density = 0;
 	private void OnEnable()
 	{
 		Signals.Get<Pointer.OnPointerDown>().AddListener(onPointerDown);
@@ -47,7 +47,9 @@ public class GroundPlanScene : MonoBehaviour {
 	public Vector3 a = Vector3.zero;
 	public Vector3 b = Vector3.zero;
 	public Vector3 c = Vector3.zero;
+	public Vector3 d = Vector3.zero;
 	public bool ziggy = false;
+
 	public void onPointerUp(RaycastHit hit){
 
 		a = points[0];
@@ -66,22 +68,36 @@ public class GroundPlanScene : MonoBehaviour {
 		}
 		if(ziggy){
 			distance = Vector3.Distance(b,c);
+			d = GetHalfway(b,c);
 		}else{
 			distance = Vector3.Distance(a,b);
+			d = GetHalfway(a,b);
 		}
+		density = points.Count;
+		var go = Resources.Load<GameObject>("Prefabs/Module");
+		go = Instantiate(go,d,Quaternion.identity);
+	}
 
+	public Vector3 GetHalfway(Vector3 a, Vector3 b){
+		return (a+b) / 2;
 	}
 
 	private void OnDrawGizmos()
 	{
 		Gizmos.color = Color.red;
+		var scale = Vector3.one * 0.1f;
 		foreach(var p in points){
-			Gizmos.DrawCube(p,Vector3.one * 0.025f);
+			Gizmos.DrawCube(p,scale);
 		}
 		Gizmos.color = Color.blue;
 		Gizmos.DrawLine(a,b);
+		Gizmos.DrawCube(a, scale);
+		Gizmos.DrawCube(b, scale);
 		Gizmos.color = Color.yellow;
+		Gizmos.DrawCube(c, scale);
 		Gizmos.DrawLine(b,c);
+		Gizmos.color = Color.magenta;
+		Gizmos.DrawCube(d, scale);
 	}
 
 	// Use this for initialization
