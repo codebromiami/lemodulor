@@ -72,7 +72,7 @@ public class GroundPlanScene : MonoBehaviour {
 		density = points.Count;
 		var go = Resources.Load<GameObject>("Prefabs/GroundPlan");
 		go = Instantiate(go,d,Quaternion.identity);
-		var gp = go.GetComponent<GroundPlan>();
+		gp = go.GetComponent<GroundPlan>();
 		gp.points = points;
 		float closestA = Modulor.GetClosestFromList(Modulor.redSeries, distance);
 		float closestB = Modulor.GetClosestFromList(Modulor.blueSeries, distance);
@@ -107,10 +107,12 @@ public class GroundPlanScene : MonoBehaviour {
 		Gizmos.DrawCube(d, scale);
 	}
 
-	// Use this for initialization
-	void Start () {
-		
+	private void Update()
+	{
+		if(Input.GetKeyDown(KeyCode.R)){
+			if(gp){
+				GameObject.Destroy(gp.gameObject);
+			}
+		}
 	}
-	
-
 }

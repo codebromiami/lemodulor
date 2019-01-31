@@ -28,28 +28,12 @@ public class GroundPlan : MonoBehaviour {
 		childModule.size = size;
 		childModule.divs = 2;
 	}
-
+	public int exceed = 0;
 	public void onModuleStart(Module _module)
 	{	
-		modules.Add(_module);
-		// if(modules.Count >= limit){
-		// 	return;
-		// }
-		// if(!_module.hit){
-		// 	return;
-		// }
-		// _module.divAxis = axis;
-		// _module.divs = 2;
-	}
-
-	// Update is called once per frame
-	void Update () {
 		
-		if(modules.Count >= limit){
-			return;
-		}
-
-		if(rays){
+		modules.Add(_module);
+		if(exceed > limit){
 			foreach(var p in points){
 				var pos = p;
 				pos.y -= 1;
@@ -60,10 +44,89 @@ public class GroundPlan : MonoBehaviour {
 					var mod = hit.collider.gameObject.GetComponentInParent<Module>();
 					if(mod != null){
 						mod.hit = true;
-						mod.divs = 2;
 					}
 				}
 			}
+			foreach(var m in modules){
+				if(m.hit){
+					m.visible = true;
+				}else{
+					m.visible = false;
+				}
+			}
+			Debug.Log("Limit hit");
 		}
+		if(modules.Count > limit){
+			Debug.Log("Limit exceded");
+			exceed++;
+			return;
+		}
+		_module.id += modules.Count;
+		List<string> axis = new List<string>();
+		axis.Add(Module.axis.x.ToString());
+		axis.Add(Module.axis.y.ToString());
+		axis.Add(Module.axis.z.ToString());
+		var choice = ExtRandom<string>.WeightedChoice(axis, new int[]{33,33,33});
+		switch(choice){
+			case "x":
+				_module.divAxis = Module.axis.x;
+			break;
+			case "y":
+				_module.divAxis = Module.axis.y;
+			break;
+			case "z":
+				_module.divAxis = Module.axis.z;
+			break;					
+		}
+		_module.divs = 2;
+	}
+	// Update is called once per frame
+	void Update () {
+
+		if(Input.GetKeyDown(KeyCode.Space)){
+			foreach(var p in points){
+				var pos = p;
+				pos.y -= 1;
+				Ray ray = new Ray(pos, Vector3.up);
+				RaycastHit[] hits;
+				hits = Physics.RaycastAll(ray, 100);
+				// RaycastHit hit;
+				// if(Physics.Raycast(ray.origin,ray.direction * 100, out hit)){
+				// 	var mod = hit.collider.gameObject.GetComponentInParent<Module>();
+				// 	if(mod != null){
+				// 		mod.hit = true;
+				// 	}
+				// }
+				foreach(var hit in hits){
+					var mod = hit.collider.gameObject.GetComponentInParent<Module>();
+					if(mod != null){
+						mod.hit = true;
+					}
+				}
+			}
+			foreach(var m in modules){
+				if(m.hit){
+					m.visible = true;
+				}else{
+					m.visible = false;
+				}
+			}
+		}
+
+		// if(rays){
+		// 	foreach(var p in points){
+		// 		var pos = p;
+		// 		pos.y -= 1;
+		// 		Ray ray = new Ray(pos, Vector3.up);
+		// 		RaycastHit[] hits;
+		// 		hits = Physics.RaycastAll(ray, 100);
+		// 		foreach(var hit in hits){
+		// 			var mod = hit.collider.gameObject.GetComponentInParent<Module>();
+		// 			if(mod != null){
+		// 				mod.hit = true;
+		// 			}
+		// 		}
+		// 	}
+		// }
 	}
 }
