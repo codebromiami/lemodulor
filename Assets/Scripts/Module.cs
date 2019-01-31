@@ -18,6 +18,7 @@ public class Module : MonoBehaviour {
 	public Modulor leModulor;
 	public bool visible = true;
 	public bool hit = false;
+	public bool init = false;
 	private void Start()
 	{
 		id += parentNode ? " " + parentNode.childNodes.IndexOf(this).ToString(): "";

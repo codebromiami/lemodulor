@@ -13,7 +13,7 @@ public class GroundPlanScene : MonoBehaviour {
 	public Vector3 c = Vector3.zero;
 	public Vector3 d = Vector3.zero;
 	public bool ziggy = false;
-	public bool rays = false;
+	public GroundPlan gp;
 
 	private void OnEnable()
 	{
@@ -36,20 +36,14 @@ public class GroundPlanScene : MonoBehaviour {
 		b = Vector3.zero;
 		c = Vector3.zero;	
 		ziggy = false;
-		rays = false;
+		if(gp){
+			GameObject.Destroy(gp.gameObject);
+		}
 	}
 
 	public void onPointer(RaycastHit hit){
 
 		points.Add(hit.point);
-		// Debug.DrawRay(hit.point, Vector3.up, Color.blue);
-		// Debug.Log("Did Hit");
-		// if(hit.collider.tag == "Ground"){
-		// 	var go = Resources.Load<GameObject>("Prefabs/Module");
-		// 	go = Instantiate(go);
-		// 	go.transform.position = hit.point;
-		// 	go.transform.localScale = Vector3.one * 0.1f;
-		// }
 	}
 
 	public void onPointerUp(RaycastHit hit){
@@ -76,17 +70,19 @@ public class GroundPlanScene : MonoBehaviour {
 			d = GetHalfway(a,b);
 		}
 		density = points.Count;
-		var go = Resources.Load<GameObject>("Prefabs/Module");
+		var go = Resources.Load<GameObject>("Prefabs/GroundPlan");
 		go = Instantiate(go,d,Quaternion.identity);
-		var m = go.GetComponent<Module>();
+		var gp = go.GetComponent<GroundPlan>();
+		gp.points = points;
 		float closestA = Modulor.GetClosestFromList(Modulor.redSeries, distance);
 		float closestB = Modulor.GetClosestFromList(Modulor.blueSeries, distance);
 		float closest = Modulor.GetClosest(closestA,closestB, distance);
-		m.size = Vector3.one * closest;
-		var pos = m.transform.position;
+		gp.size = Vector3.one * closest;
+		gp.limit = density;
+		var pos = gp.transform.position;
 		pos.y += closest /2;
-		m.transform.position = pos;
-		rays = true;
+		gp.transform.position = pos;
+		gp.rays = true;
 	}
 
 	public Vector3 GetHalfway(Vector3 a, Vector3 b){
@@ -116,25 +112,5 @@ public class GroundPlanScene : MonoBehaviour {
 		
 	}
 	
-	// Update is called once per frame
-	void Update () {
-		
-		if(rays){
-			foreach(var p in points){
-				var pos = p;
-				pos.y -= 1;
-				Ray ray = new Ray(pos, Vector3.up);
-				RaycastHit[] hits;
-				hits = Physics.RaycastAll(ray, 100);
-				Debug.Log(hits.Length);
-				foreach(var hit in hits){
-					var mod = hit.collider.gameObject.GetComponentInParent<Module>();
-					if(mod != null){
-						mod.divs = 2;
-						mod.hit = true;
-					}
-				}
-			}
-		}
-	}
+
 }
