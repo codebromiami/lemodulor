@@ -31,7 +31,7 @@ public class GroundPlan : MonoBehaviour {
 	public int exceed = 0;
 	public void onModuleStart(Module _module)
 	{	
-		
+		_module.gameObject.AddComponent<NeighborCheck>();
 		modules.Add(_module);
 		if(exceed > limit){
 			foreach(var p in points){
@@ -79,11 +79,12 @@ public class GroundPlan : MonoBehaviour {
 			break;					
 		}
 		_module.divs = 2;
+
 	}
 	// Update is called once per frame
 	void Update () {
 
-		if(Input.GetKeyDown(KeyCode.Space)){
+		if(Input.GetKeyDown(KeyCode.Alpha1)){
 			foreach(var p in points){
 				var pos = p;
 				pos.y -= 1;

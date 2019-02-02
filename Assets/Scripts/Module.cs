@@ -19,23 +19,7 @@ public class Module : MonoBehaviour {
 	public bool visible = true;
 	public bool hit = false;
 	public bool init = false;
-	Vector3[] dirs = new Vector3[]{
-			new Vector3(1,0,0),
-			new Vector3(-1,0,0),
-			new Vector3(0,1,0),
-			new Vector3(0,-1,0),
-			new Vector3(0,0,1),
-			new Vector3(0,0,-1),
-			};
-	public bool[] hitBoys = new bool[]{
-		false,
-		false,
-		false,
-		false,
-		false,
-		false
-	};
-	public List<string> tags = new List<string>();
+	
 	
 	private void Start()
 	{
@@ -52,6 +36,7 @@ public class Module : MonoBehaviour {
 			meshGo.transform.localScale = size;
 		}
 		Signals.Get<ModuleStart>().Dispatch(this);
+		
 	}
 
 	public void OnDestroy()
@@ -61,12 +46,8 @@ public class Module : MonoBehaviour {
 
 	void Update()
 	{	
-		id = "Module";
-		foreach(var str in tags){
-			id += " " + str;
-		}
-		gameObject.name = id;
 		
+
 		// todo: switch statement to set the current axis count
 		if(divs < 0)
 			divs = 0;
@@ -215,68 +196,8 @@ public class Module : MonoBehaviour {
 			meshGo.SetActive(false);
 		}
 
-		if(visible){
-			for(int i = 0; i < dirs.Length; i++){
-				RaycastHit hit;
-				if(i == 0){
-					Physics.Raycast(transform.position, dirs[0] * size.x /2, out hit);
-					if(hit.collider)
-						hitBoys[0] = true;
-				}else if(i == 1){
-					Physics.Raycast(transform.position, dirs[1] * size.x /2, out hit);
-					if(hit.collider){
-						hitBoys[1] = true;
-						if(!tags.Contains("Roof")){
-							tags.Add("Roof");
-						}
-					}else{
-						if(tags.Contains("Roof")){
-							tags.Remove("Roof");
-						}
-					}
-				}else if(i == 2){
-					Physics.Raycast(transform.position, dirs[2] * size.y /2, out hit);
-					if(hit.collider)
-						hitBoys[2] = true;
-				}else if(i == 3){
-					Physics.Raycast(transform.position, dirs[3] * size.y /2, out hit);
-					if(hit.collider){
-						hitBoys[3] = true;
-						if(hit.collider.gameObject.name == "Ground"){
-							if(!tags.Contains("Ground")){
-								tags.Add("Ground");
-							}
-						}
-					}	
-				}else if(i == 4){
-					Physics.Raycast(transform.position, dirs[4] * size.z /2, out hit);
-					if(hit.collider)
-						hitBoys[4] = true;
-				}else if(i == 5){
-					Physics.Raycast(transform.position, dirs[5] * size.z /2, out hit);
-					if(hit.collider)
-						hitBoys[5] = true;
-				}	
-			}
-		}
+		
 	}
 
-	private void OnDrawGizmos()
-	{
-		if(visible){
-			foreach(var dir in dirs){
-				RaycastHit hit;
-				if(dir == dirs[0] | dir == dirs[1]){
-					Gizmos.color = Color.red;
-					Gizmos.DrawRay(transform.position,dir * size.x/2);
-				}else if(dir == dirs[2] | dir == dirs[3]){
-					Gizmos.color = Color.green;
-					Gizmos.DrawRay(transform.position,dir * size.y/2);
-				}else{
-					Gizmos.color = Color.blue;
-					Gizmos.DrawRay(transform.position,dir * size.z/2);
-				}
-			}
-		}
-	}
+	
 }
