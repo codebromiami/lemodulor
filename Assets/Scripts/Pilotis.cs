@@ -72,25 +72,25 @@ public class Pilotis : MonoBehaviour {
 		meshFilter.transform.localScale = new Vector3(length, width,1);
 		
 		if(aGos.Count < divisor){
-			var go = (GameObject)Resources.Load<GameObject>("Cylinder");
+			var go = (GameObject)Resources.Load<GameObject>("Prefabs/Cylinder");
 			go = Instantiate(go,this.transform);
 			aGos.Add(go);
 		}
 
 		if(bGos.Count < divisor){
-			var go = (GameObject)Resources.Load<GameObject>("Cylinder");
+			var go = (GameObject)Resources.Load<GameObject>("Prefabs/Cylinder");
 			go = Instantiate(go,this.transform);
 			bGos.Add(go);
 		}
 
 		if(cGos.Count < divisor){
-			var go = (GameObject)Resources.Load<GameObject>("Cylinder");
+			var go = (GameObject)Resources.Load<GameObject>("Prefabs/Cylinder");
 			go = Instantiate(go,this.transform);
 			cGos.Add(go);
 		}
 
 		if(dGos.Count < divisor){
-			var go = (GameObject)Resources.Load<GameObject>("Cylinder");
+			var go = (GameObject)Resources.Load<GameObject>("Prefabs/Cylinder");
 			go = Instantiate(go,this.transform);
 			dGos.Add(go);
 		}

@@ -10,12 +10,30 @@ public class Piloti : MonoBehaviour {
 	public bool loop = false;
 	public Module module;
 	public NeighborCheck neighborCheck;
-
+	public float width = 1;
 	// Use this for initialization
 	void Start () {
 
 		module = gameObject.GetComponent<Module>();
 		neighborCheck = gameObject.GetComponent<NeighborCheck>();
+		var piloti = Resources.Load<GameObject>("Prefabs/Piloti");
+		var pos = transform.position;
+		var size = module.size;
+		pos.y = size.y;
+		piloti = Instantiate(piloti, pos, Quaternion.identity, transform);
+		var pilotiScript = piloti.GetComponent<Pilotis>();
+		// get the shortest side
+		pilotiScript.length = size.x;
+		pilotiScript.width = size.z;
+		var a = pilotiScript.length > pilotiScript.width ? pilotiScript.width : pilotiScript.length;	// get the shortet side
+		a *= 0.1f;
+		a = Mathf.Clamp(a, 0.1f, 0.75f);
+		pilotiScript.pilotiWidth = a;
+		pilotiScript.width -= a;
+		pilotiScript.length -= a;
+		var scale = pilotiScript.transform.localScale;
+		scale.y = size.y;
+
 	}
 
 	private void OnDrawGizmos()
@@ -33,7 +51,7 @@ public class Piloti : MonoBehaviour {
 
 		if(Input.GetKeyDown(KeyCode.Alpha3)){
 			foreach(var point in neighborCheck.boundingPoints.yPositive){
-				points.Add(transform.TransformPoint(point));
+				points.Add(point);
 			}
 		}
 		distance = 0;
@@ -42,7 +60,9 @@ public class Piloti : MonoBehaviour {
 			if(gos != null){
 				if(gos.Count < points.Count){
 					while(gos.Count < points.Count){
-						gos.Add(GameObject.CreatePrimitive(PrimitiveType.Cylinder));
+						var go = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+						go.transform.SetParent(transform);
+						gos.Add(go);
 					}
 				}else if(gos.Count > points.Count){
 					while(gos.Count > points.Count){
@@ -56,7 +76,7 @@ public class Piloti : MonoBehaviour {
 				{	
 					if(index < points.Count -1)
 						distance += Vector3.Distance(points[index], points[index +1]);
-					gos[index].transform.position = p;
+					gos[index].transform.localPosition = p;
 					index++;
 				}
 				if(loop)
@@ -76,6 +96,21 @@ public class Piloti : MonoBehaviour {
 				// 	index++;
 				// }
 			}
+		}
+		var size = module.size;
+		if(size.x > size.z){
+			width = size.z * 0.1f;
+		}else{
+			width = size.x * 0.1f;
+		}
+		foreach(var go in gos){
+			// var scale = go.transform.localScale;
+			// scale.x = width;
+			// scale.y = size.y /2;
+			// scale.z = width;
+			// go.transform.localScale = scale;
+			// var pos = go.transform.localPosition;
+			// pos.y = (size.y /2);
 		}
 	}
 
