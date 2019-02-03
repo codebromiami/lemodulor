@@ -44,6 +44,7 @@ public class RadiatingLinesScene : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		
 		var go = Resources.Load<GameObject>("Prefabs/Module");
 		go = Instantiate(go);
 		var m = go.GetComponent<Module>();

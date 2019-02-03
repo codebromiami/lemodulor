@@ -24,6 +24,7 @@ public class NeighborCheck : MonoBehaviour {
 		false
 	};
 	public List<string> tags = new List<string>();
+	public List<string> groudIds = new List<string>();
 
 	// Use this for initialization
 	void Start () {
@@ -68,15 +69,35 @@ public class NeighborCheck : MonoBehaviour {
 				RaycastHit hit;
 				if(i == 0){
 					Physics.Raycast(transform.position, dirs[0] * size.x /2, out hit);
-					if(hit.collider)
+					if(hit.collider){
 						hitBoys[0] = true;
+						if(this.gameObject.name.Contains("Piloti")){
+							if(hit.collider.transform.parent.gameObject.name.Contains("Piloti")){
+								if(!groudIds.Contains(hit.collider.transform.parent.gameObject.name)){
+									groudIds.Add(hit.collider.transform.parent.gameObject.name);
+								}
+							}else{
+								groudIds.Clear();
+							}
+						}
+					}else{
+						hitBoys[0] = false;
+					}
 				}else if(i == 1){
 					Physics.Raycast(transform.position, dirs[1] * size.x /2, out hit);
 					if(hit.collider){
 						hitBoys[1] = true;
-						
+						if(this.gameObject.name.Contains("Piloti")){
+							if(hit.collider.transform.parent.gameObject.name.Contains("Piloti")){
+								if(!groudIds.Contains(hit.collider.transform.parent.gameObject.name)){
+									groudIds.Add(hit.collider.transform.parent.gameObject.name);
+								}
+							}else{
+								groudIds.Clear();
+							}
+						}
 					}else{
-						
+						hitBoys[1] = false;
 					}
 				}else if(i == 2){
 					Physics.Raycast(transform.position, dirs[2] * size.y /2, out hit);
@@ -86,6 +107,7 @@ public class NeighborCheck : MonoBehaviour {
 							tags.Remove("Roof");
 						}
 					}else{
+						hitBoys[2] = false;
 						if(!tags.Contains("Roof")){
 							tags.Add("Roof");
 						}
@@ -104,18 +126,45 @@ public class NeighborCheck : MonoBehaviour {
 							}	
 						}
 					}else{
+						hitBoys[3] = false;
 						if(tags.Contains("Ground")){
 							tags.Remove("Ground");
 						}
 					}	
 				}else if(i == 4){
 					Physics.Raycast(transform.position, dirs[4] * size.z /2, out hit);
-					if(hit.collider)
+					if(hit.collider){
 						hitBoys[4] = true;
+						if(this.gameObject.name.Contains("Piloti")){
+							if(hit.collider.transform.parent.gameObject.name.Contains("Piloti")){
+								if(!groudIds.Contains(hit.collider.transform.parent.gameObject.name)){
+									groudIds.Add(hit.collider.transform.parent.gameObject.name);
+								}
+							}else{
+								groudIds.Clear();
+							}
+						}
+					}else{
+						hitBoys[4] = false;
+						
+					}
 				}else if(i == 5){
 					Physics.Raycast(transform.position, dirs[5] * size.z /2, out hit);
-					if(hit.collider)
+					if(hit.collider){
 						hitBoys[5] = true;
+						if(this.gameObject.name.Contains("Piloti")){
+							if(hit.collider.transform.parent.gameObject.name.Contains("Piloti")){
+								if(!groudIds.Contains(hit.collider.transform.parent.gameObject.name)){
+									groudIds.Add(hit.collider.transform.parent.gameObject.name);
+								}
+							}else{
+								groudIds.Clear();
+							}
+						}
+					}else{
+						hitBoys[5] = false;
+						
+					}
 				}	
 			}
 		}

@@ -45,8 +45,6 @@ public class Module : MonoBehaviour {
 
 	void Update()
 	{	
-		
-
 		// todo: switch statement to set the current axis count
 		if(divs < 0)
 			divs = 0;

@@ -5,6 +5,8 @@ using deVoid.Utils;
 
 public class GroundPlan : MonoBehaviour {
 
+	public static GroundPlan instance;
+
 	public Module childModule;
 	public List<Module> modules = new List<Module>();
 	public Module.axis axis = Module.axis.x;
@@ -12,7 +14,9 @@ public class GroundPlan : MonoBehaviour {
 	public Vector3 size;
 	public bool rays = false;
 	public List<Vector3> points;
-
+	public List<Piloti> pilotis = new List<Piloti>();
+	public int exceed = 0;
+	
 	private void OnEnable()
 	{
 		Signals.Get<Module.ModuleStart>().AddListener(onModuleStart);
@@ -24,11 +28,12 @@ public class GroundPlan : MonoBehaviour {
 	}
 
 	void Start(){
-		
+
+		instance = this;	
 		childModule.size = size;
 		childModule.divs = 2;
 	}
-	public int exceed = 0;
+	
 	public void onModuleStart(Module _module)
 	{	
 		_module.gameObject.AddComponent<NeighborCheck>();
