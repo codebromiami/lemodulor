@@ -36,7 +36,6 @@ public class Module : MonoBehaviour {
 			meshGo.transform.localScale = size;
 		}
 		Signals.Get<ModuleStart>().Dispatch(this);
-		
 	}
 
 	public void OnDestroy()

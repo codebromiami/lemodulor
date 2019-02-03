@@ -23,8 +23,8 @@ public class Piloti : MonoBehaviour {
 		piloti = Instantiate(piloti, pos, Quaternion.identity, transform);
 		var pilotiScript = piloti.GetComponent<Pilotis>();
 		// get the shortest side
-		pilotiScript.length = size.x;
-		pilotiScript.width = size.z;
+		pilotiScript.length = size.x - size.x * 0.1f;
+		pilotiScript.width = size.z - size.z * 0.1f;
 		var a = pilotiScript.length > pilotiScript.width ? pilotiScript.width : pilotiScript.length;	// get the shortet side
 		a *= 0.1f;
 		a = Mathf.Clamp(a, 0.1f, 0.75f);
