@@ -59,10 +59,10 @@ public class GroundPlan : MonoBehaviour {
 					m.visible = false;
 				}
 			}
-			Debug.Log("Limit hit");
+			// Debug.Log("Limit hit");
 		}
 		if(modules.Count > limit){
-			Debug.Log("Limit exceded");
+			// Debug.Log("Limit exceded");
 			exceed++;
 			return;
 		}

@@ -13,6 +13,8 @@ public class Piloti : MonoBehaviour {
 	public float width = 1;
 	public List<Vector3> yNegative = new List<Vector3>();
 	public static int piltoiGroups = 0;
+	public static List<List<string>> groups = new List<List<string>>();
+	
 	// Use this for initialization
 	void Start () {
 
@@ -61,17 +63,65 @@ public class Piloti : MonoBehaviour {
 			Gizmos.DrawCube(p,Vector3.one * 0.1f);
 		}
 	}
-	
+	static bool init = false;
+
+	public List<string> IsInList(string str, List<List<string>> listOfLists){
+		int count = 0;
+		foreach(var lst in listOfLists){
+			if(lst.Contains(str)){
+				return listOfLists[count];
+				break;
+			}
+			count++;
+		}
+		return null;
+	} 
+
 	// Update is called once per frame
 	void Update () {
 
 		// module.visible = false;
 
-		// if(Input.GetKeyDown(KeyCode.Alpha3)){
-		// 	foreach(var point in neighborCheck.boundingPoints.yPositive){
-		// 		points.Add(point);
-		// 	}
-		// }
+		if(Input.GetKeyDown(KeyCode.Alpha3)){
+			if(!init){
+				init = true;
+				var piltois = FindObjectsOfType<Piloti>();
+				foreach(var piloti in piltois){
+					var lst = IsInList(piloti.gameObject.name, groups);
+					if(lst != null){
+						foreach(var str in piloti.neighborCheck.groudIds)
+						if(!lst.Contains(str)){
+							lst.Add(str);
+						}
+					}else{
+						bool b = false;
+						foreach(var str in piloti.neighborCheck.groudIds){
+							var subLst = IsInList(str, groups);
+							if(subLst != null){
+								subLst.Add(piloti.gameObject.name);
+								b = true;
+							}
+						}
+						if(!b){
+							var g = new List<string>();
+							g.Add(piloti.gameObject.name);
+							g.AddRange(piloti.neighborCheck.groudIds);
+							groups.Add(g);
+						}
+					}
+				}
+				int count = 0;
+				foreach(var list in groups){
+					var bigStr = count.ToString();
+					foreach(var str in list){
+						bigStr += " " + str;
+					}
+					Debug.Log(bigStr);
+					count++;
+				}
+			}
+		}
+
 		// distance = 0;
 		
 		// if(points != null & points.Count > 0){
