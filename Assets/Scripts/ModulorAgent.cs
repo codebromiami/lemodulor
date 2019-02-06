@@ -81,6 +81,12 @@ public class BoundingPoints {
 				edges.Add(edge);
 			}
 		}
+		all.AddRange(yPositive);
+		all.AddRange(yNegative);
+		all.AddRange(xPositive);
+		all.AddRange(xNegative);
+		all.AddRange(zPositive);
+		all.AddRange(zNegative);
 	}
 
 	public List<Vector3> all = new List<Vector3>();
@@ -164,6 +170,7 @@ public class ModulorAgent : MonoBehaviour {
 		bounds = skinnedMesh.bounds;
 		center = bounds.center;
 		boundingPoints = new BoundingPoints(center, new Vector3(width, height, length));
+		Debug.LogFormat("{0}{1}{2}",width,height,length);
 		// Add box collider and rigidbody to generate collisions
 		boxCollider = bc.gameObject.AddComponent<BoxCollider>();
 		boxCollider.enabled = true;

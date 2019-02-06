@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class NeighborCheck : MonoBehaviour {
-
+	
 	public Module module;
-	public BoundingPoints boundingPoints;
-
+	public BoundingPoints boundingPoints;	
 	Vector3[] dirs = new Vector3[]{
 			new Vector3(1,0,0),
 			new Vector3(-1,0,0),
@@ -25,7 +24,7 @@ public class NeighborCheck : MonoBehaviour {
 	};
 	public List<string> tags = new List<string>();
 	public List<string> groudIds = new List<string>();
-
+	public List<Vertex> vertexGroups = new List<Vertex>();
 	// Use this for initialization
 	void Start () {
 		
@@ -37,6 +36,7 @@ public class NeighborCheck : MonoBehaviour {
 				var center = bounds.center;
 				var size = module.size;
 				boundingPoints = new BoundingPoints(center, new Vector3(size.x, size.y, size.z));
+				// Debug.LogFormat("x{0} y{1} z{2}",size.x, size.y, size.z);
 			}
 		}
 	}
@@ -54,15 +54,6 @@ public class NeighborCheck : MonoBehaviour {
 			}
 		}
 		gameObject.name = id;
-
-		if(visible){
-			if(Input.GetKeyDown(KeyCode.Alpha2)){
-				if(tags.Contains("Ground") && !tags.Contains("Roof")){
-					var p = gameObject.AddComponent<Piloti>();
-					p.module = module;
-				}
-			}
-		}
 
 		if(visible){
 			for(int i = 0; i < dirs.Length; i++){
@@ -175,6 +166,7 @@ public class NeighborCheck : MonoBehaviour {
 		var visible = module.visible;
 		var size = module.size;
 
+		// draw neighbor checking ray casts
 		if(visible){
 			foreach(var dir in dirs){
 				RaycastHit hit;
@@ -189,6 +181,10 @@ public class NeighborCheck : MonoBehaviour {
 					Gizmos.DrawRay(transform.position,dir * size.z/2);
 				}
 			}
+		}
+		// draw bounding points
+		foreach(var p in boundingPoints.all){
+			Gizmos.DrawCube(transform.TransformPoint(p), Vector3.one * 0.1f);
 		}
 	}
 

@@ -11,22 +11,7 @@ public class Piloti : MonoBehaviour {
 	public Module module;
 	public NeighborCheck neighborCheck;
 	public float width = 1;
-	public List<Vector3> yNegative = new List<Vector3>();
-	public static int piltoiGroups = 0;
-	public static List<List<string>> groups = new List<List<string>>();
-	public static List<List<Vertex>> vertexGroups = new List<List<Vertex>>();
-	public static List<Color> colors = new List<Color>(){
-		Color.red,
-		Color.blue,
-		Color.yellow,
-		Color.magenta,
-		Color.cyan,
-		Color.green,
-		Color.black,
-		Color.gray,
-	};
-	static int colorMainIndex = 0;
-	public int colorIndex;
+
 	// Use this for initialization
 	void Start () {
 
@@ -37,20 +22,19 @@ public class Piloti : MonoBehaviour {
 		if(neighborCheck & module){
 			var renderer = module.meshGo.GetComponent<MeshRenderer>();
 			renderer.material.color = Color.red;
-			neighborCheck.tags.Add("Piloti" + piltoiGroups);
+			neighborCheck.tags.Add("Piloti" + GroundPlan.piltoiGroups);
+			GroundPlan.piltoiGroups++;
 			GroundPlan.instance.pilotis.Add(this);
-			piltoiGroups++;
 			var center = this.transform.position;
 			var size = module.size;
-			yNegative.Add(center + new Vector3(-size.x/2, -size.y/2, -size.z/2));
-			yNegative.Add(center + new Vector3(-size.x/2, -size.y/2, size.z/2));
-			yNegative.Add(center + new Vector3(size.x/2, -size.y/2, -size.z/2));
-			yNegative.Add(center + new Vector3(size.x/2, -size.y/2, size.z/2));
 			// foreach(var p in yNegative){
 			// 	var go = GameObject.CreatePrimitive(PrimitiveType.Cube);
 			// 	go.transform.position = p;
 			// 	go.transform.SetParent(transform);
 			// }
+		}else{
+			module = gameObject.GetComponentInParent<Module>();
+			neighborCheck = gameObject.GetComponentInParent<NeighborCheck>();
 		}
 		// module.visible = false;
 		// var piloti = Resources.Load<GameObject>("Prefabs/Piloti");
@@ -76,89 +60,19 @@ public class Piloti : MonoBehaviour {
 	private void OnDrawGizmos()
 	{
 		Gizmos.color = Color.black;
-		foreach(var p in yNegative){
-			Gizmos.DrawCube(p,Vector3.one * 0.1f);
-		}
+		// foreach(var p in neighborCheck.boundingPoints.yNegative){
+		// 	Gizmos.DrawCube(p,Vector3.one * 0.1f);
+		// }
 	}
 	static bool init = false;
 
-	public List<string> IsInList(string str, List<List<string>> listOfLists){
-		int count = 0;
-		foreach(var lst in listOfLists){
-			if(lst.Contains(str)){
-				return listOfLists[count];
-				break;
-			}
-			count++;
-		}
-		return null;
-	} 
+	
 
 	// Update is called once per frame
 	void Update () {
 
 		// module.visible = false;
-
-		if(Input.GetKeyDown(KeyCode.Alpha3)){
-			if(!init){
-				init = true;
-				var piltois = FindObjectsOfType<Piloti>();
-				foreach(var piloti in piltois){
-					var lst = IsInList(piloti.gameObject.name, groups);
-					if(lst != null){
-						foreach(var str in piloti.neighborCheck.groudIds)
-						if(!lst.Contains(str)){
-							lst.Add(str);
-						}
-					}else{
-						bool b = false;
-						foreach(var str in piloti.neighborCheck.groudIds){
-							var subLst = IsInList(str, groups);
-							if(subLst != null){
-								subLst.Add(piloti.gameObject.name);
-								b = true;
-							}
-						}
-						if(!b){
-							var g = new List<string>();
-							g.Add(piloti.gameObject.name);
-							g.AddRange(piloti.neighborCheck.groudIds);
-							groups.Add(g);
-						}
-					}
-				}
-				int count = 0;
-				foreach(var list in groups){
-					var bigStr = count.ToString();
-					var vl = new List<Vertex>();
-					foreach(var str in list){
-						var go = GameObject.Find(str);
-						var p = go.GetComponent<Piloti>();
-						foreach(var v in p.yNegative){
-							vl.Add(new Vertex(v));
-						}
-						bigStr += " " + str;
-					}
-					vertexGroups.Add(vl);
-					Debug.Log(bigStr);
-					count++;
-				}
-				foreach(var vg in vertexGroups){
-					var vl = JarvisMarchAlgorithm.GetConvexHull(vg);
-					var go = new GameObject();
-					go.transform.SetParent(this.transform);
-					var p = go.AddComponent<Piloti>();
-					p.colorIndex = colorMainIndex;
-					colorMainIndex++;
-					foreach(var v in vl){
-						p.points.Add(v.position);
-					}
-				}
-			}
-		}
-
-		distance = 0;
-		
+		distance = 0;		
 		if(points != null & points.Count > 0){
 			if(gos != null){
 				if(gos.Count < points.Count){
@@ -166,7 +80,7 @@ public class Piloti : MonoBehaviour {
 						var go = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
 						go.transform.SetParent(transform);
 						gos.Add(go);
-						go.GetComponent<MeshRenderer>().material.color = colors[colorIndex];
+						go.GetComponent<MeshRenderer>().material.color = GroundPlan.colors[GroundPlan.instance.colorIndex];
 					}
 				}else if(gos.Count > points.Count){
 					while(gos.Count > points.Count){
