@@ -22,8 +22,8 @@ public class Piloti : MonoBehaviour {
 		if(neighborCheck & module){
 			var renderer = module.meshGo.GetComponent<MeshRenderer>();
 			renderer.material.color = Color.red;
-			neighborCheck.tags.Add("Piloti" + GroundPlan.piltoiGroups);
-			GroundPlan.piltoiGroups++;
+			neighborCheck.tags.Add("Piloti" + GroundPlan.instance.piltoiGroups);
+			GroundPlan.instance.piltoiGroups++;
 			GroundPlan.instance.pilotis.Add(this);
 			var center = this.transform.position;
 			var size = module.size;
@@ -80,7 +80,7 @@ public class Piloti : MonoBehaviour {
 						var go = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
 						go.transform.SetParent(transform);
 						gos.Add(go);
-						go.GetComponent<MeshRenderer>().material.color = GroundPlan.colors[GroundPlan.instance.colorIndex];
+						go.GetComponent<MeshRenderer>().material.color = GroundPlan.instance.colors[GroundPlan.instance.colorIndex];
 					}
 				}else if(gos.Count > points.Count){
 					while(gos.Count > points.Count){

@@ -28,6 +28,7 @@ public class NeighborCheck : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		
+		GroundPlan.instance.neighborChecks.Add(this);
 		module = GetComponent<Module>();
 		if(module.meshGo){
 			var filter = module.meshGo.GetComponent<MeshFilter>();
@@ -53,7 +54,11 @@ public class NeighborCheck : MonoBehaviour {
 				id += " " + str;
 			}
 		}
-		gameObject.name = id;
+		if(module.divs > 0){
+			module.gameObject.name = "Module Divided";
+		}else{
+			gameObject.name = id;
+		}
 
 		if(visible){
 			for(int i = 0; i < dirs.Length; i++){

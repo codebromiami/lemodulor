@@ -18,17 +18,10 @@ public class Module : MonoBehaviour {
 	public Modulor leModulor;
 	public bool visible = true;
 	public bool hit = false;
-	public bool init = false;
-	
-	
+		
 	private void Start()
 	{
-		id += parentNode ? " " + parentNode.childNodes.IndexOf(this).ToString(): "";
-		gameObject.name += id;
-		List<Vector3> dirs = new List<Vector3>();
-		foreach(var dir in dirs){
-
-		}
+		gameObject.name = id;
 		if(!meshGo){
 			var prefab = Resources.Load<GameObject>("Prefabs/Cube");
 			meshGo = GameObject.Instantiate(prefab, this.transform);

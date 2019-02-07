@@ -15,10 +15,12 @@ public class GroundPlan : MonoBehaviour {
 	public bool rays = false;
 	public List<Vector3> points;
 	public List<Piloti> pilotis = new List<Piloti>();
+	public List<NeighborCheck> neighborChecks = new List<NeighborCheck>();
 	public int exceed = 0;
-	public static int piltoiGroups = 0;
-	public static List<List<string>> groups = new List<List<string>>();
-	public static List<Color> colors = new List<Color>(){
+	public int piltoiGroups = 0;
+	public List<List<string>> groups = new List<List<string>>();
+	public List<GameObject> neighbors = new List<GameObject>();
+	public List<Color> colors = new List<Color>(){
 		Color.red,
 		Color.blue,
 		Color.yellow,
@@ -30,6 +32,7 @@ public class GroundPlan : MonoBehaviour {
 	};
 	static int colorMainIndex = 0;
 	public int colorIndex;
+
 	private void OnEnable()
 	{
 		Signals.Get<Module.ModuleStart>().AddListener(onModuleStart);
@@ -46,31 +49,14 @@ public class GroundPlan : MonoBehaviour {
 		childModule.size = size;
 		childModule.divs = 2;
 	}
-	
+
+	// When each module is created we subdivide it along a random axis
+	// The swipe generated a number of points, we subdivide if the number of modules 
+	// subdivded is lower than the points created.
 	public void onModuleStart(Module _module)
 	{	
 		modules.Add(_module);
 		if(exceed > limit){
-			foreach(var p in points){
-				var pos = p;
-				pos.y -= 1;
-				Ray ray = new Ray(pos, Vector3.up);
-				RaycastHit[] hits;
-				hits = Physics.RaycastAll(ray, 100);
-				foreach(var hit in hits){
-					var mod = hit.collider.gameObject.GetComponentInParent<Module>();
-					if(mod != null){
-						mod.hit = true;
-					}
-				}
-			}
-			foreach(var m in modules){
-				if(m.hit){
-					m.visible = true;
-				}else{
-					m.visible = false;
-				}
-			}
 			// Debug.Log("Limit hit");
 		}
 		
@@ -79,7 +65,7 @@ public class GroundPlan : MonoBehaviour {
 			exceed++;
 			return;
 		}
-		_module.id += modules.Count;
+		// _module.id += modules.Count.ToString();
 		List<string> axis = new List<string>();
 		axis.Add(Module.axis.x.ToString());
 		axis.Add(Module.axis.y.ToString());
@@ -97,11 +83,51 @@ public class GroundPlan : MonoBehaviour {
 			break;					
 		}
 		_module.divs = 2;
+		_module.gameObject.name = "Module Divided";
 	}
+
 	// Update is called once per frame
 	void Update () {
+		
+		// foreach (var item in neighborChecks)
+		// {
+		// 	if(item.tags.Contains("Ground") && !item.tags.Contains("Roof")){
+		// 		if(!item.tags.Contains("Piloti")){
+		// 			item.tags.Add("Piloti");
+		// 			item.tags.Add("Piloti" + GroundPlan.instance.piltoiGroups);
+		// 			GroundPlan.instance.piltoiGroups++;
+		// 		}
+		// 	}
+		// }
 
+		// The first step is to use the points made by the swipe to define modules that we wish to include going forward.
 		if(Input.GetKeyDown(KeyCode.Alpha1)){
+			
+			foreach(var point in points){
+				Vector3 position = point;
+				position.y -= 1;
+				Ray ray = new Ray(position, Vector3.up);
+				RaycastHit[] hits;
+				hits = Physics.RaycastAll(ray, 100);
+				foreach(var hit in hits){
+					Module module = hit.collider.gameObject.GetComponentInParent<Module>();
+					if(module != null){
+						module.hit = true;
+					}
+				}
+			}
+			foreach(var module in modules){
+				if(module.hit){
+					module.visible = true;
+					module.gameObject.name = "Module Visible";
+				}else{
+					module.visible = false;
+					module.gameObject.name = "Module Invisible";
+				}
+			}
+		}
+
+		if(Input.GetKeyDown(KeyCode.Alpha2)){
 			foreach(var p in points){
 				var pos = p;
 				pos.y -= 1;
@@ -132,78 +158,75 @@ public class GroundPlan : MonoBehaviour {
 			}
 		}
 
-		if(Input.GetKeyDown(KeyCode.Alpha2)){
-			var neighbors = FindObjectsOfType<NeighborCheck>();
-			foreach (var item in neighbors)
+		if(Input.GetKeyDown(KeyCode.Alpha3)){
+
+			foreach (var item in neighborChecks)
 			{
 				if(item.module.visible){
 					if(item.tags.Contains("Ground") && !item.tags.Contains("Roof")){
-						var p = item.gameObject.AddComponent<Piloti>();
+						
+						var lst = IsInList(item.gameObject.name, groups);
+						if(lst != null){
+							foreach(var str in item.groudIds)
+							if(!lst.Contains(str)){
+								lst.Add(str);
+							}
+						}else{
+							bool b = false;
+							foreach(var str in item.groudIds){
+								var subLst = IsInList(str, groups);
+								if(subLst != null){
+									subLst.Add(item.gameObject.name);
+									b = true;
+								}
+							}
+							if(!b){
+								// create a new list around a particular module
+								var g = new List<string>();
+								g.Add(item.gameObject.name);
+								g.AddRange(item.groudIds);
+								groups.Add(g);
+								neighbors.Add(item.gameObject);
+							}
+						}
+						// Create lists of vertexes from all the gameobjects that have been tagged with piloti
+						int count = 0;
+						foreach(var list in groups){
+							var bigStr = count.ToString();
+							var vl = new List<Vertex>();
+							NeighborCheck tmpP = neighbors[count].gameObject.GetComponent<NeighborCheck>();
+							NeighborCheck tmpPee = null;
+							foreach(var str in list){
+								var go = GameObject.Find(str);
+								tmpPee = go.GetComponent<NeighborCheck>();
+								foreach(var v in tmpPee.boundingPoints.yNegative){
+									vl.Add(new Vertex(v));
+								}
+								bigStr += " " + str;
+							}
+							tmpP.vertexGroups = vl;
+							Debug.Log(bigStr);
+							count++;
+						}
+						// foreach(var tmP in neighbors){
+						// 	var vg = tmP.GetComponent<NeighborCheck>().vertexGroups;
+						// 	var vl = JarvisMarchAlgorithm.GetConvexHull(vg);
+						// 	var go = new GameObject();
+						// 	go.transform.SetParent(tmP.gameObject.transform);
+						// 	go.transform.localPosition = Vector3.zero;
+						// 	var p = go.AddComponent<Piloti>();
+						// 	colorIndex = colorMainIndex;
+						// 	colorMainIndex++;
+						// 	foreach(var v in vl){
+						// 		p.points.Add(v.position);
+						// 	}
+						// }
 					}
 				}
 			}
 		}
 
-		if(Input.GetKeyDown(KeyCode.Alpha3)){
-			var piltois = FindObjectsOfType<Piloti>();
-			foreach(var piloti in piltois){
-				var lst = IsInList(piloti.gameObject.name, groups);
-				if(lst != null){
-					foreach(var str in piloti.neighborCheck.groudIds)
-					if(!lst.Contains(str)){
-						lst.Add(str);
-					}
-				}else{
-					bool b = false;
-					foreach(var str in piloti.neighborCheck.groudIds){
-						var subLst = IsInList(str, groups);
-						if(subLst != null){
-							subLst.Add(piloti.gameObject.name);
-							b = true;
-						}
-					}
-					if(!b){
-						var g = new List<string>();
-						g.Add(piloti.gameObject.name);
-						g.AddRange(piloti.neighborCheck.groudIds);
-						groups.Add(g);
-					}
-				}
-			}
-			// Create lists of vertexes from all the gameobjects that have been tagged with piloti
-			int count = 0;
-			List<NeighborCheck> inUse = new List<NeighborCheck>();
-			foreach(var list in groups){
-				var bigStr = count.ToString();
-				var vl = new List<Vertex>();
-				NeighborCheck tmpP = null; 
-				foreach(var str in list){
-					var go = GameObject.Find(str);
-					var p = go.GetComponent<Piloti>();
-					tmpP = go.GetComponent<NeighborCheck>();
-					foreach(var v in p.neighborCheck.boundingPoints.yNegative){
-						vl.Add(new Vertex(v));
-					}
-					bigStr += " " + str;
-				}
-				inUse.Add(tmpP);
-				tmpP.vertexGroups = vl;
-				Debug.Log(bigStr);
-				count++;
-			}
-			foreach(var tmP in inUse){
-				var vg = tmP.vertexGroups;
-				var vl = JarvisMarchAlgorithm.GetConvexHull(vg);
-				var go = new GameObject();
-				go.transform.SetParent(tmP.gameObject.transform);
-				var p = go.AddComponent<Piloti>();
-				colorIndex = colorMainIndex;
-				colorMainIndex++;
-				foreach(var v in vl){
-					p.points.Add(v.position);
-				}
-			}
-		}
+		
 		
 		// if(rays){
 		// 	foreach(var p in points){
@@ -221,6 +244,12 @@ public class GroundPlan : MonoBehaviour {
 		// 	}
 		// }
 	}
+
+	private void OnGUI()
+	{
+		
+	}
+
 	public List<string> IsInList(string str, List<List<string>> listOfLists){
 		int count = 0;
 		foreach(var lst in listOfLists){
