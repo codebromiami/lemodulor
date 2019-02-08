@@ -15,6 +15,7 @@ public class GroundPlan : MonoBehaviour {
 	public bool rays = false;
 	public List<Vector3> points;
 	public List<NeighborCheck> neighborChecks = new List<NeighborCheck>();
+	public List<Piloti> pilotis = new List<Piloti>();
 	public int exceed = 0;
 	public int piltoiGroups = 0;
 	public List<List<string>> groups = new List<List<string>>();
@@ -29,7 +30,6 @@ public class GroundPlan : MonoBehaviour {
 		Color.black,
 		Color.gray,
 	};
-	static int colorMainIndex = 0;
 	public int colorIndex;
 
 	private void OnEnable()
@@ -147,12 +147,15 @@ public class GroundPlan : MonoBehaviour {
 					}
 				}
 			}
-			foreach(var m in modules){
-				if(m.hit){
-					m.visible = true;
-					m.gameObject.AddComponent<NeighborCheck>();
+			neighborChecks = new List<NeighborCheck>();
+			foreach(var module in modules){
+				if(module.hit){
+					module.visible = true;
+					var neighborCheck = module.gameObject.AddComponent<NeighborCheck>();
+					neighborCheck.module = module;
+					neighborChecks.Add(neighborCheck);
 				}else{
-					m.visible = false;
+					module.visible = false;
 				}
 			}
 		}
@@ -221,6 +224,8 @@ public class GroundPlan : MonoBehaviour {
 			}
 		}
 		if(Input.GetKeyDown(KeyCode.Alpha5)){
+			// For each group add the vertex positions of their yNegative bounding box
+			// Use JarvisMarch alogrith to wrap those points and create piloti areas
 			var vertexGroupList = new List<List<Vertex>>();
 			var gos = new List<GameObject>();
 			foreach(var group in groups){
@@ -239,18 +244,27 @@ public class GroundPlan : MonoBehaviour {
 				vertexGroupList.Add(vertexList);
 			}
 			int index = 0;
+			pilotis = new List<Piloti>();
 			foreach(var vertexGroup in vertexGroupList){
 				var vl = JarvisMarchAlgorithm.GetConvexHull(vertexGroup);
-				var go = new GameObject();
+				GameObject go = new GameObject();
 				go.transform.SetParent(gos[index].gameObject.transform);
 				go.transform.localPosition = Vector3.zero;
-				var p = go.AddComponent<Piloti>();
-				colorIndex = colorMainIndex;
-				colorMainIndex++;
+				NeighborCheck neighborCheck = gos[index].gameObject.GetComponent<NeighborCheck>();
+				Piloti piloti = go.AddComponent<Piloti>();
+				piloti.module = neighborCheck.module;
+				pilotis.Add(piloti);
+				go.name = "Piloti";
+				colorIndex++;
 				foreach(var v in vl){
-					p.points.Add(go.transform.InverseTransformPoint(v.position));
+					piloti.points.Add(go.transform.InverseTransformPoint(v.position));
 				}
 				index++;
+			}
+			foreach(Piloti piloti in pilotis){
+
+				if(piloti.transform.position.y > piloti.module.size.y /2)
+					Debug.LogWarning("Piloti is too damn high!");
 			}
 		}
 

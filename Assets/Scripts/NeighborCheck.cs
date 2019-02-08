@@ -28,7 +28,6 @@ public class NeighborCheck : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		
-		GroundPlan.instance.neighborChecks.Add(this);
 		module = GetComponent<Module>();
 		if(module.meshGo){
 			var filter = module.meshGo.GetComponent<MeshFilter>();
