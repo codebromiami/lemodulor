@@ -245,9 +245,17 @@ public class GroundPlan : MonoBehaviour {
 		// }
 	}
 
-	private void OnGUI()
+	private void OnDrawGizmos()
 	{
-		
+		foreach (var neighborCheck in neighborChecks){
+			if(neighborCheck.tags.Contains("Roof") & neighborCheck.tags.Contains("Ground")){
+
+			}else if(neighborCheck.tags.Contains("Roof")){
+				Gizmos.DrawWireCube(neighborCheck.transform.position, neighborCheck.module.size);
+			}else if(neighborCheck.tags.Contains("Ground")){
+
+			}
+		}	
 	}
 
 	public List<string> IsInList(string str, List<List<string>> listOfLists){
