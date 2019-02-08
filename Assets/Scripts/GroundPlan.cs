@@ -205,57 +205,87 @@ public class GroundPlan : MonoBehaviour {
 								// neighbors.Add(neighborCheck.gameObject);
 							}
 						}
-						
-
-						// // Create lists of vertexes from all the gameobjects that have been tagged with piloti
-						// int count = 0;
-						// foreach(var list in groups){
-						// 	var bigStr = count.ToString();
-						// 	var vl = new List<Vertex>();
-						// 	NeighborCheck tmpP = neighbors[count].gameObject.GetComponent<NeighborCheck>();
-						// 	NeighborCheck tmpPee = null;
-						// 	foreach(var str in list){
-						// 		var go = GameObject.Find(str);
-						// 		tmpPee = go.GetComponent<NeighborCheck>();
-						// 		foreach(var v in tmpPee.boundingPoints.yNegative){
-						// 			vl.Add(new Vertex(v));
-						// 		}
-						// 		bigStr += " " + str;
-						// 	}
-						// 	tmpP.vertexGroups = vl;
-						// 	Debug.Log(bigStr);
-						// 	count++;
-						// }
-						// foreach(var tmP in neighbors){
-						// 	var vg = tmP.GetComponent<NeighborCheck>().vertexGroups;
-						// 	var vl = JarvisMarchAlgorithm.GetConvexHull(vg);
-						// 	var go = new GameObject();
-						// 	go.transform.SetParent(tmP.gameObject.transform);
-						// 	go.transform.localPosition = Vector3.zero;
-						// 	var p = go.AddComponent<Piloti>();
-						// 	colorIndex = colorMainIndex;
-						// 	colorMainIndex++;
-						// 	foreach(var v in vl){
-						// 		p.points.Add(v.position);
-						// 	}
-						// }
 					}
 				}
 			}
-			int count = 0;
-			foreach(var list in groups){
-				Debug.Log(string.Format("List count: {0}",list.Count));
-				var bigStr = "Group: " + count.ToString();
-				foreach(var str in list){
-					bigStr += " " + str;
+			// Log the group info
+			int index = 0;
+			foreach(var group in groups){
+				Debug.Log(string.Format("Group {0} count: {1}",index, group.Count));
+				string groupIDs = "Group: " + index.ToString();
+				foreach(string name in group){
+					groupIDs += " " + name + ",";
 				}
-				Debug.Log(bigStr);
-				count++;
+				Debug.Log(groupIDs);
+				index++;
+			}
+		}
+		if(Input.GetKeyDown(KeyCode.Alpha5)){
+			var vertexGroupList = new List<List<Vertex>>();
+			var gos = new List<GameObject>();
+			foreach(var group in groups){
+				var vertexList = new List<Vertex>();
+				GameObject go = null;
+				
+				foreach(string name in group){
+					go = GameObject.Find(name);
+					var neighborCheck = go.GetComponent<NeighborCheck>();
+					foreach(Vector3 point in neighborCheck.boundingPoints.yNegative){
+						vertexList.Add(new Vertex(go.transform.TransformPoint(point)));
+					}
+					if(group.IndexOf(name) == -0)
+						gos.Add(go);
+				}
+				vertexGroupList.Add(vertexList);
+			}
+			int index = 0;
+			foreach(var vertexGroup in vertexGroupList){
+				var vl = JarvisMarchAlgorithm.GetConvexHull(vertexGroup);
+				var go = new GameObject();
+				go.transform.SetParent(gos[index].gameObject.transform);
+				go.transform.localPosition = Vector3.zero;
+				var p = go.AddComponent<Piloti>();
+				colorIndex = colorMainIndex;
+				colorMainIndex++;
+				foreach(var v in vl){
+					p.points.Add(go.transform.InverseTransformPoint(v.position));
+				}
+				index++;
 			}
 		}
 
-		
-		
+		// // Create lists of vertexes from all the gameobjects that have been tagged with piloti
+		// int count = 0;
+		// foreach(var list in groups){
+		// 	var bigStr = count.ToString();
+		// 	var vl = new List<Vertex>();
+		// 	NeighborCheck tmpP = neighbors[count].gameObject.GetComponent<NeighborCheck>();
+		// 	NeighborCheck tmpPee = null;
+		// 	foreach(var str in list){
+		// 		var go = GameObject.Find(str);
+		// 		tmpPee = go.GetComponent<NeighborCheck>();
+		// 		foreach(var v in tmpPee.boundingPoints.yNegative){
+		// 			vl.Add(new Vertex(v));
+		// 		}
+		// 		bigStr += " " + str;
+		// 	}
+		// 	tmpP.vertexGroups = vl;
+		// 	Debug.Log(bigStr);
+		// 	count++;
+		// }
+		// foreach(var tmP in neighbors){
+		// 	var vg = tmP.GetComponent<NeighborCheck>().vertexGroups;
+		// 	var vl = JarvisMarchAlgorithm.GetConvexHull(vg);
+		// 	var go = new GameObject();
+		// 	go.transform.SetParent(tmP.gameObject.transform);
+		// 	go.transform.localPosition = Vector3.zero;
+		// 	var p = go.AddComponent<Piloti>();
+		// 	colorIndex = colorMainIndex;
+		// 	colorMainIndex++;
+		// 	foreach(var v in vl){
+		// 		p.points.Add(v.position);
+		// 	}
+		// }
 		// if(rays){
 		// 	foreach(var p in points){
 		// 		var pos = p;
@@ -270,7 +300,7 @@ public class GroundPlan : MonoBehaviour {
 		// 			}
 		// 		}
 		// 	}
-		// }
+		// }			
 	}
 
 	private void OnDrawGizmos()
