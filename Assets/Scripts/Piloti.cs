@@ -22,7 +22,6 @@ public class Piloti : MonoBehaviour {
 		if(neighborCheck & module){
 			var renderer = module.meshGo.GetComponent<MeshRenderer>();
 			renderer.material.color = Color.red;
-			GroundPlan.instance.pilotis.Add(this);
 			var center = this.transform.position;
 			var size = module.size;
 			// foreach(var p in yNegative){

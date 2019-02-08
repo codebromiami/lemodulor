@@ -14,12 +14,11 @@ public class GroundPlan : MonoBehaviour {
 	public Vector3 size;
 	public bool rays = false;
 	public List<Vector3> points;
-	public List<Piloti> pilotis = new List<Piloti>();
 	public List<NeighborCheck> neighborChecks = new List<NeighborCheck>();
 	public int exceed = 0;
 	public int piltoiGroups = 0;
 	public List<List<string>> groups = new List<List<string>>();
-	public List<GameObject> neighbors = new List<GameObject>();
+	// public List<GameObject> neighbors = new List<GameObject>();
 	public List<Color> colors = new List<Color>(){
 		Color.red,
 		Color.blue,
@@ -166,40 +165,47 @@ public class GroundPlan : MonoBehaviour {
 					if(neighborCheck.tags.Contains("Ground") && !neighborCheck.tags.Contains("Roof")){	
 						neighborCheck.tags.Add("Piloti: " + GroundPlan.instance.piltoiGroups);
 						GroundPlan.instance.piltoiGroups++;
-						//Check to see if this gameObject is in
+					}
+				}
+			}
+		}
+		if(Input.GetKeyDown(KeyCode.Alpha4)){
+			foreach (var neighborCheck in neighborChecks)
+			{
+				if(neighborCheck.module.visible){
+					if(neighborCheck.tags.Contains("Ground") && !neighborCheck.tags.Contains("Roof")){	
+						Debug.Log(string.Format("Checking: {0}", neighborCheck.gameObject.name));
+						// groupList is the list that contains this gameObject
 						var groupList = IsInLists(neighborCheck.gameObject.name, groups);
 						if(groupList != null){
-							foreach(var str in neighborCheck.groudIds)
-							if(!groupList.Contains(str)){
-								groupList.Add(str);
+							//Add the gameObjects this gameObjects has been tagged with
+							foreach(var str in neighborCheck.groudIds){
+								if(!groupList.Contains(str)){
+									groupList.Add(str);
+								}
 							}
 						}else{
+							// This gameObject isn't in any list, check if any of the gameObjects it's been tagged with are in any of the groups
 							bool b = false;
-							foreach(var str in neighborCheck.groudIds){
-								var subList = IsInLists(str, groups);
+							foreach(var groupID in neighborCheck.groudIds){
+								var subList = IsInLists(groupID, groups);
 								if(subList != null){
+									// One of the gameObjects is in a group, so lets add this gameObject to that list
 									subList.Add(neighborCheck.gameObject.name);
 									b = true;
 								}
 							}
+							// This gameObjects groupID's were not in any group
 							if(!b){
 								// create a new list around a particular module
 								var newList = new List<string>();
 								newList.Add(neighborCheck.gameObject.name);
 								newList.AddRange(neighborCheck.groudIds);
 								groups.Add(newList);
-								neighbors.Add(neighborCheck.gameObject);
+								// neighbors.Add(neighborCheck.gameObject);
 							}
 						}
-						int count = 0;
-						foreach(var list in groups){
-							var bigStr = count.ToString();
-							foreach(var str in list){
-								bigStr += " " + str;
-							}
-							Debug.Log(bigStr);
-							count++;
-						}
+						
 
 						// // Create lists of vertexes from all the gameobjects that have been tagged with piloti
 						// int count = 0;
@@ -235,6 +241,16 @@ public class GroundPlan : MonoBehaviour {
 						// }
 					}
 				}
+			}
+			int count = 0;
+			foreach(var list in groups){
+				Debug.Log(string.Format("List count: {0}",list.Count));
+				var bigStr = "Group: " + count.ToString();
+				foreach(var str in list){
+					bigStr += " " + str;
+				}
+				Debug.Log(bigStr);
+				count++;
 			}
 		}
 
