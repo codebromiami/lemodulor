@@ -37,7 +37,7 @@ public class GroundPlanScene : MonoBehaviour {
 		c = Vector3.zero;	
 		ziggy = false;
 		if(gp){
-			GameObject.Destroy(gp.gameObject);
+			GameObject.DestroyImmediate(gp.gameObject);
 		}
 	}
 

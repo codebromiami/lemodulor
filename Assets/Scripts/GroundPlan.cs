@@ -157,57 +157,69 @@ public class GroundPlan : MonoBehaviour {
 				}
 			}
 		}
-
+		// We iterate through all the visible modules that are tagged to be piloti
 		if(Input.GetKeyDown(KeyCode.Alpha3)){
 
-			foreach (var item in neighborChecks)
+			foreach (var neighborCheck in neighborChecks)
 			{
-				if(item.module.visible){
-					if(item.tags.Contains("Ground") && !item.tags.Contains("Roof")){
-						
-						var lst = IsInList(item.gameObject.name, groups);
-						if(lst != null){
-							foreach(var str in item.groudIds)
-							if(!lst.Contains(str)){
-								lst.Add(str);
+				if(neighborCheck.module.visible){
+					if(neighborCheck.tags.Contains("Ground") && !neighborCheck.tags.Contains("Roof")){	
+						neighborCheck.tags.Add("Piloti: " + GroundPlan.instance.piltoiGroups);
+						GroundPlan.instance.piltoiGroups++;
+						//Check to see if this gameObject is in
+						var groupList = IsInLists(neighborCheck.gameObject.name, groups);
+						if(groupList != null){
+							foreach(var str in neighborCheck.groudIds)
+							if(!groupList.Contains(str)){
+								groupList.Add(str);
 							}
 						}else{
 							bool b = false;
-							foreach(var str in item.groudIds){
-								var subLst = IsInList(str, groups);
-								if(subLst != null){
-									subLst.Add(item.gameObject.name);
+							foreach(var str in neighborCheck.groudIds){
+								var subList = IsInLists(str, groups);
+								if(subList != null){
+									subList.Add(neighborCheck.gameObject.name);
 									b = true;
 								}
 							}
 							if(!b){
 								// create a new list around a particular module
-								var g = new List<string>();
-								g.Add(item.gameObject.name);
-								g.AddRange(item.groudIds);
-								groups.Add(g);
-								neighbors.Add(item.gameObject);
+								var newList = new List<string>();
+								newList.Add(neighborCheck.gameObject.name);
+								newList.AddRange(neighborCheck.groudIds);
+								groups.Add(newList);
+								neighbors.Add(neighborCheck.gameObject);
 							}
 						}
-						// Create lists of vertexes from all the gameobjects that have been tagged with piloti
 						int count = 0;
 						foreach(var list in groups){
 							var bigStr = count.ToString();
-							var vl = new List<Vertex>();
-							NeighborCheck tmpP = neighbors[count].gameObject.GetComponent<NeighborCheck>();
-							NeighborCheck tmpPee = null;
 							foreach(var str in list){
-								var go = GameObject.Find(str);
-								tmpPee = go.GetComponent<NeighborCheck>();
-								foreach(var v in tmpPee.boundingPoints.yNegative){
-									vl.Add(new Vertex(v));
-								}
 								bigStr += " " + str;
 							}
-							tmpP.vertexGroups = vl;
 							Debug.Log(bigStr);
 							count++;
 						}
+
+						// // Create lists of vertexes from all the gameobjects that have been tagged with piloti
+						// int count = 0;
+						// foreach(var list in groups){
+						// 	var bigStr = count.ToString();
+						// 	var vl = new List<Vertex>();
+						// 	NeighborCheck tmpP = neighbors[count].gameObject.GetComponent<NeighborCheck>();
+						// 	NeighborCheck tmpPee = null;
+						// 	foreach(var str in list){
+						// 		var go = GameObject.Find(str);
+						// 		tmpPee = go.GetComponent<NeighborCheck>();
+						// 		foreach(var v in tmpPee.boundingPoints.yNegative){
+						// 			vl.Add(new Vertex(v));
+						// 		}
+						// 		bigStr += " " + str;
+						// 	}
+						// 	tmpP.vertexGroups = vl;
+						// 	Debug.Log(bigStr);
+						// 	count++;
+						// }
 						// foreach(var tmP in neighbors){
 						// 	var vg = tmP.GetComponent<NeighborCheck>().vertexGroups;
 						// 	var vl = JarvisMarchAlgorithm.GetConvexHull(vg);
@@ -249,16 +261,19 @@ public class GroundPlan : MonoBehaviour {
 	{
 		foreach (var neighborCheck in neighborChecks){
 			if(neighborCheck.tags.Contains("Roof") & neighborCheck.tags.Contains("Ground")){
-
+				Gizmos.color = Color.green;
+				Gizmos.DrawCube(neighborCheck.transform.position, neighborCheck.module.size);
 			}else if(neighborCheck.tags.Contains("Roof")){
-				Gizmos.DrawWireCube(neighborCheck.transform.position, neighborCheck.module.size);
+				Gizmos.color = Color.red;
+				Gizmos.DrawCube(neighborCheck.transform.position, neighborCheck.module.size);
 			}else if(neighborCheck.tags.Contains("Ground")){
-
+				Gizmos.color = Color.blue;
+				Gizmos.DrawCube(neighborCheck.transform.position, neighborCheck.module.size);
 			}
 		}	
 	}
 
-	public List<string> IsInList(string str, List<List<string>> listOfLists){
+	public List<string> IsInLists(string str, List<List<string>> listOfLists){
 		int count = 0;
 		foreach(var lst in listOfLists){
 			if(lst.Contains(str)){
