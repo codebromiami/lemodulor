@@ -269,6 +269,64 @@ public class GroundPlan : MonoBehaviour {
 					Debug.LogWarning(string.Format("{0} is too damn high!", piloti.module.gameObject.name));
 					piloti.module.gameObject.GetComponent<NeighborCheck>().tooDamnHigh = true;
 			}
+		}
+		if(Input.GetKeyDown(KeyCode.Alpha6)){
+			// For each group add the vertex positions of their yNegative bounding box
+			// Use JarvisMarch alogrith to wrap those points and create piloti areas
+			var vertexGroupList = new List<List<Vector3>>();
+			var gos = new List<GameObject>();
+			foreach(var group in groups){
+				var vertexList = new List<Vector3>();
+				GameObject go = null;
+				foreach(string name in group){
+					go = GameObject.Find(name);
+					var neighborCheck = go.GetComponent<NeighborCheck>();
+					foreach(Vector3 point in neighborCheck.boundingPoints.yNegative){
+						var newPoint = go.transform.TransformPoint(point);
+						if(!vertexList.Contains(newPoint)){
+							vertexList.Add(newPoint);
+						}
+					}
+					if(group.IndexOf(name) == 0)
+						gos.Add(go);
+				}
+				vertexGroupList.Add(vertexList);
+			}
+			// Log the group info
+			int index = 0;
+			foreach(var vertexGroup in vertexGroupList){
+				Debug.Log(string.Format("Group {0} count: {1}",index, vertexGroup.Count));
+				string groupIDs = "Group: " + index.ToString();
+				foreach(Vector3 vertex in vertexGroup){
+					groupIDs += " " + vertex + ",";
+				}
+				Debug.Log(groupIDs);
+				index++;
+			}
+			index = 0;
+			foreach(var vertexGroup in vertexGroupList){
+				GameObject go = new GameObject();
+				go.transform.SetParent(gos[index].gameObject.transform);
+				go.transform.localPosition = Vector3.zero;
+				NeighborCheck neighborCheck = gos[index].gameObject.GetComponent<NeighborCheck>();
+				Piloti piloti = go.AddComponent<Piloti>();
+				piloti.module = neighborCheck.module;
+				piloti.divs = 4;
+				pilotis.Add(piloti);
+				go.name = "Piloti";
+				colorIndex++;
+				foreach(var vertex in vertexGroup){
+					piloti.points.Add(go.transform.InverseTransformPoint(vertex));
+				}
+				index++;
+			}
+			// Log that there was an error with one of the piloti
+			foreach(Piloti piloti in pilotis){
+
+				if(piloti.transform.position.y > piloti.module.size.y /2)
+					Debug.LogWarning(string.Format("{0} is too damn high!", piloti.module.gameObject.name));
+					piloti.module.gameObject.GetComponent<NeighborCheck>().tooDamnHigh = true;
+			}
 		}		
 	}
 

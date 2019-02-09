@@ -36,7 +36,14 @@ public class Piloti : MonoBehaviour {
 
 	private void OnDrawGizmos()
 	{
+		int count = 0;
 		foreach(Line line in lines){
+			if(count == 0){
+				foreach(var point in line.points){
+					Gizmos.DrawRay(this.transform.TransformPoint(point), Vector3.right);
+				}	
+			}
+			count++;
 			Gizmos.color = Color.blue;
 			Gizmos.DrawLine(line.p1,line.p2);
 			Gizmos.color = Color.red;
