@@ -25,6 +25,7 @@ public class NeighborCheck : MonoBehaviour {
 	public List<string> tags = new List<string>();
 	public List<string> groudIds = new List<string>();
 	public List<Vertex> vertexGroups = new List<Vertex>();
+	public bool tooDamnHigh = false;
 	// Use this for initialization
 	void Start () {
 		
@@ -62,6 +63,7 @@ public class NeighborCheck : MonoBehaviour {
 		if(visible){
 			for(int i = 0; i < dirs.Length; i++){
 				RaycastHit hit;
+				// Right
 				if(i == 0){
 					Physics.Raycast(transform.position, dirs[0] * size.x /2, out hit);
 					if(hit.collider){
@@ -78,6 +80,7 @@ public class NeighborCheck : MonoBehaviour {
 					}else{
 						hitBoys[0] = false;
 					}
+				// Left
 				}else if(i == 1){
 					Physics.Raycast(transform.position, dirs[1] * size.x /2, out hit);
 					if(hit.collider){
@@ -94,6 +97,7 @@ public class NeighborCheck : MonoBehaviour {
 					}else{
 						hitBoys[1] = false;
 					}
+				// Up
 				}else if(i == 2){
 					Physics.Raycast(transform.position, dirs[2] * size.y /2, out hit);
 					if(hit.collider){
@@ -107,7 +111,11 @@ public class NeighborCheck : MonoBehaviour {
 							tags.Add("Roof");
 						}
 					}
+				// Down
 				}else if(i == 3){
+					if(tooDamnHigh){
+						//
+					}
 					Physics.Raycast(transform.position, dirs[3] * size.y /2, out hit);
 					if(hit.collider){
 						hitBoys[3] = true;
@@ -126,6 +134,7 @@ public class NeighborCheck : MonoBehaviour {
 							tags.Remove("Ground");
 						}
 					}	
+				// Forwards
 				}else if(i == 4){
 					Physics.Raycast(transform.position, dirs[4] * size.z /2, out hit);
 					if(hit.collider){
@@ -143,6 +152,7 @@ public class NeighborCheck : MonoBehaviour {
 						hitBoys[4] = false;
 						
 					}
+				// Backwards
 				}else if(i == 5){
 					Physics.Raycast(transform.position, dirs[5] * size.z /2, out hit);
 					if(hit.collider){

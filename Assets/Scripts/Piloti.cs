@@ -11,6 +11,8 @@ public class Piloti : MonoBehaviour {
 	public Module module;
 	public NeighborCheck neighborCheck;
 	public float width = 1;
+	// public Mesh convexHull;
+
 
 	// Use this for initialization
 	void Start () {
@@ -51,19 +53,10 @@ public class Piloti : MonoBehaviour {
 		// pilotiScript.length -= a;
 		// var scale = pilotiScript.transform.localScale;
 		// scale.y = size.y;
+		// CreateMesh();
+
 		
 	}
-
-	private void OnDrawGizmos()
-	{
-		Gizmos.color = Color.black;
-		// foreach(var p in neighborCheck.boundingPoints.yNegative){
-		// 	Gizmos.DrawCube(p,Vector3.one * 0.1f);
-		// }
-	}
-	static bool init = false;
-
-	
 
 	// Update is called once per frame
 	void Update () {
@@ -77,7 +70,8 @@ public class Piloti : MonoBehaviour {
 						var go = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
 						go.transform.SetParent(transform);
 						gos.Add(go);
-						go.GetComponent<MeshRenderer>().material.color = GroundPlan.instance.colors[GroundPlan.instance.colorIndex];
+						if(GroundPlan.instance)
+							go.GetComponent<MeshRenderer>().material.color = GroundPlan.instance.colors[GroundPlan.instance.colorIndex];
 					}
 				}else if(gos.Count > points.Count){
 					while(gos.Count > points.Count){
@@ -94,22 +88,24 @@ public class Piloti : MonoBehaviour {
 					gos[index].transform.localPosition = p;
 					index++;
 				}
+
 				if(loop)
 					distance += Vector3.Distance(points[0], points[index +1]);
 				index = 0;
 				float divisor = distance / points.Count;
-				// foreach(var go in gos){
-				// 	float t = Mathf.InverseLerp(0,distance, divisor * index);
-				// 	if(index == 0){
-
-				// 	}else if(index == points.Count -1){
-
-				// 	}else{
-				// 		Vector3 newPoint = Vector3.Lerp(points[index],points[index+1],t);
-				// 		go.transform.position = newPoint;
-				// 	}
-				// 	index++;
-				// }
+				foreach(var go in gos){
+					float t = Mathf.InverseLerp(0,distance, divisor * index);
+					if(index == 0){
+						Vector3 newPoint = points[0];
+						go.transform.position = newPoint;
+					}else if(index == points.Count -1){
+						Vector3 newPoint = points[points.Count -1];
+					}else{
+						Vector3 newPoint = Vector3.Lerp(points[index],points[index+1],t);
+						go.transform.position = newPoint;
+					}
+					index++;
+				}
 			}
 		}
 		if(module){
@@ -130,6 +126,39 @@ public class Piloti : MonoBehaviour {
 			}
 		}
 	}
+
+	// public void CreateMesh(){
+
+		
+	// 	var vertexList = new List<Vertex>();
+	// 	foreach(Vector3 point in points){
+	// 		vertexList.Add(new Vertex(point));
+	// 	}
+	// 	var vl = JarvisMarchAlgorithm.GetConvexHull(vertexList);
+		
+	// 	List<Vector3> newVertices = new List<Vector3>();
+	// 	foreach(var vertex in vertexList){
+	// 		newVertices.Add(vertex.position);
+	// 	}
+	// 	Vector2[] newUV = new Vector2[0];
+	// 	int[] newTriangles = new int[newVertices.Count * 3];
+	// 	for(int i = 0; i < newVertices.Count; i++){
+	// 		newTriangles[i] = i;
+	// 		newTriangles[i + 1] = i +1;
+	// 		newTriangles[i +2] = i + 2;
+	// 	}
+	// 	Mesh mesh = new Mesh();
+	// 	gameObject.AddComponent<MeshRenderer>();
+    //     mesh.vertices = newVertices.ToArray();
+    //     mesh.uv = newUV;
+    //     mesh.triangles = newTriangles;
+	// 	mesh.RecalculateBounds();
+	// 	Debug.Log(mesh.bounds.size);
+	// 	convexHull = mesh;
+	// 	gameObject.AddComponent<MeshFilter>().mesh = convexHull;
+	// }
+
+	
 
 	private void OnDestroy()
 	{

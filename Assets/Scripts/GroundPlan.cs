@@ -264,7 +264,8 @@ public class GroundPlan : MonoBehaviour {
 			foreach(Piloti piloti in pilotis){
 
 				if(piloti.transform.position.y > piloti.module.size.y /2)
-					Debug.LogWarning("Piloti is too damn high!");
+					Debug.LogWarning(string.Format("{0} is too damn high!", piloti.module.gameObject.name));
+					piloti.module.gameObject.GetComponent<NeighborCheck>().tooDamnHigh = true;
 			}
 		}
 
