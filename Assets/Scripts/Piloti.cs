@@ -6,7 +6,7 @@ public class Piloti : MonoBehaviour {
 
 	public List<Vector3> points = new List<Vector3>();
 	public Module module;	
-	public float divs = 1;
+	public float divs = 4;
 	public List<Line> lines = new List<Line>();
 
 	// Use this for initialization
@@ -18,19 +18,20 @@ public class Piloti : MonoBehaviour {
 	void Update () {
 		
 		lines = new List<Line>();
-		for(int i = 0; i < points.Count; i++){
-			if(i == 0){
-				lines.Add(new Line(points[i], points[i +1]));
-			}else if(i == points.Count - 1){
-				lines.Add(new Line(points[i], points[0]));
-			}else{
-				lines.Add(new Line(points[i], points[i +1]));
-			}
-			
-		}
+		var size = module.size;
+		var a = new Vector3(-(size.x/2), 0, size.z /2);
+		var b = new Vector3(-(size.x/2), 0, -(size.z /2));
+		var newLine = new Line(a,b);
+		lines.Add(newLine);
 		foreach(Line line in lines){
 			line.divs = divs;
 			line.Update();
+		}
+		foreach(var p in newLine.points){
+			var crossLine = new Line(p, p + new Vector3(module.size.x,0,0));
+			lines.Add(crossLine);
+			crossLine.divs = divs;
+			crossLine.Update();
 		}
 	}	
 
@@ -48,7 +49,7 @@ public class Piloti : MonoBehaviour {
 			Gizmos.DrawLine(line.p1,line.p2);
 			Gizmos.color = Color.red;
 			foreach(var point in line.points){
-				Gizmos.DrawCube(this.transform.TransformPoint(point), Vector3.one);
+				Gizmos.DrawCube(this.transform.TransformPoint(point), Vector3.one * 0.1f);
 			}
 		
 		}
