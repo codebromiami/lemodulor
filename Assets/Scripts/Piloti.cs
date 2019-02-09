@@ -5,166 +5,84 @@ using UnityEngine;
 public class Piloti : MonoBehaviour {
 
 	public List<Vector3> points = new List<Vector3>();
-	public List<GameObject> gos = new List<GameObject>();
-	public float distance = 0;
-	public bool loop = false;
-	public Module module;
-	public NeighborCheck neighborCheck;
-	public float width = 1;
-	// public Mesh convexHull;
-
+	public Module module;	
+	public float divs = 1;
+	public List<Line> lines = new List<Line>();
 
 	// Use this for initialization
 	void Start () {
-
-		
-		module = gameObject.GetComponent<Module>();
-		neighborCheck = gameObject.GetComponent<NeighborCheck>();
-		
-		if(neighborCheck & module){
-			var renderer = module.meshGo.GetComponent<MeshRenderer>();
-			renderer.material.color = Color.red;
-			var center = this.transform.position;
-			var size = module.size;
-			// foreach(var p in yNegative){
-			// 	var go = GameObject.CreatePrimitive(PrimitiveType.Cube);
-			// 	go.transform.position = p;
-			// 	go.transform.SetParent(transform);
-			// }
-		}else{
-			module = gameObject.GetComponentInParent<Module>();
-			neighborCheck = gameObject.GetComponentInParent<NeighborCheck>();
-		}
-		// module.visible = false;
-		// var piloti = Resources.Load<GameObject>("Prefabs/Piloti");
-		// var pos = transform.position;
-		// var size = module.size;
-		// pos.y = size.y;
-		// piloti = Instantiate(piloti, pos, Quaternion.identity, transform);
-		// var pilotiScript = piloti.GetComponent<Pilotis>();
-		// // get the shortest side
-		// pilotiScript.length = size.x - size.x * 0.1f;
-		// pilotiScript.width = size.z - size.z * 0.1f;
-		// var a = pilotiScript.length > pilotiScript.width ? pilotiScript.width : pilotiScript.length;	// get the shortet side
-		// a *= 0.1f;
-		// a = Mathf.Clamp(a, 0.1f, 0.75f);
-		// pilotiScript.pilotiWidth = a;
-		// pilotiScript.width -= a;
-		// pilotiScript.length -= a;
-		// var scale = pilotiScript.transform.localScale;
-		// scale.y = size.y;
-		// CreateMesh();
-
 		
 	}
 
 	// Update is called once per frame
 	void Update () {
-
-		// module.visible = false;
-		distance = 0;		
-		if(points != null & points.Count > 0){
-			if(gos != null){
-				if(gos.Count < points.Count){
-					while(gos.Count < points.Count){
-						var go = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
-						go.transform.SetParent(transform);
-						gos.Add(go);
-						if(GroundPlan.instance)
-							go.GetComponent<MeshRenderer>().material.color = GroundPlan.instance.colors[GroundPlan.instance.colorIndex];
-					}
-				}else if(gos.Count > points.Count){
-					while(gos.Count > points.Count){
-						var go = gos[gos.Count-1];
-						GameObject.Destroy(go);
-						gos.RemoveAt(gos.Count-1);
-					}
-				}
-				int index = 0;
-				foreach (var p in points)
-				{	
-					if(index < points.Count -1)
-						distance += Vector3.Distance(points[index], points[index +1]);
-					gos[index].transform.localPosition = p;
-					index++;
-				}
-
-				if(loop)
-					distance += Vector3.Distance(points[0], points[index +1]);
-				index = 0;
-				float divisor = distance / points.Count;
-				foreach(var go in gos){
-					float t = Mathf.InverseLerp(0,distance, divisor * index);
-					if(index == 0){
-						Vector3 newPoint = points[0];
-						go.transform.position = newPoint;
-					}else if(index == points.Count -1){
-						Vector3 newPoint = points[points.Count -1];
-					}else{
-						Vector3 newPoint = Vector3.Lerp(points[index],points[index+1],t);
-						go.transform.position = newPoint;
-					}
-					index++;
-				}
-			}
-		}
-		if(module){
-			var size = module.size;
-			if(size.x > size.z){
-				width = size.z * 0.1f;
+		
+		lines = new List<Line>();
+		for(int i = 0; i < points.Count; i++){
+			if(i == 0){
+				lines.Add(new Line(points[i], points[i +1]));
+			}else if(i == points.Count - 1){
+				lines.Add(new Line(points[i], points[0]));
 			}else{
-				width = size.x * 0.1f;
+				lines.Add(new Line(points[i], points[i +1]));
 			}
-			foreach(var go in gos){
-				// var scale = go.transform.localScale;
-				// scale.x = width;
-				// scale.y = size.y /2;
-				// scale.z = width;
-				// go.transform.localScale = scale;
-				// var pos = go.transform.localPosition;
-				// pos.y = (size.y /2);
+			
+		}
+		foreach(Line line in lines){
+			line.divs = divs;
+			line.Update();
+		}
+	}	
+
+	private void OnDrawGizmos()
+	{
+		foreach(Line line in lines){
+			Gizmos.color = Color.blue;
+			Gizmos.DrawLine(line.p1,line.p2);
+			Gizmos.color = Color.red;
+			foreach(var point in line.points){
+				Gizmos.DrawCube(this.transform.TransformPoint(point), Vector3.one);
+			}
+		
+		}
+	}	
+}
+[System.Serializable]
+public class Line {
+	
+	public Vector3 p1;
+	public Vector3 p2;
+	public float divs;
+	public Vector3[] points;
+	public float[] floats;
+	public Line(Vector3 p1, Vector3 p2){
+		
+		this.p1 = p1;
+		this.p2 = p2;
+
+	}
+
+	public void Update(){
+
+		points = new Vector3[Mathf.RoundToInt(divs)];
+		floats = new float[Mathf.RoundToInt(divs)];
+		float divisor = divs -1f;
+		floats = new float[Mathf.RoundToInt(divs)];
+		for(int i = 0; i < Mathf.RoundToInt(divs); i++){
+			if(i == 0){
+				floats[i] = 0;
+			}else if(i == Mathf.RoundToInt(divs) - 1){
+				floats[i] = 1;
+			}else{
+				float t = i;
+				float v = t / divisor;
+				floats[i] = v;
+				
 			}
 		}
+
+		for(int i = 0; i < floats.Length; i++){
+			points[i] = Vector3.Lerp(p1,p2,floats[i]);
+		}
 	}
-
-	// public void CreateMesh(){
-
-		
-	// 	var vertexList = new List<Vertex>();
-	// 	foreach(Vector3 point in points){
-	// 		vertexList.Add(new Vertex(point));
-	// 	}
-	// 	var vl = JarvisMarchAlgorithm.GetConvexHull(vertexList);
-		
-	// 	List<Vector3> newVertices = new List<Vector3>();
-	// 	foreach(var vertex in vertexList){
-	// 		newVertices.Add(vertex.position);
-	// 	}
-	// 	Vector2[] newUV = new Vector2[0];
-	// 	int[] newTriangles = new int[newVertices.Count * 3];
-	// 	for(int i = 0; i < newVertices.Count; i++){
-	// 		newTriangles[i] = i;
-	// 		newTriangles[i + 1] = i +1;
-	// 		newTriangles[i +2] = i + 2;
-	// 	}
-	// 	Mesh mesh = new Mesh();
-	// 	gameObject.AddComponent<MeshRenderer>();
-    //     mesh.vertices = newVertices.ToArray();
-    //     mesh.uv = newUV;
-    //     mesh.triangles = newTriangles;
-	// 	mesh.RecalculateBounds();
-	// 	Debug.Log(mesh.bounds.size);
-	// 	convexHull = mesh;
-	// 	gameObject.AddComponent<MeshFilter>().mesh = convexHull;
-	// }
-
-	
-
-	private void OnDestroy()
-	{
-		foreach(var go in gos){
-			GameObject.Destroy(go);
-		}	
-	}
-		
 }

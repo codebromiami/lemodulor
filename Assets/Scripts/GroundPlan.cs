@@ -253,6 +253,7 @@ public class GroundPlan : MonoBehaviour {
 				NeighborCheck neighborCheck = gos[index].gameObject.GetComponent<NeighborCheck>();
 				Piloti piloti = go.AddComponent<Piloti>();
 				piloti.module = neighborCheck.module;
+				piloti.divs = 4;
 				pilotis.Add(piloti);
 				go.name = "Piloti";
 				colorIndex++;
@@ -261,61 +262,14 @@ public class GroundPlan : MonoBehaviour {
 				}
 				index++;
 			}
+			// Log that there was an error with one of the piloti
 			foreach(Piloti piloti in pilotis){
 
 				if(piloti.transform.position.y > piloti.module.size.y /2)
 					Debug.LogWarning(string.Format("{0} is too damn high!", piloti.module.gameObject.name));
 					piloti.module.gameObject.GetComponent<NeighborCheck>().tooDamnHigh = true;
 			}
-		}
-
-		// // Create lists of vertexes from all the gameobjects that have been tagged with piloti
-		// int count = 0;
-		// foreach(var list in groups){
-		// 	var bigStr = count.ToString();
-		// 	var vl = new List<Vertex>();
-		// 	NeighborCheck tmpP = neighbors[count].gameObject.GetComponent<NeighborCheck>();
-		// 	NeighborCheck tmpPee = null;
-		// 	foreach(var str in list){
-		// 		var go = GameObject.Find(str);
-		// 		tmpPee = go.GetComponent<NeighborCheck>();
-		// 		foreach(var v in tmpPee.boundingPoints.yNegative){
-		// 			vl.Add(new Vertex(v));
-		// 		}
-		// 		bigStr += " " + str;
-		// 	}
-		// 	tmpP.vertexGroups = vl;
-		// 	Debug.Log(bigStr);
-		// 	count++;
-		// }
-		// foreach(var tmP in neighbors){
-		// 	var vg = tmP.GetComponent<NeighborCheck>().vertexGroups;
-		// 	var vl = JarvisMarchAlgorithm.GetConvexHull(vg);
-		// 	var go = new GameObject();
-		// 	go.transform.SetParent(tmP.gameObject.transform);
-		// 	go.transform.localPosition = Vector3.zero;
-		// 	var p = go.AddComponent<Piloti>();
-		// 	colorIndex = colorMainIndex;
-		// 	colorMainIndex++;
-		// 	foreach(var v in vl){
-		// 		p.points.Add(v.position);
-		// 	}
-		// }
-		// if(rays){
-		// 	foreach(var p in points){
-		// 		var pos = p;
-		// 		pos.y -= 1;
-		// 		Ray ray = new Ray(pos, Vector3.up);
-		// 		RaycastHit[] hits;
-		// 		hits = Physics.RaycastAll(ray, 100);
-		// 		foreach(var hit in hits){
-		// 			var mod = hit.collider.gameObject.GetComponentInParent<Module>();
-		// 			if(mod != null){
-		// 				mod.hit = true;
-		// 			}
-		// 		}
-		// 	}
-		// }			
+		}		
 	}
 
 	private void OnDrawGizmos()
