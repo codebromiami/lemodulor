@@ -1,46 +1,22 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using deVoid.Utils;
 
 public class PilotiAgent : MonoBehaviour {
-
-	public bool set = false;
-
-	public void Build(Pilotis piloti, Vector3 position)
+	public bool hit = false;
+	
+	private void OnTriggerEnter(Collider other)
 	{
-		transform.position = position;
-		float height = Vector3.Distance(position, new Vector3(position.x, 0, position.z));
-		height = FloatHelper.Truncate(height, 4);
-		var scale = new Vector3(piloti.pilotiWidth, height/2, piloti.pilotiWidth);
-		transform.localScale = scale;
+		var groundPlanModule = GroundPlan.instance.childModule;
+		var parentModule = other.gameObject.GetComponentInParent<Module>();
+		var a = groundPlanModule.size.x;
+		var b = groundPlanModule.size.z;
+		var c = a > b ? b : a;
+		c *= 0.05f;
+		transform.localScale = new Vector3(c,parentModule.size.y /2, c);
 		var pos = transform.position;
-		pos.y -= height /2;
+		pos.y = parentModule.size.y /2;
 		transform.position = pos;
-		set = true;
-
-		// transform.position = position;
-		// int layerMask = 1 << 8;
-		// float height = 0;
-		// layerMask = ~layerMask;
-		// RaycastHit[] hits = Physics.RaycastAll(transform.position, Vector3.down, Mathf.Infinity, layerMask);
-		// foreach(var hit in hits){
-		// 	if(set)
-		// 		break;
-		// 	if(hit.collider.gameObject.name == "GroundPlane"){
-		// 		height = hit.distance;
-		// 		height = FloatHelper.Truncate(height, 4);
-		// 		var scale = new Vector3(piloti.pilotiWidth, height/2, piloti.pilotiWidth);
-		// 		transform.localScale = scale;
-		// 		var pos = transform.position;
-		// 		pos.y -= height /2;
-		// 		transform.position = pos;
-		// 		set = true;
-		// 	}
-		// }
-	}
-
-	void OnTriggerEnter(Collider other)
-	{
-		Destroy(this.gameObject);
 	}
 }

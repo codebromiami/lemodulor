@@ -118,19 +118,19 @@ public class Pilotis : MonoBehaviour {
 
 		foreach (GameObject go in aGos)
 		{	
-			var pilotiScript = go.GetComponent<PilotiAgent>();
-			if(!pilotiScript.set){
-				pilotiScript.Build(this, a + new Vector3(x, 0, 0));
-			}
+			// var pilotiScript = go.GetComponent<PilotiAgent>();
+			// if(!pilotiScript.set){
+			// 	pilotiScript.Build(this, a + new Vector3(x, 0, 0));
+			// }
 			x += xDivision;
 		}
 
 		foreach (GameObject go in bGos)
 		{
-			var pilotiScript = go.GetComponent<PilotiAgent>();
-			if(!pilotiScript.set){
-				pilotiScript.Build(this, b + new Vector3(0, 0,z));
-			}
+			// var pilotiScript = go.GetComponent<PilotiAgent>();
+			// if(!pilotiScript.set){
+			// 	pilotiScript.Build(this, b + new Vector3(0, 0,z));
+			// }
 			z += zDivision;
 		}
 
@@ -138,10 +138,10 @@ public class Pilotis : MonoBehaviour {
 
 		foreach (GameObject go in cGos)
 		{
-			var pilotiScript = go.GetComponent<PilotiAgent>();
-			if(!pilotiScript.set){
-				pilotiScript.Build(this, a + new Vector3(0,0,z));
-			}
+			// var pilotiScript = go.GetComponent<PilotiAgent>();
+			// if(!pilotiScript.set){
+			// 	pilotiScript.Build(this, a + new Vector3(0,0,z));
+			// }
 			z += zDivision;
 		}
 
@@ -149,10 +149,10 @@ public class Pilotis : MonoBehaviour {
 
 		foreach (GameObject go in dGos)
 		{
-			var pilotiScript = go.GetComponent<PilotiAgent>();
-			if(!pilotiScript.set){
-				pilotiScript.Build(this, d + new Vector3(x, 0,0));
-			}
+			// var pilotiScript = go.GetComponent<PilotiAgent>();
+			// // if(!pilotiScript.set){
+			// // 	pilotiScript.Build(this, d + new Vector3(x, 0,0));
+			// // }
 			x += xDivision;
 		}
 	}

@@ -22,10 +22,12 @@ public class NeighborCheck : MonoBehaviour {
 		false,
 		false
 	};
+	
 	public List<string> tags = new List<string>();
 	public List<string> groudIds = new List<string>();
 	public List<Vertex> vertexGroups = new List<Vertex>();
 	public bool tooDamnHigh = false;
+	public int pilotiGroupId = -1;
 	// Use this for initialization
 	void Start () {
 		
@@ -43,7 +45,7 @@ public class NeighborCheck : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	public void Check () {
 		
 		var visible = module.visible;
 		var size = module.size;
@@ -61,6 +63,7 @@ public class NeighborCheck : MonoBehaviour {
 		}
 
 		if(visible){
+
 			for(int i = 0; i < dirs.Length; i++){
 				RaycastHit hit;
 				// Right
@@ -113,9 +116,6 @@ public class NeighborCheck : MonoBehaviour {
 					}
 				// Down
 				}else if(i == 3){
-					if(tooDamnHigh){
-						//
-					}
 					Physics.Raycast(transform.position, dirs[3] * size.y /2, out hit);
 					if(hit.collider){
 						hitBoys[3] = true;
@@ -130,6 +130,9 @@ public class NeighborCheck : MonoBehaviour {
 						}
 					}else{
 						hitBoys[3] = false;
+						if(tags.Contains("Piloti")){
+							tags.Remove("Piloti");
+						}
 						if(tags.Contains("Ground")){
 							tags.Remove("Ground");
 						}
@@ -177,29 +180,25 @@ public class NeighborCheck : MonoBehaviour {
 
 	private void OnDrawGizmos()
 	{
-		var visible = module.visible;
-		var size = module.size;
+		// var visible = module.visible;
+		// var size = module.size;
 
-		// draw neighbor checking ray casts
-		if(visible){
-			foreach(var dir in dirs){
-				RaycastHit hit;
-				if(dir == dirs[0] | dir == dirs[1]){
-					Gizmos.color = Color.red;
-					Gizmos.DrawRay(transform.position,dir * size.x/2);
-				}else if(dir == dirs[2] | dir == dirs[3]){
-					Gizmos.color = Color.green;
-					Gizmos.DrawRay(transform.position,dir * size.y/2);
-				}else{
-					Gizmos.color = Color.blue;
-					Gizmos.DrawRay(transform.position,dir * size.z/2);
-				}
-			}
-		}
-		// draw bounding points
-		foreach(var p in boundingPoints.all){
-			Gizmos.DrawCube(transform.TransformPoint(p), Vector3.one * 0.1f);
-		}
+		// // draw neighbor checking ray casts
+		// if(visible){
+		// 	foreach(var dir in dirs){
+		// 		RaycastHit hit;
+		// 		if(dir == dirs[0] | dir == dirs[1]){
+		// 			Gizmos.color = Color.red;
+		// 			Gizmos.DrawRay(transform.position,dir * size.x/2);
+		// 		}else if(dir == dirs[2] | dir == dirs[3]){
+		// 			Gizmos.color = Color.green;
+		// 			Gizmos.DrawRay(transform.position,dir * size.y/2);
+		// 		}else{
+		// 			Gizmos.color = Color.blue;
+		// 			Gizmos.DrawRay(transform.position,dir * size.z/2);
+		// 		}
+		// 	}
+		// }
 	}
 
 }

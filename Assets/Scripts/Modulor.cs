@@ -82,7 +82,7 @@ public class Modulor : MonoBehaviour {
 	public int count;
 	public List<KeyPair> divs = new List<KeyPair>();
 
-	private List<float> seriesList;
+	public List<float> seriesList;
 	
 	private void Update() {	
 		

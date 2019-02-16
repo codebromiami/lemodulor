@@ -184,8 +184,11 @@ public class Module : MonoBehaviour {
 			meshGo.SetActive(true);
 		}else{
 			meshGo.SetActive(false);
-		}
+		}		
+	}
 
+	private void OnDrawGizmos()
+	{
 		
 	}
 

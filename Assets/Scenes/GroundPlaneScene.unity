@@ -58,10 +58,10 @@ LightmapSettings:
     m_Resolution: 2
     m_BakeResolution: 40
     m_AtlasSize: 1024
-    m_AO: 0
-    m_AOMaxDistance: 1
-    m_CompAOExponent: 1
-    m_CompAOExponentDirect: 0
+    m_AO: 1
+    m_AOMaxDistance: 2
+    m_CompAOExponent: 3.08
+    m_CompAOExponentDirect: 0.47
     m_Padding: 2
     m_LightmapParameters: {fileID: 0}
     m_LightmapsBakeMode: 1
@@ -309,8 +309,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1187295360}
-  m_LocalRotation: {x: -0.20081039, y: 0.38656765, z: -0.086672634, w: -0.8959512}
-  m_LocalPosition: {x: 81, y: 56, z: -77}
+  m_LocalRotation: {x: 0.09111635, y: 0.903738, z: -0.34204006, w: 0.24075714}
+  m_LocalPosition: {x: -5.514302, y: 7.8020406, z: 8.968014}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -415,7 +415,7 @@ Transform:
   m_GameObject: {fileID: 1403405777}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 10, y: 1, z: 10}
+  m_LocalScale: {x: 5, y: 1, z: 5}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 3

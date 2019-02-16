@@ -8,7 +8,10 @@ public class Piloti : MonoBehaviour {
 	public Module module;	
 	public float divs = 4;
 	public List<Line> lines = new List<Line>();
-
+	public float size = 1;
+	public List<PilotiAgent> pilotiAgents = new List<PilotiAgent>();
+	public List<Module> pilotiModules = new List<Module>();
+	public bool init = false;
 	// Use this for initialization
 	void Start () {
 		
@@ -17,6 +20,9 @@ public class Piloti : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		
+		if(init)
+			return;
+			
 		lines = new List<Line>();
 		var size = module.size;
 		var a = new Vector3(-(size.x/2), 0, size.z /2);
@@ -35,6 +41,10 @@ public class Piloti : MonoBehaviour {
 		}
 	}	
 
+	public void Build(){
+
+	}
+
 	private void OnDrawGizmos()
 	{
 		int count = 0;
@@ -46,10 +56,10 @@ public class Piloti : MonoBehaviour {
 			}
 			count++;
 			Gizmos.color = Color.blue;
-			Gizmos.DrawLine(line.p1,line.p2);
-			Gizmos.color = Color.red;
+			Gizmos.DrawLine(this.transform.TransformPoint(line.p1),this.transform.TransformPoint(line.p2));
+			Gizmos.color = Color.yellow;
 			foreach(var point in line.points){
-				Gizmos.DrawCube(this.transform.TransformPoint(point), Vector3.one * 0.1f);
+				Gizmos.DrawCube(this.transform.TransformPoint(point), Vector3.one * 0.01f);
 			}
 		
 		}
