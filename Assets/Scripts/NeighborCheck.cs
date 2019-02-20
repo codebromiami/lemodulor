@@ -42,6 +42,7 @@ public class NeighborCheck : MonoBehaviour {
 				// Debug.LogFormat("x{0} y{1} z{2}",size.x, size.y, size.z);
 			}
 		}
+		GroundPlan.instance.initCount++;
 	}
 	
 	// Update is called once per frame
