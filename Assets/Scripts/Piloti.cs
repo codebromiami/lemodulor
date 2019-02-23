@@ -12,6 +12,7 @@ public class Piloti : MonoBehaviour {
 	public List<PilotiAgent> pilotiAgents = new List<PilotiAgent>();
 	public List<Module> pilotiModules = new List<Module>();
 	public bool init = false;
+	
 	// Use this for initialization
 	void Start () {
 		

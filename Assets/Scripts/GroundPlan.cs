@@ -265,6 +265,7 @@ public class GroundPlan : MonoBehaviour {
 			if(neighborCheck.module.visible){
 				if(neighborCheck.gameObject.name.Contains("Piloti")){	
 					neighborCheck.module.meshGo.GetComponent<MeshRenderer>().enabled = false;
+					yield return null;
 				}
 			}
 		}
@@ -279,8 +280,6 @@ public class GroundPlan : MonoBehaviour {
 				}
 			}
 		}
-
-
 		// Check through each of the pilotiAgents to see if it collides with a piloti module
 		foreach(var pilotiAgent in piloti.pilotiAgents){
 			
@@ -290,23 +289,54 @@ public class GroundPlan : MonoBehaviour {
 				if(colliderA.bounds.Intersects(colliderB.bounds)){
 					pilotiAgent.hit = true;
 					pilotiAgent.tags.Add(colliderB.gameObject.name);
-					// var parentModule = colliderB.gameObject.GetComponentInParent<Module>();
-					// var a = childModule.size.x;
-					// var b = childModule.size.z;
-					// var c = a > b ? b : a;
-					// c *= 0.05f;
-					// pilotiAgent.transform.localScale = new Vector3(c,parentModule.size.y /2, c);
-					// var pos = pilotiAgent.transform.position;
-					// pos.y = parentModule.size.y /2;
-					// pilotiAgent.transform.position = pos;
-					// pilotiAgent.gameObject.GetComponent<MeshRenderer>().enabled = true;
 				}
 			}
 		}
-		yield return new WaitUntil(()=> false);
+	
+		// yield return new WaitForSeconds(0.2f);
+				
+		// foreach(var pilotiAgent in piloti.pilotiAgents){
+			
+		// 	if(pilotiAgent.hitPoint != Vector3.zero){
+				
+		// 		float height = Vector3.Distance(pilotiAgent.transform.position, pilotiAgent.hitPoint) / 2;
+		// 		float width = (piloti.size / piloti.divs);
+		// 		pilotiAgent.transform.localScale = new Vector3(width, height, width);
+		// 		var pos = pilotiAgent.transform.position;
+		// 		pos.y = height;
+		// 		pilotiAgent.transform.position = pos;
+		// 	}
+		// }
 
+		// // wait for the triggers to reset in their new position
+		// yield return new WaitForSeconds(0.2f);
+
+		// foreach(var pilotiAgent in piloti.pilotiAgents){
+			
+		// 	if(pilotiAgent.hitPoint != Vector3.zero){
+			
+		// 		foreach(var trigger in pilotiAgent.triggers){
+		// 			if(!trigger.triggered){
+		// 				pilotiAgent.unTriggered = true;
+		// 				break;
+		// 			}
+		// 		}
+		// 	}
+		// 	pilotiAgent.triggerGo.SetActive(false);
+		// }
+
+		// foreach(var pilotiAgent in piloti.pilotiAgents){
+			
+		// 	if(pilotiAgent.hitPoint != Vector3.zero & !pilotiAgent.unTriggered){
+			
+		// 		pilotiAgent.gameObject.GetComponent<MeshRenderer>().enabled = true;
+				
+		// 	}else{
+		// 		pilotiAgent.gameObject.GetComponent<MeshRenderer>().enabled = false;
+		// 	}
+		// }
 	}
-
+	
 	private void OnDrawGizmos()
 	{
 		if(!Application.isPlaying)
