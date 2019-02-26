@@ -20,6 +20,7 @@ public class GroundPlan : MonoBehaviour {
 	public int initCount = 0;
 	public int piltoiGroups = 0;
 	public List<List<string>> groups = new List<List<string>>();
+	public float scaleFactor = 0.1f;
 	public List<Color> colors = new List<Color>(){
 		Color.red,
 		Color.blue,
@@ -60,6 +61,30 @@ public class GroundPlan : MonoBehaviour {
 		var b = a / size.x;
 		piloti.divs = Mathf.RoundToInt(b);
 		go.name = "Piloti";
+	}
+
+	private void Update()
+	{
+		if(Input.GetKeyDown(KeyCode.C)){
+			
+			MaterialPropertyBlock props = new MaterialPropertyBlock();
+			Renderer renderer;
+			foreach(var module in modules){
+				if(module.meshGo){
+					renderer = module.meshGo.GetComponent<Renderer>();
+					float r = Random.Range(0.0f, 1.0f);
+					float g = Random.Range(0.0f, 1.0f);
+					float b = Random.Range(0.0f, 1.0f);
+					props.SetColor("_Color", new Color(r, g, b));
+					if(module.size.x > module.size.z){
+						props.SetVector("_ST", new Vector4(module.size.x * scaleFactor, module.size.y * scaleFactor,1,1));
+					}else{
+						props.SetVector("_ST", new Vector4(module.size.z * scaleFactor, module.size.y * scaleFactor,1,1));
+					}
+					renderer.SetPropertyBlock(props);
+				}
+			}
+		}	
 	}
 
 	// When each module is created we subdivide it along a random axis

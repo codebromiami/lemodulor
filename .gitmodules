@@ -1,0 +1,6 @@
+[submodule "Assets/Submodules/UnityToonShader"]
+	path = Assets/Submodules/UnityToonShader
+	url = git@github.com:IronWarrior/UnityToonShader.git
+[submodule "Assets/Submodules/UnityOutlineShader"]
+	path = Assets/Submodules/UnityOutlineShader
+	url = git@github.com:IronWarrior/UnityOutlineShader.git

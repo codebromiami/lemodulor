@@ -27,6 +27,7 @@ public class Module : MonoBehaviour {
 			meshGo = GameObject.Instantiate(prefab, this.transform);
 			meshGo.transform.localPosition = Vector3.zero;
 			meshGo.transform.localScale = size;
+			
 		}
 		Signals.Get<ModuleStart>().Dispatch(this);
 	}

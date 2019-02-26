@@ -5,11 +5,12 @@ using deVoid.Utils;
 
 public class PanelExercise : MonoBehaviour {
 
-	public Module module;
+	public Module childModel;
 	public Modulor leModulor;
 	public List<Module> modules = new List<Module>();
 	public float limit = 50;
-	
+	public List<float> subdivisions = new List<float>(); 
+
 	private void OnEnable()
 	{
 		Signals.Get<Module.ModuleStart>().AddListener(onModuleStart);
@@ -23,8 +24,26 @@ public class PanelExercise : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		
-		if(Input.GetKeyDown(KeyCode.Space)){
-			StartCoroutine(Refresh());
+		if(Input.GetKeyDown(KeyCode.R)){
+			
+			foreach(var module in modules){
+				var list = module.gameObject.GetComponentsInParent<Module>();
+				subdivisions.Add(list.Length);
+			}
+			MaterialPropertyBlock props = new MaterialPropertyBlock();
+			Renderer renderer;
+			float scaleFactor = 0.01f;
+			foreach(var module in modules){
+				if(module.meshGo){
+					renderer = module.meshGo.GetComponent<Renderer>();
+					float r = Random.Range(0.0f, 1.0f);
+					float g = Random.Range(0.0f, 1.0f);
+					float b = Random.Range(0.0f, 1.0f);
+					props.SetColor("_Color", new Color(r, g, b));
+					props.SetVector("_ST", new Vector4(module.size.x * scaleFactor, module.size.y * scaleFactor,1,1));
+					renderer.SetPropertyBlock(props);
+				}
+			}
 		}
 	}
 
@@ -45,16 +64,16 @@ public class PanelExercise : MonoBehaviour {
 	}
 
 	public IEnumerator Refresh(){
-		module.divs = 0;
+		childModel.divs = 0;
 		modules = new List<Module>();
 		yield return new WaitForSeconds(0.1f);
 		var rand = Random.value;
 		if(Random.value < 0.5f){
-			module.divAxis = Module.axis.x;	
+			childModel.divAxis = Module.axis.x;	
 		}else{
-			module.divAxis = Module.axis.y;	
+			childModel.divAxis = Module.axis.y;	
 		}
-		module.divs = 2;
+		childModel.divs = 2;
 	}
 	
 
