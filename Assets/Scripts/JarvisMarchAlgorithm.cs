@@ -74,8 +74,13 @@ public static class JarvisMarchAlgorithm
                 points.Add(convexHull[0]);
             }
         
+            //Random index
+            int randIndex = Random.Range(0, points.Count - 1);
+            if(randIndex < 0 | randIndex > points.Count - 1){
+                Debug.LogError(string.Format("{0} out of range of {1}", randIndex, points.Count));
+            } 
             //Pick next point randomly
-            Vertex nextPoint = points[Random.Range(0, points.Count)];
+            Vertex nextPoint = points[randIndex];
 
             //To 2d space so we can see if a point is to the left is the vector ab
             Vector2 a = currentPoint.GetPos2D_XZ();

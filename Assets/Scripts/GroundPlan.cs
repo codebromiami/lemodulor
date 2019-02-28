@@ -85,6 +85,13 @@ public class GroundPlan : MonoBehaviour {
 				}
 			}
 		}	
+
+		if(Input.GetKeyDown(KeyCode.B)){
+			childModule.divs = 0;
+			modules.Clear();
+		}
+		if(Input.GetKeyDown(KeyCode.N)){
+		}
 	}
 
 	// When each module is created we subdivide it along a random axis
@@ -93,14 +100,37 @@ public class GroundPlan : MonoBehaviour {
 	public void onModuleStart(Module _module)
 	{	
 		modules.Add(_module);
+
+		MaterialPropertyBlock props = new MaterialPropertyBlock();
+		Renderer renderer;
+		if(_module.meshGo){
+		renderer = _module.meshGo.GetComponent<Renderer>();
+		float r = Random.Range(0.0f, 1.0f);
+		float g = Random.Range(0.0f, 1.0f);
+		float b = Random.Range(0.0f, 1.0f);
+		props.SetColor("_Color", new Color(r, g, b));
+		if(_module.size.x > _module.size.z){
+			props.SetVector("_ST", new Vector4(_module.size.x * scaleFactor, _module.size.y * scaleFactor,1,1));
+		}else{
+			props.SetVector("_ST", new Vector4(_module.size.z * scaleFactor, _module.size.y * scaleFactor,1,1));
+		}
+		renderer.SetPropertyBlock(props);
+	}
 		if(modules.Count >= limit){
 			if(modules.Count == limit){
-				StartCoroutine(Build());
+				// StartCoroutine(Build());
+				
 			}else{
 				exceed++;
 			}
 			return;
 		}
+		foreach(var mod in modules){
+			Divide(mod);
+		}
+	}
+
+	public void Divide(Module _module){
 		// _module.id += modules.Count.ToString();
 		List<string> axis = new List<string>();
 		axis.Add(Module.axis.x.ToString());
@@ -124,240 +154,201 @@ public class GroundPlan : MonoBehaviour {
 
 	IEnumerator Build(){
 		
+		yield return new WaitForSeconds(1f);
+		childModule.divs = 0;
+		modules.Clear();
 		yield return new WaitForSeconds(0.1f);
+		childModule.divs = 2;
 
-		foreach(var point in points){
-			Vector3 position = point;
-			position.y -= 1;
-			Ray ray = new Ray(position, Vector3.up);
-			RaycastHit[] hits;
-			hits = Physics.RaycastAll(ray, 100);
-			foreach(var hit in hits){
-				Module module = hit.collider.gameObject.GetComponentInParent<Module>();
-				if(module != null){
-					module.hit = true;
-				}
-			}
-		}
-
-		foreach(var module in modules){
-			if(module.hit){
-				module.visible = true;
-				module.gameObject.name = "Module Visible";
-			}else{
-				module.visible = false;
-				module.gameObject.name = "Module Invisible";
-			}
-		}
-		// Take all the modules that were hit by the touch and add a NeighborCheck
-		neighborChecks = new List<NeighborCheck>();
-		foreach(var module in modules){
-			if(module.hit){
-				var neighborCheck = module.gameObject.AddComponent<NeighborCheck>();
-				neighborCheck.module = module;
-				neighborChecks.Add(neighborCheck);
-			}else{
-				module.visible = false;
-			}
-		}
-		foreach (var neighborCheck in neighborChecks){
-			neighborCheck.Check();
-		}
-		// We iterate through all the visible modules that are tagged to be piloti
-		foreach (var neighborCheck in neighborChecks)
-		{
-			if(neighborCheck.module.visible){
-				if(neighborCheck.tags.Contains("Ground") && !neighborCheck.tags.Contains("Roof")){	
-					neighborCheck.tags.Add("Piloti");
-					neighborCheck.tags.Add(piltoiGroups.ToString());
-					GroundPlan.instance.piltoiGroups++;
-				}
-			}
-		}
-		foreach (var neighborCheck in neighborChecks){
-				neighborCheck.Check();
-		}
-		// Loop through all the modules tagged piloti and double check they on the ground
-		foreach (var neighborCheck in neighborChecks)
-		{
-			if(neighborCheck.gameObject.name.Contains("Piloti")){
-				var value = neighborCheck.transform.position.y;
-				if(!Mathf.Approximately(value,size.y /2)){
-					if(value > size.y /2){
-						neighborCheck.tags.Remove("Piloti");
-						Debug.Log(string.Format("Piloti '{0}' is too high. Position: {1} Module Size / 2: {2}",neighborCheck.gameObject.name, value, size.y / 2));
-					}
-				}
-			}
-		}
-		foreach (var neighborCheck in neighborChecks){
-				neighborCheck.Check();
-		}
-
-		foreach (var neighborCheck in neighborChecks)
-		{
-			// For all the piloti modules we look for neihboring piloti modules
-			if(neighborCheck.module.visible){
-				if(neighborCheck.tags.Contains("Piloti")){	
-					Debug.Log(string.Format("Checking: {0}", neighborCheck.gameObject.name));
-					// groupList is the list that contains this gameObject
-					var groupList = IsInLists(neighborCheck.gameObject.name, groups);
-					if(groupList != null){
-						//Add the gameObjects this gameObjects has been tagged with
-						foreach(var str in neighborCheck.groudIds){
-							if(!groupList.Contains(str)){
-								groupList.Add(str);
-							}
-						}
-					}else{
-						// This gameObject isn't in any list, check if any of the gameObjects it's been tagged with are in any of the groups
-						bool b = false;
-						foreach(var groupID in neighborCheck.groudIds){
-							var subList = IsInLists(groupID, groups);
-							if(subList != null){
-								// One of the gameObjects is in a group, so lets add this gameObject to that list
-								subList.Add(neighborCheck.gameObject.name);
-								b = true;
-							}
-						}
-						// This gameObjects groupID's were not in any group
-						if(!b){
-							// create a new list around a particular module
-							var newList = new List<string>();
-							newList.Add(neighborCheck.gameObject.name);
-							newList.AddRange(neighborCheck.groudIds);
-							groups.Add(newList);
-							// neighbors.Add(neighborCheck.gameObject);
-						}
-					}
-				}
-			}
-		}
-		foreach (var neighborCheck in neighborChecks){
-			neighborCheck.Check();
-		}
-		// Log the group info and give the modules in groups an index to the group
-		int index = 0;
-		foreach(var group in groups){
-			Debug.Log(string.Format("Group {0} count: {1}",index, group.Count));
-			string groupIDs = "Group: " + index.ToString();
-			foreach(string name in group){
-				groupIDs += " " + name + ",";
-			}
-			Debug.Log(groupIDs);
-			index++;
-		}
-		foreach (var neighborCheck in neighborChecks)
-		{
-			if(neighborCheck.module.visible){
-				if(neighborCheck.gameObject.name.Contains("Piloti")){	
-					neighborCheck.module.meshGo.GetComponent<Collider>().isTrigger = true;
-				}
-			}
-		}
-		var piloti = FindObjectOfType<Piloti>();
-		List<Vector3> tmp = new List<Vector3>();
-		
-		foreach(var line in piloti.lines){
-			
-			if(piloti.lines.IndexOf(line) == 0)
-				continue;
-
-			foreach(var point in line.points){
-				if(!Vector3Contains(tmp, point)){
-					tmp.Add(point);
-				}else{
-					Debug.Log("Duplicate Point");
-				}
-			}
-		}
-		var go = Resources.Load<GameObject>("Prefabs/PilotiAgent");
-		foreach(var point in tmp){
-			go = Instantiate(go);
-			go.transform.SetParent(piloti.transform);
-			go.transform.localPosition = point;
-			go.name = "Piloti Agent: " + point.ToString();
-			var scale = go.transform.localScale;
-			scale.x = piloti.size;
-			scale.z = piloti.size;
-			go.transform.localScale = scale;
-			var pilotiAgent = go.GetComponent<PilotiAgent>();
-			piloti.pilotiAgents.Add(pilotiAgent);
-		}
-		// Hide all the modules tagged 'piloti'
-		foreach (var neighborCheck in neighborChecks)
-		{
-			if(neighborCheck.module.visible){
-				if(neighborCheck.gameObject.name.Contains("Piloti")){	
-					neighborCheck.module.meshGo.GetComponent<MeshRenderer>().enabled = false;
-					yield return null;
-				}
-			}
-		}
-
-		// Add all the modules tagged 'piloti' to list and scale them
-		foreach (var neighborCheck in neighborChecks)
-		{
-			if(neighborCheck.module.visible){
-				if(neighborCheck.gameObject.name.Contains("Piloti")){	
-					// neighborCheck.module.size *= 0.6f;
-					piloti.pilotiModules.Add(neighborCheck.module);
-				}
-			}
-		}
-		// Check through each of the pilotiAgents to see if it collides with a piloti module
-		foreach(var pilotiAgent in piloti.pilotiAgents){
-			
-			var colliderA = pilotiAgent.GetComponent<Collider>();
-			foreach(var module in piloti.pilotiModules){
-				var colliderB = module.meshGo.GetComponent<Collider>();
-				if(colliderA.bounds.Intersects(colliderB.bounds)){
-					pilotiAgent.hit = true;
-					pilotiAgent.tags.Add(colliderB.gameObject.name);
-				}
-			}
-		}
-	
-		// yield return new WaitForSeconds(0.2f);
-				
-		// foreach(var pilotiAgent in piloti.pilotiAgents){
-			
-		// 	if(pilotiAgent.hitPoint != Vector3.zero){
-				
-		// 		float height = Vector3.Distance(pilotiAgent.transform.position, pilotiAgent.hitPoint) / 2;
-		// 		float width = (piloti.size / piloti.divs);
-		// 		pilotiAgent.transform.localScale = new Vector3(width, height, width);
-		// 		var pos = pilotiAgent.transform.position;
-		// 		pos.y = height;
-		// 		pilotiAgent.transform.position = pos;
+		// foreach(var point in points){
+		// 	Vector3 position = point;
+		// 	position.y -= 1;
+		// 	Ray ray = new Ray(position, Vector3.up);
+		// 	RaycastHit[] hits;
+		// 	hits = Physics.RaycastAll(ray, 100);
+		// 	foreach(var hit in hits){
+		// 		Module module = hit.collider.gameObject.GetComponentInParent<Module>();
+		// 		if(module != null){
+		// 			module.hit = true;
+		// 		}
 		// 	}
 		// }
 
-		// // wait for the triggers to reset in their new position
-		// yield return new WaitForSeconds(0.2f);
-
-		// foreach(var pilotiAgent in piloti.pilotiAgents){
-			
-		// 	if(pilotiAgent.hitPoint != Vector3.zero){
-			
-		// 		foreach(var trigger in pilotiAgent.triggers){
-		// 			if(!trigger.triggered){
-		// 				pilotiAgent.unTriggered = true;
-		// 				break;
+		// foreach(var module in modules){
+		// 	if(module.hit){
+		// 		module.visible = true;
+		// 		module.gameObject.name = "Module Visible";
+		// 	}else{
+		// 		module.visible = false;
+		// 		module.gameObject.name = "Module Invisible";
+		// 	}
+		// }
+		// // Take all the modules that were hit by the touch and add a NeighborCheck
+		// neighborChecks = new List<NeighborCheck>();
+		// foreach(var module in modules){
+		// 	if(module.hit){
+		// 		var neighborCheck = module.gameObject.AddComponent<NeighborCheck>();
+		// 		neighborCheck.module = module;
+		// 		neighborChecks.Add(neighborCheck);
+		// 	}else{
+		// 		module.visible = false;
+		// 	}
+		// }
+		// foreach (var neighborCheck in neighborChecks){
+		// 	neighborCheck.Check();
+		// }
+		// // We iterate through all the visible modules that are tagged to be piloti
+		// foreach (var neighborCheck in neighborChecks)
+		// {
+		// 	if(neighborCheck.module.visible){
+		// 		if(neighborCheck.tags.Contains("Ground") && !neighborCheck.tags.Contains("Roof")){	
+		// 			neighborCheck.tags.Add("Piloti");
+		// 			neighborCheck.tags.Add(piltoiGroups.ToString());
+		// 			GroundPlan.instance.piltoiGroups++;
+		// 		}
+		// 	}
+		// }
+		// foreach (var neighborCheck in neighborChecks){
+		// 		neighborCheck.Check();
+		// }
+		// // Loop through all the modules tagged piloti and double check they on the ground
+		// foreach (var neighborCheck in neighborChecks)
+		// {
+		// 	if(neighborCheck.gameObject.name.Contains("Piloti")){
+		// 		var value = neighborCheck.transform.position.y;
+		// 		if(!Mathf.Approximately(value,size.y /2)){
+		// 			if(value > size.y /2){
+		// 				neighborCheck.tags.Remove("Piloti");
+		// 				Debug.Log(string.Format("Piloti '{0}' is too high. Position: {1} Module Size / 2: {2}",neighborCheck.gameObject.name, value, size.y / 2));
 		// 			}
 		// 		}
 		// 	}
-		// 	pilotiAgent.triggerGo.SetActive(false);
+		// }
+		// foreach (var neighborCheck in neighborChecks){
+		// 		neighborCheck.Check();
 		// }
 
+		// foreach (var neighborCheck in neighborChecks)
+		// {
+		// 	// For all the piloti modules we look for neihboring piloti modules
+		// 	if(neighborCheck.module.visible){
+		// 		if(neighborCheck.tags.Contains("Piloti")){	
+		// 			Debug.Log(string.Format("Checking: {0}", neighborCheck.gameObject.name));
+		// 			// groupList is the list that contains this gameObject
+		// 			var groupList = IsInLists(neighborCheck.gameObject.name, groups);
+		// 			if(groupList != null){
+		// 				//Add the gameObjects this gameObjects has been tagged with
+		// 				foreach(var str in neighborCheck.groudIds){
+		// 					if(!groupList.Contains(str)){
+		// 						groupList.Add(str);
+		// 					}
+		// 				}
+		// 			}else{
+		// 				// This gameObject isn't in any list, check if any of the gameObjects it's been tagged with are in any of the groups
+		// 				bool b = false;
+		// 				foreach(var groupID in neighborCheck.groudIds){
+		// 					var subList = IsInLists(groupID, groups);
+		// 					if(subList != null){
+		// 						// One of the gameObjects is in a group, so lets add this gameObject to that list
+		// 						subList.Add(neighborCheck.gameObject.name);
+		// 						b = true;
+		// 					}
+		// 				}
+		// 				// This gameObjects groupID's were not in any group
+		// 				if(!b){
+		// 					// create a new list around a particular module
+		// 					var newList = new List<string>();
+		// 					newList.Add(neighborCheck.gameObject.name);
+		// 					newList.AddRange(neighborCheck.groudIds);
+		// 					groups.Add(newList);
+		// 					// neighbors.Add(neighborCheck.gameObject);
+		// 				}
+		// 			}
+		// 		}
+		// 	}
+		// }
+		// foreach (var neighborCheck in neighborChecks){
+		// 	neighborCheck.Check();
+		// }
+		// // Log the group info and give the modules in groups an index to the group
+		// int index = 0;
+		// foreach(var group in groups){
+		// 	Debug.Log(string.Format("Group {0} count: {1}",index, group.Count));
+		// 	string groupIDs = "Group: " + index.ToString();
+		// 	foreach(string name in group){
+		// 		groupIDs += " " + name + ",";
+		// 	}
+		// 	Debug.Log(groupIDs);
+		// 	index++;
+		// }
+		// foreach (var neighborCheck in neighborChecks)
+		// {
+		// 	if(neighborCheck.module.visible){
+		// 		if(neighborCheck.gameObject.name.Contains("Piloti")){	
+		// 			neighborCheck.module.meshGo.GetComponent<Collider>().isTrigger = true;
+		// 		}
+		// 	}
+		// }
+		// var piloti = FindObjectOfType<Piloti>();
+		// List<Vector3> tmp = new List<Vector3>();
+		
+		// foreach(var line in piloti.lines){
+			
+		// 	if(piloti.lines.IndexOf(line) == 0)
+		// 		continue;
+
+		// 	foreach(var point in line.points){
+		// 		if(!Vector3Contains(tmp, point)){
+		// 			tmp.Add(point);
+		// 		}else{
+		// 			Debug.Log("Duplicate Point");
+		// 		}
+		// 	}
+		// }
+		// var go = Resources.Load<GameObject>("Prefabs/PilotiAgent");
+		// foreach(var point in tmp){
+		// 	go = Instantiate(go);
+		// 	go.transform.SetParent(piloti.transform);
+		// 	go.transform.localPosition = point;
+		// 	go.name = "Piloti Agent: " + point.ToString();
+		// 	var scale = go.transform.localScale;
+		// 	scale.x = piloti.size;
+		// 	scale.z = piloti.size;
+		// 	go.transform.localScale = scale;
+		// 	var pilotiAgent = go.GetComponent<PilotiAgent>();
+		// 	piloti.pilotiAgents.Add(pilotiAgent);
+		// }
+		// // Hide all the modules tagged 'piloti'
+		// foreach (var neighborCheck in neighborChecks)
+		// {
+		// 	if(neighborCheck.module.visible){
+		// 		if(neighborCheck.gameObject.name.Contains("Piloti")){	
+		// 			neighborCheck.module.meshGo.GetComponent<MeshRenderer>().enabled = false;
+		// 			yield return null;
+		// 		}
+		// 	}
+		// }
+
+		// // Add all the modules tagged 'piloti' to list and scale them
+		// foreach (var neighborCheck in neighborChecks)
+		// {
+		// 	if(neighborCheck.module.visible){
+		// 		if(neighborCheck.gameObject.name.Contains("Piloti")){	
+		// 			// neighborCheck.module.size *= 0.6f;
+		// 			piloti.pilotiModules.Add(neighborCheck.module);
+		// 		}
+		// 	}
+		// }
+		// // Check through each of the pilotiAgents to see if it collides with a piloti module
 		// foreach(var pilotiAgent in piloti.pilotiAgents){
 			
-		// 	if(pilotiAgent.hitPoint != Vector3.zero & !pilotiAgent.unTriggered){
-			
-		// 		pilotiAgent.gameObject.GetComponent<MeshRenderer>().enabled = true;
-				
-		// 	}else{
-		// 		pilotiAgent.gameObject.GetComponent<MeshRenderer>().enabled = false;
+		// 	var colliderA = pilotiAgent.GetComponent<Collider>();
+		// 	foreach(var module in piloti.pilotiModules){
+		// 		var colliderB = module.meshGo.GetComponent<Collider>();
+		// 		if(colliderA.bounds.Intersects(colliderB.bounds)){
+		// 			pilotiAgent.hit = true;
+		// 			pilotiAgent.tags.Add(colliderB.gameObject.name);
+		// 		}
 		// 	}
 		// }
 	}
