@@ -6,6 +6,8 @@ public class ModuleSwitcher : MonoBehaviour
 {   
     public LeModule module;
     public float scaleFactor = 0.1f;
+    [Range(0f,1f)]
+    public float time = 1;
     // Start is called before the first frame update
     void Start()
     {
@@ -64,13 +66,13 @@ public class ModuleSwitcher : MonoBehaviour
 
         // wait a second before allowing this function to run
         switchEnumerating = true;
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(time);
         switchEnumerating = false;
     }
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireCube(transform.position, Vector3.one * 2.26f);
-    }
+    // private void OnDrawGizmos()
+    // {
+    //     Gizmos.color = Color.yellow;
+    //     Gizmos.DrawWireCube(transform.position, Vector3.one * 2.26f);
+    // }
 }

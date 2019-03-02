@@ -8,9 +8,9 @@ public class LeModule : MonoBehaviour {
 
 	public class ModuleStart : ASignal <Module> {};
 	public enum axis {x,y,z}
-	public axis divAxis = axis.x;
 	public string uid = "Add Monobehaviour instance ID";
 	public string id = "Module";
+	public axis subdivisionAxis = axis.x;
 	public LeModule parent;
 	public List<LeModule> children;
 	public Vector3 size = Vector3.one;
@@ -45,7 +45,7 @@ public class LeModule : MonoBehaviour {
 
 	public void Subdivide(LeModule.axis axis)
 	{	
-        divAxis = axis;
+        subdivisionAxis = axis;
 		// Create modules if this is the first time we've been divided
 		while(children.Count < 2){
 			var go = new GameObject();
@@ -73,9 +73,9 @@ public class LeModule : MonoBehaviour {
 		}
 		// Get a list containing two modulor values
 		List<float> ms = new List<float>();
-		foreach (LeModule item in children)
+		foreach (LeModule child in children)
 		{
-			switch(divAxis){
+			switch(subdivisionAxis){
 				case axis.x:
 				ms = Modulor.GetList(size.x,2);
 				break;
@@ -93,7 +93,7 @@ public class LeModule : MonoBehaviour {
 		}
 		
 		for(int i = 0; i < children.Count; i++){
-			switch(divAxis){
+			switch(subdivisionAxis){
 				case axis.x:
 				children[i].size.x = ms[i];
 				break;
@@ -105,37 +105,37 @@ public class LeModule : MonoBehaviour {
 				break;
 			}
 		}
-		foreach (LeModule item in children) {
-			var scale = item.meshGo.transform.localScale;
-			switch(divAxis){
+		foreach (LeModule child in children) {
+			var scale = child.meshGo.transform.localScale;
+			switch(subdivisionAxis){
 				case axis.x:
-					scale.x = item.size.x;
+					scale.x = child.size.x;
 					scale.y = size.y;
 					scale.z = size.z;
 				break;
 				case axis.y:
 					scale.x = size.x;
-					scale.y = item.size.y;
+					scale.y = child.size.y;
 					scale.z = size.z;
 				break;
 				case axis.z:
 					scale.x = size.x;
 					scale.y = size.y;
-					scale.z = item.size.z;
+					scale.z = child.size.z;
 				break;					
 			}
-			item.meshGo.transform.localScale = scale;
+			child.meshGo.transform.localScale = scale;
 		}
 
 		// Effect position
 		// index 0 pos = index 1 scale / 2
 		// index 1 should be moved the scale of index 0 / 2
-		foreach (LeModule item in children)
+		foreach (LeModule child in children)
 		{
-			var pos = item.transform.localPosition;
-			int index = children.IndexOf(item);
-			if(index == 0){
-				switch(divAxis){
+			var pos = child.transform.localPosition;
+			int childIndex = children.IndexOf(child);
+			if(childIndex == 0){
+				switch(subdivisionAxis){
 					case axis.x:
 						pos.x = children[1].size.x /2 * -1;
 						pos.y = 0;
@@ -152,8 +152,8 @@ public class LeModule : MonoBehaviour {
 						pos.z = children[1].size.z /2 * -1;
 					break;					
 				}
-			}else if(index == 1){
-				switch(divAxis){
+			}else if(childIndex == 1){
+				switch(subdivisionAxis){
 					case axis.x:
 						pos.x = children[0].size.x /2;
 						pos.y = 0;
@@ -173,27 +173,25 @@ public class LeModule : MonoBehaviour {
 			}else{
 				Debug.LogError(uid + "Index should not be greater than 1");
 			}
-			item.transform.localPosition = pos;
+			child.transform.localPosition = pos;
 		}	
-
 		// Set the size of the un effected axises to the values in the parent
-		if(parent){
-			switch(parent.divAxis){
+		foreach (LeModule child in children){
+			switch(subdivisionAxis){
 				case axis.x:
-					size.y = parent.size.y;
-					size.z = parent.size.z;
+					child.size.y = size.y;
+					child.size.z = size.z;
 				break;
 				case axis.y:
-					size.x = parent.size.x;
-					size.z = parent.size.z;
+					child.size.x = size.x;
+					child.size.z = size.z;
 				break;
 				case axis.z:
-					size.x = parent.size.x;
-					size.y = parent.size.y;
+					child.size.x = size.x;
+					child.size.y = size.y;
 				break;					
 			}
 		}
-
 		// Hide self
 		foreach (LeModule item in children)
 		{
@@ -204,6 +202,7 @@ public class LeModule : MonoBehaviour {
 
 	private void OnDrawGizmos()
 	{
-		
+		Gizmos.color = Color.white;
+		Gizmos.DrawWireCube(transform.position, size);
 	}	
 }
