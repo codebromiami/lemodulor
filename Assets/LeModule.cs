@@ -37,9 +37,14 @@ public class LeModule : MonoBehaviour {
 	}
 	
 	public void UnDivide(){
-		for(int i = 0; i < 2; i++){
-			var node = children[children.Count-1];
-			GameObject.Destroy(node.gameObject);
+		
+		if(children == null){
+			Debug.LogError(uid + "children is null when undividing");
+			return;
+		}
+		for(int i = 0; i < children.Count; i++){
+			var child = children[children.Count-1];
+			GameObject.Destroy(child.gameObject);
 			children.RemoveAt(children.Count-1);
 			Debug.Log(uid + " Removed child");
 		}
@@ -49,7 +54,7 @@ public class LeModule : MonoBehaviour {
 	{	
         subdivisionAxis = axis;
 		if(children == null)
-				children = new List<LeModule>();
+			children = new List<LeModule>();
 		// Create modules if this is the first time we've been divided
 		while(children.Count < 2){
 			var go = new GameObject();
@@ -91,7 +96,7 @@ public class LeModule : MonoBehaviour {
 		}
 		// Check sizes to see if they are out of bounds
 		foreach(var value in ms){
-			
+
 		}
 		// Revese the list randomly
 		if(ExtRandom<bool>.Chance(1,2)){
