@@ -59,9 +59,10 @@ public class ModuleSwitcher : MonoBehaviour
                 newAxis = LeModule.axis.z;
             break;					
         }
-        module.Divide(newAxis);
+        module.Subdivide(newAxis);
         Debug.Log(string.Format("Axis: {0}", newAxis));
 
+        // wait a second before allowing this function to run
         switchEnumerating = true;
         yield return new WaitForSeconds(1f);
         switchEnumerating = false;

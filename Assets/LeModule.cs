@@ -11,14 +11,10 @@ public class LeModule : MonoBehaviour {
 	public axis divAxis = axis.x;
 	public string uid = "Add Monobehaviour instance ID";
 	public string id = "Module";
-	public int divs = 0;
-	public LeModule parentNode;
-	public List<LeModule> childNodes;
+	public LeModule parent;
+	public List<LeModule> children;
 	public Vector3 size = Vector3.one;
 	public GameObject meshGo;
-	public Modulor leModulor;
-	public bool visible = true;
-	public bool hit = false;
 		
 	private void Start()
 	{
@@ -40,76 +36,76 @@ public class LeModule : MonoBehaviour {
 	
 	public void UnDivide(){
 		for(int i = 0; i < 2; i++){
-			var node = childNodes[childNodes.Count-1];
+			var node = children[children.Count-1];
 			GameObject.Destroy(node.gameObject);
-			childNodes.RemoveAt(childNodes.Count-1);
+			children.RemoveAt(children.Count-1);
 			Debug.Log(uid + " Removed child");
 		}
 	}
 
-	public void Divide(LeModule.axis axis)
+	public void Subdivide(LeModule.axis axis)
 	{	
-        divs = 2;
         divAxis = axis;
 		// Create modules if this is the first time we've been divided
-		if(divs > childNodes.Count){
-			while(divs > childNodes.Count){
-				var go = new GameObject();
-				go.transform.SetParent(this.transform);
-				go.transform.localPosition = Vector3.zero;
-				var node = go.AddComponent<LeModule>();
-				if(childNodes == null)
-					childNodes = new List<LeModule>();
-				childNodes.Add(node);
-				node.parentNode = this;
-				var prefab = Resources.Load<GameObject>("Prefabs/Cube");
-				node.meshGo = GameObject.Instantiate(prefab);
-				node.meshGo.transform.SetParent(node.transform);
-				node.meshGo.transform.localPosition = Vector3.zero;
-				Debug.Log( uid + "Added child");
-			}
+		while(children.Count < 2){
+			var go = new GameObject();
+			go.transform.SetParent(this.transform);
+			go.transform.localPosition = Vector3.zero;
+			var node = go.AddComponent<LeModule>();
+			if(children == null)
+				children = new List<LeModule>();
+			children.Add(node);
+			node.parent = this;
+			var prefab = Resources.Load<GameObject>("Prefabs/Cube");
+			node.meshGo = GameObject.Instantiate(prefab);
+			node.meshGo.transform.SetParent(node.transform);
+			node.meshGo.transform.localPosition = Vector3.zero;
+			Debug.Log( uid + " Added child");
 		}
-		if(childNodes != null){
-			if(childNodes.Count < 2){
-				Debug.LogError(uid + "childNodes.Count < 2");
+		if(children != null){
+			if(children.Count < 2){
+				Debug.LogError(uid + " childNodes.Count < 2");
 				return;
 			}
 		}else{
-			Debug.LogError(uid + "childNodes list == null");
+			Debug.LogError(uid + " childNodes list == null");
 			return;
 		}
-		// Apply scale based child count
-		
+		// Get a list containing two modulor values
 		List<float> ms = new List<float>();
-		foreach (LeModule item in childNodes)
+		foreach (LeModule item in children)
 		{
 			switch(divAxis){
 				case axis.x:
-				ms = Modulor.GetList(size.x,divs);
+				ms = Modulor.GetList(size.x,2);
 				break;
 				case axis.y:
-				ms = Modulor.GetList(size.y,divs);
+				ms = Modulor.GetList(size.y,2);
 				break;
 				case axis.z:
-				ms = Modulor.GetList(size.z,divs);
+				ms = Modulor.GetList(size.z,2);
 				break;
 			}
 		}
-		for(int i = 0; i < childNodes.Count; i++){
-			
+		if(ExtRandom<bool>.Chance(1,2)){
+			ms.Reverse();
+		}
+		//
+		for(int i = 0; i < children.Count; i++){
 			switch(divAxis){
 				case axis.x:
-				childNodes[i].size.x = ms[i];
+				children[i].size.x = ms[i];
 				break;
 				case axis.y:
-				childNodes[i].size.y = ms[i];
+				children[i].size.y = ms[i];
 				break;
 				case axis.z:
-				childNodes[i].size.z = ms[i];
+				children[i].size.z = ms[i];
 				break;
 			}
 		}
-		foreach (LeModule item in childNodes) {
+		//We only set scale we don't reset it
+		foreach (LeModule item in children) {
 			var scale = item.meshGo.transform.localScale;
 			switch(divAxis){
 				case axis.x:
@@ -133,76 +129,69 @@ public class LeModule : MonoBehaviour {
 			}
 			item.meshGo.transform.localScale = scale;
 		}
+
 		// Effect position
 		// index 0 pos = index 1 scale / 2
 		// index 1 should be moved the scale of index 0 / 2
-		foreach (LeModule item in childNodes)
+		foreach (LeModule item in children)
 		{
 			var pos = item.transform.localPosition;
-			int index = childNodes.IndexOf(item);
+			int index = children.IndexOf(item);
 			if(index == 0){
 				switch(divAxis){
 					case axis.x:
-						pos.x = childNodes[1].size.x /2 * -1;
+						pos.x = children[1].size.x /2 * -1;
 					break;
 					case axis.y:
-						pos.y = childNodes[1].size.y /2 * -1;
+						pos.y = children[1].size.y /2 * -1;
 					break;
 					case axis.z:
-						pos.z = childNodes[1].size.z /2 * -1;
+						pos.z = children[1].size.z /2 * -1;
 					break;					
 				}
 			}else if(index == 1){
 				switch(divAxis){
 					case axis.x:
-						pos.x = childNodes[0].size.x /2;
+						pos.x = children[0].size.x /2;
 					break;
 					case axis.y:
-						pos.y = childNodes[0].size.y /2;
+						pos.y = children[0].size.y /2;
 					break;
 					case axis.z:
-						pos.z = childNodes[0].size.z /2;
+						pos.z = children[0].size.z /2;
 					break;					
 				}
 			}else{
 				Debug.LogError(uid + "Index should not be greater than 1");
 			}
 			item.transform.localPosition = pos;
-		}		
-	}
+		}	
 
-    private void Update()
-    {
-        // Set the size of the un effected axises to the values in the parent
-		if(parentNode){
-			switch(parentNode.divAxis){
+		// Set the size of the un effected axises to the values in the parent
+		if(parent){
+			switch(parent.divAxis){
 				case axis.x:
-					size.y = parentNode.size.y;
-					size.z = parentNode.size.z;
+					size.y = parent.size.y;
+					size.z = parent.size.z;
 				break;
 				case axis.y:
-					size.x = parentNode.size.x;
-					size.z = parentNode.size.z;
+					size.x = parent.size.x;
+					size.z = parent.size.z;
 				break;
 				case axis.z:
-					size.x = parentNode.size.x;
-					size.y = parentNode.size.y;
+					size.x = parent.size.x;
+					size.y = parent.size.y;
 				break;					
 			}
 		}
 
-        if(meshGo){
-			if(divs > 0){
-				visible = false;
-			}
+		// Hide self
+		foreach (LeModule item in children)
+		{
+			item.meshGo.SetActive(true);
 		}
-
-		if(visible){
-			meshGo.SetActive(true);
-		}else{
-			meshGo.SetActive(false);
-		}
-    }
+		meshGo.SetActive(false);
+	}
 
 	private void OnDrawGizmos()
 	{

@@ -106,7 +106,7 @@ public class Modulor : MonoBehaviour {
 	public static List<float> GetList(float length, int count){
 		List<float> goldenDivs = new List<float>();
 		goldenDivs.Add(length / 1.6180339887f);
-		for(int i = 0; i < count; i++){
+		for(int i = 0; i < count -1; i++){
 			goldenDivs.Add(goldenDivs[goldenDivs.Count-1] / 1.6180339887f);
 		}
 		return goldenDivs;
