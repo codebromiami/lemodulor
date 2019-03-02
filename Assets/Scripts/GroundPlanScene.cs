@@ -43,7 +43,9 @@ public class GroundPlanScene : MonoBehaviour {
 
 	private void Update()
 	{
-		
+		if(Input.GetKeyDown(KeyCode.R)){
+			gp.transform.rotation = visGo.transform.rotation;
+		}
 	}
 
 	public void onPointerDown(RaycastHit hit){
@@ -146,7 +148,7 @@ public class GroundPlanScene : MonoBehaviour {
 			gp = go.GetComponent<GroundPlan>();
 			gp.points = points;
 			gp.size = visGo.transform.localScale;
-			gp.limit = density;
+			gp.limit = Random.Range(2,density);
 			gp.rays = true;
 			visGo.GetComponent<Renderer>().enabled = false;
 			visGo2.GetComponent<Renderer>().enabled = false;

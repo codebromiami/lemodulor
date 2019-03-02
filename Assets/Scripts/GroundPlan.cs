@@ -118,16 +118,26 @@ public class GroundPlan : MonoBehaviour {
 	}
 		if(modules.Count >= limit){
 			if(modules.Count == limit){
-				// StartCoroutine(Build());
 				
+			foreach(var module in modules){
+				if(module.divs == 0){
+					if(ExtRandom<bool>.Chance(1,2)){
+						module.visible = true;
+						module.gameObject.name = "Module Visible";
+					}else{
+						module.visible = false;	
+					}
+				}else{
+					module.visible = false;
+					module.gameObject.name = "Module Invisible";
+				}
+			}
 			}else{
 				exceed++;
 			}
 			return;
 		}
-		foreach(var mod in modules){
-			Divide(mod);
-		}
+		Divide(_module);
 	}
 
 	public void Divide(Module _module){
