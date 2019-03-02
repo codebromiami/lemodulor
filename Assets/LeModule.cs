@@ -87,10 +87,11 @@ public class LeModule : MonoBehaviour {
 				break;
 			}
 		}
+		// Revese the list randomly
 		if(ExtRandom<bool>.Chance(1,2)){
 			ms.Reverse();
 		}
-		//
+		
 		for(int i = 0; i < children.Count; i++){
 			switch(divAxis){
 				case axis.x:
@@ -104,7 +105,6 @@ public class LeModule : MonoBehaviour {
 				break;
 			}
 		}
-		//We only set scale we don't reset it
 		foreach (LeModule item in children) {
 			var scale = item.meshGo.transform.localScale;
 			switch(divAxis){
@@ -112,19 +112,16 @@ public class LeModule : MonoBehaviour {
 					scale.x = item.size.x;
 					scale.y = size.y;
 					scale.z = size.z;
-					// scale.x -= margin;
 				break;
 				case axis.y:
 					scale.x = size.x;
 					scale.y = item.size.y;
 					scale.z = size.z;
-					// scale.y -= margin;
 				break;
 				case axis.z:
 					scale.x = size.x;
 					scale.y = size.y;
 					scale.z = item.size.z;
-					// scale.z -= margin;
 				break;					
 			}
 			item.meshGo.transform.localScale = scale;
@@ -141,11 +138,17 @@ public class LeModule : MonoBehaviour {
 				switch(divAxis){
 					case axis.x:
 						pos.x = children[1].size.x /2 * -1;
+						pos.y = 0;
+						pos.z = 0;
 					break;
 					case axis.y:
+						pos.x = 0;
 						pos.y = children[1].size.y /2 * -1;
+						pos.z = 0;
 					break;
 					case axis.z:
+						pos.x = 0;
+						pos.y = 0;
 						pos.z = children[1].size.z /2 * -1;
 					break;					
 				}
@@ -153,11 +156,17 @@ public class LeModule : MonoBehaviour {
 				switch(divAxis){
 					case axis.x:
 						pos.x = children[0].size.x /2;
+						pos.y = 0;
+						pos.z = 0;
 					break;
 					case axis.y:
+						pos.x = 0;
 						pos.y = children[0].size.y /2;
+						pos.z = 0;
 					break;
 					case axis.z:
+						pos.x = 0;
+						pos.y = 0;
 						pos.z = children[0].size.z /2;
 					break;					
 				}
