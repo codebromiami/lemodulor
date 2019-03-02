@@ -6,6 +6,7 @@ using UnityEngine.Events;
 
 public class LeModule : MonoBehaviour {
 
+	public class OnStart : ASignal<LeModule> {}
 	public class ModuleStart : ASignal <Module> {};
 	public enum axis {x,y,z}
 	public string uid = "Add Monobehaviour instance ID";
@@ -15,7 +16,7 @@ public class LeModule : MonoBehaviour {
 	public List<LeModule> children;
 	public Vector3 size = Vector3.one;
 	public GameObject meshGo;
-		
+	
 	private void Start()
 	{
 		gameObject.name = id;
@@ -27,6 +28,7 @@ public class LeModule : MonoBehaviour {
 		}
 		uid = GetInstanceID().ToString();
 		gameObject.name += uid;
+		Signals.Get<OnStart>().Dispatch(this);
 	}
 
 	public void OnDestroy()
@@ -46,14 +48,14 @@ public class LeModule : MonoBehaviour {
 	public void Subdivide(LeModule.axis axis)
 	{	
         subdivisionAxis = axis;
+		if(children == null)
+				children = new List<LeModule>();
 		// Create modules if this is the first time we've been divided
 		while(children.Count < 2){
 			var go = new GameObject();
 			go.transform.SetParent(this.transform);
 			go.transform.localPosition = Vector3.zero;
 			var node = go.AddComponent<LeModule>();
-			if(children == null)
-				children = new List<LeModule>();
 			children.Add(node);
 			node.parent = this;
 			var prefab = Resources.Load<GameObject>("Prefabs/Cube");
@@ -86,6 +88,10 @@ public class LeModule : MonoBehaviour {
 				ms = Modulor.GetList(size.z,2);
 				break;
 			}
+		}
+		// Check sizes to see if they are out of bounds
+		foreach(var value in ms){
+			
 		}
 		// Revese the list randomly
 		if(ExtRandom<bool>.Chance(1,2)){
