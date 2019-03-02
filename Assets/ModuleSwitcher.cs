@@ -6,28 +6,12 @@ using deVoid.Utils;
 public class ModuleSwitcher : MonoBehaviour
 {   
     public LeModule childModule;
-    public List<LeModule> modules = new List<LeModule>();
     public float scaleFactor = 0.1f;
     [Range(0f,1f)]
     public float time = 1;
     public int count = 0;
     bool switchEnumerating = false;
-
-    private void OnEnable()
-	{
-		Signals.Get<LeModule.OnStart>().AddListener(onModuleStart);
-	}
-
-	private void OnDisable()
-	{
-		Signals.Get<LeModule.OnStart>().RemoveListener(onModuleStart);
-	}
-
-	public void onModuleStart(LeModule newModule)
-	{	
-        modules.Add(newModule);
-		count++;
-	}
+    bool useSwitch = false;
 
     // Start is called before the first frame update
     void Start()
@@ -37,20 +21,24 @@ public class ModuleSwitcher : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
-        if(!switchEnumerating){
-            StartCoroutine(Switch());
-        }
-
-        if(Input.GetKeyDown(KeyCode.Alpha1)){
-            
-            foreach(LeModule child in childModule.children){
-                child.Subdivide(LeModule.axis.x);
+    {   
+        if(useSwitch){
+            if(!switchEnumerating){
+                StartCoroutine(Switch());
             }
         }
     }
     
-    IEnumerator Switch(){
+    public IEnumerator Switch(){
+        
+        RandomDivision();
+        // wait a second before allowing this function to run
+        switchEnumerating = true;
+        yield return new WaitForSeconds(time);
+        switchEnumerating = false;
+    }
+
+    public void RandomDivision(){
         
         LeModule module = childModule;
         if(ExtRandom<bool>.Chance(1,2)){
@@ -63,16 +51,11 @@ public class ModuleSwitcher : MonoBehaviour
                 Renderer renderer = child.meshGo.GetComponent<Renderer>();
                 RandomColor(renderer);
                 child.gameObject.AddComponent<ModuleSwitcher>();
+                child.gameObject.AddComponent<ModuleCollider>();
             }
         }else{
             module.UnDivide();
         }
-        
-        
-        // wait a second before allowing this function to run
-        switchEnumerating = true;
-        yield return new WaitForSeconds(time);
-        switchEnumerating = false;
     }
 
     LeModule.axis RandomAxis(){

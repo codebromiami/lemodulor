@@ -123,6 +123,7 @@ GameObject:
   - component: {fileID: 336537723}
   - component: {fileID: 336537722}
   - component: {fileID: 336537721}
+  - component: {fileID: 336537725}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
@@ -142,16 +143,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eafe8695cca9841b9a93411022343d04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  divAxis: 0
+  uid: Add Monobehaviour instance ID
   id: Module
-  divs: 0
-  parentNode: {fileID: 0}
-  childNodes: []
-  size: {x: 2.26, y: 2.26, z: 2.26}
+  subdivisionAxis: 0
+  parent: {fileID: 0}
+  children: []
+  size: {x: 1, y: 1, z: 1}
   meshGo: {fileID: 0}
-  leModulor: {fileID: 0}
-  visible: 1
-  hit: 0
 --- !u!114 &336537722
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -164,8 +162,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce7a1a5cbf8f74162a0af5e2cc407083, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  module: {fileID: 336537721}
+  childModule: {fileID: 336537721}
+  modules: []
   scaleFactor: 0.1
+  time: 1
+  count: 0
 --- !u!4 &336537723
 Transform:
   m_ObjectHideFlags: 0
@@ -180,6 +181,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &336537725
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 336537720}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 832fb4c4db55e430ea3651023ca031e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  collider: {fileID: 0}
 --- !u!1 &990840069
 GameObject:
   m_ObjectHideFlags: 0
