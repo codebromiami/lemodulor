@@ -85,6 +85,11 @@ public class ModuleMove : MonoBehaviour
         if(active && hitBoys.Contains(false)){
             
             if(rb == null){
+                var scale = transform.localScale;
+                scale.x -= scale.x * 0.01f;
+                scale.y -= scale.y * 0.01f;
+                scale.z -= scale.z * 0.01f;
+                transform.localScale = scale;
                 rb = gameObject.AddComponent<Rigidbody>();
                 rb.mass = module.size.magnitude;
                 cachePosition = transform.position;
@@ -105,8 +110,7 @@ public class ModuleMove : MonoBehaviour
         for(int i = 0; i < dirs.Count; i++){
            
             RaycastHit hit;
-            Physics.Raycast(transform.position, dirs[i] * lengths[i], out hit);
-            if(hit.collider){
+            if(Physics.Raycast(transform.position, dirs[i] * lengths[i], out hit)){
                 Gizmos.color = Color.red;
             }else{
                 Gizmos.color = Color.white;

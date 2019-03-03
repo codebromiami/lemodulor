@@ -39,22 +39,22 @@ public class LeModule : MonoBehaviour {
 	public void UnDivide(){
 		if(!parent){
 			Debug.LogError(uid + " has no parent, cannot un divide");
-		}
-		if(children != null){
-			Debug.LogError(uid + " has children, Undivide should be called on the children");
-			return;
 		}else{
-			
-			for(int i = 0; i < parent.children.Count; i++){
-				var child = parent.children[i];
-				GameObject.Destroy(child.gameObject);
-				Debug.Log(string.Format("{0} removed children: {1}", parent.uid, child.uid));
+			if(children != null){
+				Debug.LogError(uid + " has children, Undivide should be called on the children");
+				return;
+			}else{
+				
+				for(int i = 0; i < parent.children.Count; i++){
+					var child = parent.children[i];
+					GameObject.Destroy(child.gameObject);
+					Debug.Log(string.Format("{0} removed children: {1}", parent.uid, child.uid));
+				}
+				parent.children = null;
+				parent.meshGo.SetActive(true);
+				parent.GetComponent<BoxCollider>().enabled = true;
 			}
-			parent.children = null;
-			parent.meshGo.SetActive(true);
-			parent.GetComponent<BoxCollider>().enabled = true;
 		}
-		
 	}
 
 	public void Subdivide(LeModule.axis axis)

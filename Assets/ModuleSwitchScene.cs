@@ -48,6 +48,7 @@ public class ModuleSwitchScene : MonoBehaviour
                         childSwitch.RandomColorFromList(renderer, LeModular.colours);
                         child.gameObject.AddComponent<ModuleCollider>();
                         child.gameObject.AddComponent<ModuleMove>();
+                        child.gameObject.AddComponent<ModuleCheck>();
                     }
                 }else{
                     switcher.childModule.UnDivide();

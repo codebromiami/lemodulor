@@ -154,7 +154,6 @@ public class NeighborCheck : MonoBehaviour {
 						}
 					}else{
 						hitBoys[4] = false;
-						
 					}
 				// Backwards
 				}else if(i == 5){
@@ -172,7 +171,6 @@ public class NeighborCheck : MonoBehaviour {
 						}
 					}else{
 						hitBoys[5] = false;
-						
 					}
 				}	
 			}
