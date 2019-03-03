@@ -13,7 +13,7 @@ public class NeighborCheck : MonoBehaviour {
 			new Vector3(0,-1,0),
 			new Vector3(0,0,1),
 			new Vector3(0,0,-1),
-			};
+	};
 	public bool[] hitBoys = new bool[]{
 		false,
 		false,

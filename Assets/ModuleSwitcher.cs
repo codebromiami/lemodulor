@@ -52,6 +52,7 @@ public class ModuleSwitcher : MonoBehaviour
                 RandomColor(renderer);
                 child.gameObject.AddComponent<ModuleSwitcher>();
                 child.gameObject.AddComponent<ModuleCollider>();
+                child.gameObject.AddComponent<ModuleMove>();
             }
         }else{
             module.UnDivide();
