@@ -41,7 +41,7 @@ public class ModuleSwitcher : MonoBehaviour
     public void RandomDivision(){
         
         LeModule module = childModule;
-        if(ExtRandom<bool>.Chance(1,2)){
+        if(ExtRandom<bool>.Chance(1,10)){
             
             LeModule.axis newAxis = RandomAxis();
             
@@ -55,10 +55,11 @@ public class ModuleSwitcher : MonoBehaviour
             }
         }else{
             module.UnDivide();
+            Debug.Log("module.UnDivide()");
         }
     }
 
-    LeModule.axis RandomAxis(){
+    public LeModule.axis RandomAxis(){
         // Get a random axis
         List<string> axis = new List<string>();
         axis.Add(Module.axis.x.ToString());
@@ -89,6 +90,25 @@ public class ModuleSwitcher : MonoBehaviour
             float g = Random.Range(0.0f, 1.0f);
             float b = Random.Range(0.0f, 1.0f);
             props.SetColor("_Color", new Color(r, g, b));
+            renderer.SetPropertyBlock(props);
+        }
+    }
+
+    public void RandomColorFromList(Renderer renderer, List<Color> colours){
+
+        MaterialPropertyBlock props = new MaterialPropertyBlock();
+        LeModule module = childModule;
+        int index = Random.Range(0, colours.Count);
+        Color color = colours[index];
+        props.SetColor("_Color", color);
+        renderer.SetPropertyBlock(props);
+    }
+
+    public void SetTextureScale(Renderer renderer){
+        
+        MaterialPropertyBlock props = new MaterialPropertyBlock();
+        LeModule module = childModule;
+        if(module.meshGo){
             if(module.size.x > module.size.z){
                 props.SetVector("_ST", new Vector4(module.size.x * scaleFactor, module.size.y * scaleFactor,1,1));
             }else{

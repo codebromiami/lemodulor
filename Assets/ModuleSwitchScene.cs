@@ -5,7 +5,7 @@ using deVoid.Utils;
 
 public class ModuleSwitchScene : MonoBehaviour
 {
-    
+    public bool subdivide = false;
 	private void OnEnable()
 	{
 		Signals.Get<Pointer.OnPointerDown>().AddListener(onPointerDown);
@@ -21,16 +21,31 @@ public class ModuleSwitchScene : MonoBehaviour
 	}
 
     public void onPointerDown(RaycastHit hit){
-        
+        ModuleSwitcher switcher = hit.collider.GetComponent<ModuleSwitcher>();
+        if(switcher){
+
+            if(subdivide){
+                LeModule.axis newAxis = switcher.RandomAxis();
+                
+                switcher.childModule.Subdivide(newAxis);
+                
+                foreach(var child in switcher.childModule.children){
+                    Renderer renderer = child.meshGo.GetComponent<Renderer>();
+                    
+                    var childSwitch = child.gameObject.AddComponent<ModuleSwitcher>();
+                    childSwitch.RandomColorFromList(renderer, LeModular.colours);
+                    child.gameObject.AddComponent<ModuleCollider>();
+                }
+            }else{
+                switcher.childModule.UnDivide();
+            }
+        }
 
 	}
 
 	public void onPointer(RaycastHit hit){
 
-        ModuleSwitcher module = hit.collider.GetComponent<ModuleSwitcher>();
-        if(module){
-            module.RandomDivision();
-        }
+        
 		
 	}
 
@@ -41,12 +56,16 @@ public class ModuleSwitchScene : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        LeModular.Init();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if(Input.GetKey(KeyCode.Space)){
+            subdivide = false;
+        }else{
+            subdivide = true;
+        }
     }
 }

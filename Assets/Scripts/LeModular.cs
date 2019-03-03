@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using System.Text.RegularExpressions;
 public static class LeModular {
 
 	public static List<float> redSeries = new List<float>(){
@@ -92,4 +92,28 @@ public static class LeModular {
 
 		return possibilities;
 	}
+
+
+	static  public List<Color> colours = new List<Color>();
+	
+	static public void Init(){
+		
+		Xml2CSharp.Root root = ReadXML.Deserialize<Xml2CSharp.Root>(Application.streamingAssetsPath + "/colourpalette.xml");
+		Regex rx = new Regex(@"(\d+)", RegexOptions.Compiled | RegexOptions.IgnoreCase); // regex to capture groups of numbers
+		foreach(var div in root.Div){
+			MatchCollection matches = rx.Matches(div.Style);
+			if(matches.Count != 3){
+				Debug.LogError("Regex matches count is outside of range, either the regex failed or the string doesn't contain 3 groups of numbers");
+			}
+			byte r = byte.Parse(matches[0].ToString());
+			byte g = byte.Parse(matches[1].ToString());
+			byte b = byte.Parse(matches[2].ToString());
+			byte a = byte.Parse("255");
+			Color colour = new Color32(r,g,b,a);
+			colours.Add(colour);
+		}
+
+		Debug.Log(colours);
+	}
 }
+

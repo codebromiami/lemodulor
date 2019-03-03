@@ -1,0 +1,442 @@
+<div id="palette">
+    <div class='colour' style='background-color: rgb(234,219,192)' >
+        <span class='colname'>32001 blanc</span>
+        <span class='descmed'></span>
+        <span class='shade'>White</span>
+        <span class='text'>The cream white. Balanced, with stable aesthetics. The first mural ‘Velvet’ shade. </span>
+    </div>
+
+    <div class='colour' style='background-color: rgb(94,96,97)' >
+        <span class='colname'>32010 gris foncé 31</span>
+        <span class='descmed'></span>
+        <span class='shade'>Grey &amp; Black</span>
+        <span class='text'>The iron grey. Soft, warm, expressive. The darkest shade of 1931.</span>
+    </div>
+
+    <div class='colour' style='background-color: rgb(146,148,148)' >
+        <span class='colname'>32011 gris 31</span>
+        <span class='descmed'></span>
+        <span class='shade'>Grey &amp; Black</span>
+        <span class='text'>The medium grey. Elegant and restrained. It can place the walls into shadow.</span>
+    </div>
+
+    <div class='colour' style='background-color: rgb(167,168,165)' >
+        <span class='colname'>32012 gris moyen</span>
+        <span class='descmed'></span>
+        <span class='shade'>Grey &amp; Black</span>
+        <span class='text'>The discreet grey. Natural, neutral, discreetly calm. The second ‘Velvet’ shade.</span>
+    </div>
+
+    <div class='colour' style='background-color: rgb(188,187,182)' >
+        <span class='colname'>32013 gris clair 31</span>
+        <span class='descmed'></span>
+        <span class='shade'>Grey &amp; Black</span>
+        <span class='text'>The pearl grey. Weakly luminescent and airy. The third mural ‘Velvet’ shade.</span>
+    </div>
+
+    <div class='colour' style='background-color: rgb(77,106,168)' >
+        <span class='colname'>32020 bleu outremer 31</span>
+        <span class='descmed'></span>
+        <span class='shade'>Blue</span>
+        <span class='text'>The luminous ultramarin. Dynamic, imposing and much in demand.</span>
+    </div>
+
+    <div class='colour' style='background-color: rgb(143,171,201)' >
+        <span class='colname'>32021 outremer moyen</span>
+        <span class='descmed'></span>
+        <span class='shade'>Blue</span>
+        <span class='text'>The lucent sky blue. Like the sky on a clear, sunny day in summer.</span>
+    </div>
+
+    <div class='colour' style='background-color: rgb(171,189,200)' >
+        <span class='colname'>32022 outremer clair</span>
+        <span class='descmed'></span>
+        <span class='shade'>Blue</span>
+        <span class='text'>The brightened ultramarine. A space atmosphere that loosens up. The first ‘Space’ shade.</span>
+    </div>
+
+    <div class='colour' style='background-color: rgb(182,198,206)' >
+        <span class='colname'>32023 outremer pâle</span>
+        <span class='descmed'></span>
+        <span class='shade'>Blue</span>
+        <span class='text'>The light ultramarine. An atmosphere that recedes gently. The second ‘Space’ shade.</span>
+    </div>
+
+    <div class='colour' style='background-color: rgb(217,225,221)' >
+        <span class='colname'>32024 outremer gris</span>
+        <span class='descmed'></span>
+        <span class='shade'>Blue</span>
+        <span class='text'>The blue grey. The imagination. A restrained atmosphere. The third ‘Space’ shade.</span>
+    </div>
+
+    <div class='colour' style='background-color: rgb(62,110,144)' >
+        <span class='colname'>32030 bleu céruléen 31</span>
+        <span class='descmed'></span>
+        <span class='shade'>Blue</span>
+        <span class='text'>The powerful cerulean. Appears dynamic and attracts the attention.</span>
+    </div>
+
+    <div class='colour' style='background-color: rgb(103,157,174)' >
+        <span class='colname'>32031 céruléen vif</span>
+        <span class='descmed'></span>
+        <span class='shade'>Blue</span>
+        <span class='text'>The luminous cerulean. Warm, sensual, Mediterranean. The colour tends towards the observer.</span>
+    </div>
+
+    <div class='colour' style='background-color: rgb(138,181,186)' >
+        <span class='colname'>32032 céruléen moyen</span>
+        <span class='descmed'></span>
+        <span class='shade'>Blue</span>
+        <span class='text'>The summery sky. Static, does not come forward anymore. The first mural ‘Sky’ shade.</span>
+    </div>
+
+    <div class='colour' style='background-color: rgb(168,196,193)' >
+        <span class='colname'>32033 céruléen clair</span>
+        <span class='descmed'></span>
+        <span class='shade'>Blue</span>
+        <span class='text'>The sky reflected in the water. Subordinates itself. The second mural ‘Sky’ shade.</span>
+    </div>
+
+    <div class='colour' style='background-color: rgb(198,213,204)' >
+        <span class='colname'>32034 céruléen pâle</span>
+        <span class='descmed'></span>
+        <span class='shade'>Blue</span>
+        <span class='text'>The sky reflected in ocean waves. Somewhat greenish. The third mural ‘Sky’ colour shade.</span>
+    </div>
+
+    <div class='colour' style='background-color: rgb(64,110,88)' >
+        <span class='colname'>32040 vert anglais</span>
+        <span class='descmed'></span>
+        <span class='shade'>Green</span>
+        <span class='text'>The english green. Reminds of aristocracy, also of freshness of the forest.</span>
+    </div>
+
+    <div class='colour' style='background-color: rgb(145,175,161)' >
+        <span class='colname'>32041 vert anglais clair</span>
+        <span class='descmed'></span>
+        <span class='shade'>Green</span>
+        <span class='text'>The slightly greyed english green. Like a discreet Verona green.</span>
+    </div>
+
+    <div class='colour' style='background-color: rgb(190,203,183)' >
+        <span class='colname'>32042 vert anglais pâle</span>
+        <span class='descmed'></span>
+        <span class='shade'>Green</span>
+        <span class='text'>The mild grey green. The colour shade links retentively to the landscape.</span>
+    </div>
+
+    <div class='colour' style='background-color: rgb(62,111,66)' >
+        <span class='colname'>32050 vert foncé</span>
+        <span class='descmed'></span>
+        <span class='shade'>Green</span>
+        <span class='text'>The rich brilliant green. A deep and very neutral green; expressing the summer.</span>
+    </div>
+
+    <div class='colour' style='background-color: rgb(127,162,90)' >
+        <span class='colname'>32051 vert 31</span>
+        <span class='descmed'></span>
+        <span class='shade'>Green</span>
+        <span class='text'>The vernal green. Very expressive. The first tone of the ‘Scenery’ atmosphere.</span>
+    </div>
+
+    <div class='colour' style='background-color: rgb(171,193,122)' >
+        <span class='colname'>32052 vert clair</span>
+        <span class='descmed'></span>
+        <span class='shade'>Green</span>
+        <span class='text'>The green of spring. Natural and fruitful. The second shade representing ‘Scenery’.</span>
+    </div>
+
+    <div class='colour' style='background-color: rgb(196,211,155)' >
+        <span class='colname'>32053 vert jaune clair</span>
+        <span class='descmed'></span>
+        <span class='shade'>Green</span>
+        <span class='text'>The pale green. Gentle, smooth and balanced. The third tone with the mural value of ‘Scenery’.</span>
+    </div>
+
+    <div class='colour' style='background-color: rgb(234,207,166)' >
+        <span class='colname'>32060 ocre</span>
+        <span class='descmed'></span>
+        <span class='shade'>Ochre &amp; Yellow</span>
+        <span class='text'>The natural sand. Restrained and very elegant. The first tone with mural value of ‘Sand’.</span>
+    </div>
+
+    <div class='colour' style='background-color: rgb(212,108,64)' >
+        <span class='colname'>32080 orange</span>
+        <span class='descmed'></span>
+        <span class='shade'>Orange</span>
+        <span class='text'>The shiny orange. A dynamic, youthful and optimistic colour.</span>
+    </div>
+
+    <div class='colour' style='background-color: rgb(220,141,103)' >
+        <span class='colname'>32081 orange clair</span>
+        <span class='descmed'></span>
+        <span class='shade'>Orange</span>
+        <span class='text'>The orange apricot. A dynamic, touching and consistently attractive ton.</span>
+    </div>
+
+    <div class='colour' style='background-color: rgb(234,207,185)' >
+        <span class='colname'>32082 orange pâle</span>
+        <span class='descmed'></span>
+        <span class='shade'>Orange</span>
+        <span class='text'>The sandy orange. Earthy, gentle and constructive. The second mural ‘Sand’ colour.</span>
+    </div>
+
+    <div class='colour' style='background-color: rgb(155,55,56)' >
+        <span class='colname'>32090 rouge vermillon 31</span>
+        <span class='descmed'></span>
+        <span class='shade'>Red</span>
+        <span class='text'>The deep dynamic red. Or the luminescent vermilion red.</span>
+    </div>
+
+    <div class='colour' style='background-color: rgb(230,205,191)' >
+        <span class='colname'>32091 rose pâle</span>
+        <span class='descmed'></span>
+        <span class='shade'>Red</span>
+        <span class='text'>The gentle pink. Earthy, warm and restrained. The first shade with ‘Masonry’ significance.</span>
+    </div>
+
+    <div class='colour' style='background-color: rgb(143,58,67)' >
+        <span class='colname'>32100 rouge carmin</span>
+        <span class='descmed'></span>
+        <span class='shade'>Red</span>
+        <span class='text'>The noble carmine red. Steeped in history, dignified and brilliant. </span>
+    </div>
+
+    <div class='colour' style='background-color: rgb(148,58,77)' >
+        <span class='colname'>32101 rouge rubia</span>
+        <span class='descmed'></span>
+        <span class='shade'>Red</span>
+        <span class='text'>The artistic red. The tradition-rich red of famous painters.</span>
+    </div>
+
+    <div class='colour' style='background-color: rgb(214,175,166)' >
+        <span class='colname'>32102 rose clair</span>
+        <span class='descmed'></span>
+        <span class='shade'>Red</span>
+        <span class='text'>The bright pink. Or the medium dynamic rose.</span>
+    </div>
+
+    <div class='colour' style='background-color: rgb(139,77,62)' >
+        <span class='colname'>32110 l'ocre rouge</span>
+        <span class='descmed'></span>
+        <span class='shade'>Red ochre &amp; Brown</span>
+        <span class='text'>The red of ancient architecture. An earthy and deeply luminescent nuance. </span>
+    </div>
+
+    <div class='colour' style='background-color: rgb(205,152,134)' >
+        <span class='colname'>32111 l'ocre rouge moyen</span>
+        <span class='descmed'></span>
+        <span class='shade'>Red ochre &amp; Brown</span>
+        <span class='text'>The medium Terracotta. An earthy and warm tone, which emphasises comfort.</span>
+    </div>
+
+    <div class='colour' style='background-color: rgb(219,190,170)' >
+        <span class='colname'>32112 l'ocre rouge clair</span>
+        <span class='descmed'></span>
+        <span class='shade'>Red ochre &amp; Brown</span>
+        <span class='text'>The bright red ochre. Earthy and stable. The second shade with ‘Masonry’ significance.</span>
+    </div>
+
+    <div class='colour' style='background-color: rgb(104,68,60)' >
+        <span class='colname'>32120 terre sienne brûlée 31</span>
+        <span class='descmed'></span>
+        <span class='shade'>Red ochre &amp; Brown</span>
+        <span class='text'>The deeply burnt sienna. It fixes the wall impressively.</span>
+    </div>
+
+    <div class='colour' style='background-color: rgb(182,123,102)' >
+        <span class='colname'>32121 terre sienne brique</span>
+        <span class='descmed'></span>
+        <span class='shade'>Red ochre &amp; Brown</span>
+        <span class='text'>The light brick red. Suited for timeless colour combinations.</span>
+    </div>
+
+    <div class='colour' style='background-color: rgb(216,178,154)' >
+        <span class='colname'>32122 terre sienne claire 31</span>
+        <span class='descmed'></span>
+        <span class='shade'>Red ochre &amp; Brown</span>
+        <span class='text'>The colour of the summery masonry. Loamy and soft. The third ‘Masonry’ shade.</span>
+    </div>
+
+    <div class='colour' style='background-color: rgb(226,203,181)' >
+        <span class='colname'>32123 terre sienne pâle </span>
+        <span class='descmed'></span>
+        <span class='shade'>Red ochre &amp; Brown</span>
+        <span class='text'>The pale sienna. A sandy, discreet and stable colour shade.</span>
+    </div>
+
+    <div class='colour' style='background-color: rgb(76,66,61)' >
+        <span class='colname'>32130 terre d'ombre brûlée 31</span>
+        <span class='descmed'></span>
+        <span class='shade'>Umber</span>
+        <span class='text'>The marron. Deeply red brown, burnt. Like a chestnut.</span>
+    </div>
+
+    <div class='colour' style='background-color: rgb(183,163,146)' >
+        <span class='colname'>32131 ombre brûlée claire</span>
+        <span class='descmed'></span>
+        <span class='shade'>Umber</span>
+        <span class='text'>The burnt umber. An ideal background colour. The third shade with mural value of ‘Sand’.</span>
+    </div>
+
+    <div class='colour' style='background-color: rgb(90,85,80)' >
+        <span class='colname'>32140 ombre naturelle 31</span>
+        <span class='descmed'></span>
+        <span class='shade'>Umber</span>
+        <span class='text'>The dark natural umber. An elegant brown grey colour.</span>
+    </div>
+
+    <div class='colour' style='background-color: rgb(146,138,126)' >
+        <span class='colname'>32141 ombre naturelle moyenne</span>
+        <span class='descmed'></span>
+        <span class='shade'>Umber</span>
+        <span class='text'>The grey brown natural umber. A balanced, aesthetic and appealing colour.</span>
+    </div>
+
+    <div class='colour' style='background-color: rgb(183,172,157)' >
+        <span class='colname'>32142 ombre naturelle claire</span>
+        <span class='descmed'></span>
+        <span class='shade'>Umber</span>
+        <span class='text'>The discrete natural umber. As shadow colour, ideal for combinations.</span>
+    </div>
+
+    <div class='colour' style='background-color: rgb(172,68,58)' >
+        <span class='colname'>4320A rouge vermillon 59</span>
+        <span class='descmed'></span>
+        <span class='shade'>Red</span>
+        <span class='text'>The cinnabar red. A fiery shade which catches the eye and reduces the space.</span>
+    </div>
+
+    <div class='colour' style='background-color: rgb(234,228,215)' >
+        <span class='colname'>4320B blanc ivoire</span>
+        <span class='descmed'></span>
+        <span class='shade'>White</span>
+        <span class='text'>The ivory white. Elegant, charming, chalky. The calm background colour. </span>
+    </div>
+
+    <div class='colour' style='background-color: rgb(219,163,175)' >
+        <span class='colname'>4320C rose vif</span>
+        <span class='descmed'></span>
+        <span class='shade'>Red</span>
+        <span class='text'>The luminous pink. Less earthy and mostly used as complement to other luscious colours.</span>
+    </div>
+
+    <div class='colour' style='background-color: rgb(116,68,56)' >
+        <span class='colname'>4320D terre sienne brûlée 59</span>
+        <span class='descmed'></span>
+        <span class='shade'>Red ochre &amp; Brown</span>
+        <span class='text'>The deep brown sienna. A burnt, rich, dynamic and stable colour tone. </span>
+    </div>
+
+    <div class='colour' style='background-color: rgb(58,59,59)' >
+        <span class='colname'>4320E noir d'ivoire</span>
+        <span class='descmed'></span>
+        <span class='shade'>Grey &amp; Black</span>
+        <span class='text'>The ivory black. Black as the night. Le Corbusier’s only, impressive black tone.</span>
+    </div>
+
+    <div class='colour' style='background-color: rgb(184,161,54)' >
+        <span class='colname'>4320F vert olive vif</span>
+        <span class='descmed'></span>
+        <span class='shade'>Green</span>
+        <span class='text'>The olive green. Green yellow or yellow green? A unique classic.</span>
+    </div>
+
+    <div class='colour' style='background-color: rgb(66,143,112)' >
+        <span class='colname'>4320G vert 59</span>
+        <span class='descmed'></span>
+        <span class='shade'>Green</span>
+        <span class='text'>The emerald green. A dynamic shade with luminous power.</span>
+    </div>
+
+    <div class='colour' style='background-color: rgb(129,134,139)' >
+        <span class='colname'>4320H gris 59</span>
+        <span class='descmed'></span>
+        <span class='shade'>Grey &amp; Black</span>
+        <span class='text'>The dynamic medium grey. It reacts stable and dynamic in any light.</span>
+    </div>
+
+    <div class='colour' style='background-color: rgb(64,60,58)' >
+        <span class='colname'>4320J terre d'ombre brûlée 59</span>
+        <span class='descmed'></span>
+        <span class='shade'>Umber</span>
+        <span class='text'>The dark burnt umber. Resembles mahogany. It can camouflage and hide.</span>
+    </div>
+
+    <div class='colour' style='background-color: rgb(57,87,165)' >
+        <span class='colname'>4320K bleu outremer 59</span>
+        <span class='descmed'></span>
+        <span class='shade'>Blue</span>
+        <span class='text'>The spectacular ultramarine. An impressive colour shade which moves worlds.</span>
+    </div>
+
+    <div class='colour' style='background-color: rgb(219,176,127)' >
+        <span class='colname'>4320L ocre jaune clair</span>
+        <span class='descmed'></span>
+        <span class='shade'>Ochre &amp; Yellow</span>
+        <span class='text'>The golden ochre. A deep, powerful and very present colour tone.</span>
+    </div>
+
+    <div class='colour' style='background-color: rgb(116,57,59)' >
+        <span class='colname'>4320M le rubis </span>
+        <span class='descmed'></span>
+        <span class='shade'>Red</span>
+        <span class='text'>The ruby. It is darksome and shining, velvety, festive and luxurious.</span>
+    </div>
+
+    <div class='colour' style='background-color: rgb(122,167,203)' >
+        <span class='colname'>4320N bleu céruléen 59</span>
+        <span class='descmed'></span>
+        <span class='shade'>Blue</span>
+        <span class='text'>Represents sky and sea. The colour shade is virtually infinitely combinable.</span>
+    </div>
+
+    <div class='colour' style='background-color: rgb(146,150,154)' >
+        <span class='colname'>4320O gris clair 59</span>
+        <span class='descmed'></span>
+        <span class='shade'>Grey &amp; Black</span>
+        <span class='text'>The grey in the morning. Somewhat cool. The shade is receding in contrast to white.</span>
+    </div>
+
+    <div class='colour' style='background-color: rgb(221,191,153)' >
+        <span class='colname'>4320P terre sienne claire 59</span>
+        <span class='descmed'></span>
+        <span class='shade'>Ochre &amp; Yellow</span>
+        <span class='text'>The natural sienna ochre. Earthy, warm and softer than yellow.</span>
+    </div>
+
+    <div class='colour' style='background-color: rgb(69,66,62)' >
+        <span class='colname'>4320R ombre naturelle 59</span>
+        <span class='descmed'></span>
+        <span class='shade'>Umber</span>
+        <span class='text'>The deeply dark natural umber. Camouflaging, emphasising other colours.</span>
+    </div>
+
+    <div class='colour' style='background-color: rgb(196,94,58)' >
+        <span class='colname'>4320S orange vif</span>
+        <span class='descmed'></span>
+        <span class='shade'>Orange</span>
+        <span class='text'>The powerful orange. Saturated and energetic. It steps forward and unfolds bold effects.</span>
+    </div>
+
+    <div class='colour' style='background-color: rgb(49,61,107)' >
+        <span class='colname'>4320T bleu outremer foncé</span>
+        <span class='descmed'></span>
+        <span class='shade'>Blue</span>
+        <span class='text'>The profound ultramarine blue. A fascinating shade which reflects infinity.</span>
+    </div>
+
+    <div class='colour' style='background-color: rgb(96,100,106)' >
+        <span class='colname'>4320U gris foncé 59</span>
+        <span class='descmed'></span>
+        <span class='shade'>Grey &amp; Black</span>
+        <span class='text'>The dark grey. Strong, rich and close to a metallic effect.</span>
+    </div>
+
+    <div class='colour' style='background-color: rgb(242,187,29)' >
+        <span class='colname'>4320W le jaune vif</span>
+        <span class='descmed'></span>
+        <span class='shade'>Ochre &amp; Yellow</span>
+        <span class='text'>The yellow colour of the sun. It shines impressively in good light.</span>
+    </div>
+</div>

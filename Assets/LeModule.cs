@@ -16,7 +16,7 @@ public class LeModule : MonoBehaviour {
 	public List<LeModule> children;
 	public Vector3 size = Vector3.one;
 	public GameObject meshGo;
-	
+
 	private void Start()
 	{
 		gameObject.name = id;
@@ -37,17 +37,24 @@ public class LeModule : MonoBehaviour {
 	}
 	
 	public void UnDivide(){
-		
-		if(children == null){
-			Debug.LogError(uid + "children is null when undividing");
+		if(!parent){
+			Debug.LogError(uid + " has no parent, cannot un divide");
+		}
+		if(children != null){
+			Debug.LogError(uid + " has children, Undivide should be called on the children");
 			return;
+		}else{
+			
+			for(int i = 0; i < parent.children.Count; i++){
+				var child = parent.children[i];
+				GameObject.Destroy(child.gameObject);
+				Debug.Log(string.Format("{0} removed children: {1}", parent.uid, child.uid));
+			}
+			parent.children = null;
+			parent.meshGo.SetActive(true);
+			parent.GetComponent<BoxCollider>().enabled = true;
 		}
-		for(int i = 0; i < children.Count; i++){
-			var child = children[children.Count-1];
-			GameObject.Destroy(child.gameObject);
-			children.RemoveAt(children.Count-1);
-			Debug.Log(uid + " Removed child");
-		}
+		
 	}
 
 	public void Subdivide(LeModule.axis axis)
