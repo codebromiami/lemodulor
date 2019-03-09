@@ -4,7 +4,7 @@ using UnityEngine;
 using deVoid.Utils;
 using UnityEngine.Events;
 
-public class LeModule : MonoBehaviour {
+public class LeModule : Module {
 
 	public class OnStart : ASignal<LeModule> {}
 	public class ModuleStart : ASignal <Module> {};
@@ -37,6 +37,7 @@ public class LeModule : MonoBehaviour {
 	}
 	
 	public void UnDivide(){
+
 		if(!parent){
 			Debug.LogError(uid + " has no parent, cannot un divide");
 		}else{

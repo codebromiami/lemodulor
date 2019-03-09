@@ -73,17 +73,21 @@ public class ModuleSwitchScene : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKey(KeyCode.F)){
-            move = true;
-        }else{
-            move = false;
-        }
+       
+    }
 
-        if(Input.GetKey(KeyCode.S)){
-            subdivide = true;
-        }else{
-            subdivide = false;
-        }
+    public void SetSubdivide(){
+        subdivide = true;
+        move = false;
 
+    }
+
+    public void SetUndevide(){
+        subdivide = false;
+        move = false;
+    }
+
+    public void SetMove(){
+        move = true;
     }
 }

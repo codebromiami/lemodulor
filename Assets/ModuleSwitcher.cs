@@ -12,11 +12,23 @@ public class ModuleSwitcher : MonoBehaviour
     public int count = 0;
     bool switchEnumerating = false;
     bool useSwitch = false;
+    public Piloti piloti;
 
     // Start is called before the first frame update
     void Start()
     {
         childModule = gameObject.GetComponent<LeModule>();
+        GameObject go = new GameObject();
+		go.transform.SetParent(transform);
+		var pos = Vector3.zero;
+		pos.y = -childModule.size.y / 2;
+		go.transform.localPosition = pos; 
+		piloti = go.AddComponent<Piloti>();
+		piloti.module = childModule;
+		var a = childModule.size.y * 10;
+		var b = a / childModule.size.x;
+		piloti.divs = Mathf.RoundToInt(b);
+		go.name = "Piloti";
     }
 
     // Update is called once per frame

@@ -44,6 +44,7 @@ public class ModuleMove : MonoBehaviour
             module.size.z/2,
             module.size.z/2
         };
+        active = module.GetComponent<ModuleMove>().active;
     }
 
     // Update is called once per frame
@@ -103,6 +104,17 @@ public class ModuleMove : MonoBehaviour
                 }
             }
         }
+    }
+
+    private void OnCollisionEnter(Collision other)
+    {
+        // if(active && hitBoys.Contains(false)){
+        //     var scale = transform.localScale;
+        //     scale.x -= scale.x * 0.01f;
+        //     scale.y -= scale.y * 0.01f;
+        //     scale.z -= scale.z * 0.01f;
+        //     transform.localScale = scale;
+        // }
     }
     
     private void OnDrawGizmos()
