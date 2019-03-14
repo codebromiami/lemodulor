@@ -119,6 +119,9 @@ public class ModuleMove : MonoBehaviour
     
     private void OnDrawGizmos()
     {
+        if(!Application.isPlaying)
+            return;
+            
         for(int i = 0; i < dirs.Count; i++){
            
             RaycastHit hit;

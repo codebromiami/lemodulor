@@ -122,6 +122,7 @@ GameObject:
   m_Component:
   - component: {fileID: 387679524}
   - component: {fileID: 387679523}
+  - component: {fileID: 387679525}
   m_Layer: 0
   m_Name: GroundPlanScene
   m_TagString: Untagged
@@ -153,6 +154,7 @@ MonoBehaviour:
   z: {x: 0, y: 0, z: 0}
   ziggy: 0
   gp: {fileID: 114041129358743286, guid: 24416886591b24bf69f64ebd470bb0f8, type: 3}
+  state: 0
   visGo: {fileID: 538133818}
   visGo2: {fileID: 2015418273}
   t: {fileID: 1814688563}
@@ -170,6 +172,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &387679525
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 387679522}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f878e208c15047ad8bc4ab8e939e93c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &538133818
 GameObject:
   m_ObjectHideFlags: 0

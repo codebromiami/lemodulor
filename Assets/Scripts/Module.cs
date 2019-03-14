@@ -181,11 +181,13 @@ public class Module : MonoBehaviour {
 				visible = false;
 			}
 		}
-		if(visible){
-			meshGo.SetActive(true);
-		}else{
-			meshGo.SetActive(false);
-		}		
+		if(meshGo){
+			if(visible){
+				meshGo.SetActive(true);
+			}else{
+				meshGo.SetActive(false);
+			}		
+		}
 	}
 
 	private void OnDrawGizmos()

@@ -40,15 +40,17 @@ public class ModuleSwitchScene : MonoBehaviour
                     LeModule.axis newAxis = switcher.RandomAxis();
                     
                     switcher.childModule.Subdivide(newAxis);
-                    
+                    bool active = switcher.GetComponent<ModuleMove>().active;
                     foreach(var child in switcher.childModule.children){
                         Renderer renderer = child.meshGo.GetComponent<Renderer>();
                         
                         var childSwitch = child.gameObject.AddComponent<ModuleSwitcher>();
                         childSwitch.RandomColorFromList(renderer, LeModular.colours);
                         child.gameObject.AddComponent<ModuleCollider>();
-                        child.gameObject.AddComponent<ModuleMove>();
                         child.gameObject.AddComponent<ModuleCheck>();
+                        ModuleMove moduleMove = child.gameObject.AddComponent<ModuleMove>();
+                        moduleMove.active = active;
+
                     }
                 }else{
                     switcher.childModule.UnDivide();

@@ -4,7 +4,7 @@ using UnityEngine;
 using deVoid.Utils;
 using UnityEngine.Events;
 
-public class LeModule : Module {
+public class LeModule : MonoBehaviour {
 
 	public class OnStart : ASignal<LeModule> {}
 	public class ModuleStart : ASignal <Module> {};
