@@ -68,6 +68,7 @@ public class LeModule : MonoBehaviour {
 			var go = new GameObject();
 			go.transform.SetParent(this.transform);
 			go.transform.localPosition = Vector3.zero;
+			go.transform.localRotation = Quaternion.identity;
 			var node = go.AddComponent<LeModule>();
 			children.Add(node);
 			node.parent = this;
@@ -75,6 +76,7 @@ public class LeModule : MonoBehaviour {
 			node.meshGo = GameObject.Instantiate(prefab);
 			node.meshGo.transform.SetParent(node.transform);
 			node.meshGo.transform.localPosition = Vector3.zero;
+			node.meshGo.transform.localRotation = Quaternion.identity;
 			Debug.Log( uid + " Added child");
 		}
 		if(children != null){
