@@ -219,11 +219,5 @@ public class LeModule : MonoBehaviour {
 			item.meshGo.SetActive(true);
 		}
 		meshGo.SetActive(false);
-	}
-
-	private void OnDrawGizmos()
-	{
-		Gizmos.color = Color.white;
-		Gizmos.DrawWireCube(transform.position, size);
 	}	
 }

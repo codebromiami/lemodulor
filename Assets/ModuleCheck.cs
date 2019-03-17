@@ -94,11 +94,13 @@ public class ModuleCheck : MonoBehaviour
                         hitBoys[2] = true;
                         if(tags.Contains("Roof")){
                             tags.Remove("Roof");
+                            gameObject.layer = 0;
                         }
                     }else{
                         hitBoys[2] = false;
                         if(!tags.Contains("Roof")){
                             tags.Add("Roof");
+                            gameObject.layer = 9;
                         }
                     }
                 // Down
@@ -164,19 +166,20 @@ public class ModuleCheck : MonoBehaviour
 
 	private void OnDrawGizmos()
 	{
-		if(tags.Contains("Roof")){
-            Gizmos.color = Color.red;
-            Gizmos.DrawCube(transform.position, module.size);
-        }
-
-        if(tags.Contains("Ground")){
-            Gizmos.color = Color.green;
-            Gizmos.DrawCube(transform.position, module.size);
-        }
-        
         if(tags.Contains("Roof") & tags.Contains("Ground")){
             Gizmos.color = Color.yellow;
-            Gizmos.DrawCube(transform.position, module.size);
+            Gizmos.DrawWireCube(transform.position, module.size);
+        }else
+		if(tags.Contains("Roof")){
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireCube(transform.position, module.size);
+        }else
+        if(tags.Contains("Ground")){
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireCube(transform.position, module.size);
+        }else{
+            // Gizmos.color = Color.white;
+            // Gizmos.DrawWireCube(transform.position, module.size);
         }
 	}
 }

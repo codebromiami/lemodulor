@@ -24,7 +24,6 @@ public class ModuleSwitcher : MonoBehaviour
 		go.transform.localPosition = pos; 
 		var a = childModule.size.y * 10;
 		var b = a / childModule.size.x;
-		go.name = "Piloti";
     }
 
     // Update is called once per frame
