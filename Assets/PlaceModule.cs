@@ -11,8 +11,9 @@ public class PlaceModule : MonoBehaviour {
 	public Vector3 d = Vector3.zero;
 	public GroundPlan gp;
 	public int state = 0;
-	public GameObject visGo = null;
-	public GameObject visGo2 = null;
+	public LeModule leModule;
+	public GameObject leModuleGO = null;
+	public GameObject go = null;
 	public GameObject t;
 
 	private void OnEnable()
@@ -31,13 +32,14 @@ public class PlaceModule : MonoBehaviour {
 
 	private void Start()
 	{
-		
+		leModuleGO = leModule.go;
+		leModuleGO.SetActive(true);
 	}
 
 	private void Update()
 	{
 		if(Input.GetKeyDown(KeyCode.R)){
-			gp.transform.rotation = visGo.transform.rotation;
+			gp.transform.rotation = leModuleGO.transform.rotation;
 		}
 	}
 
@@ -50,8 +52,8 @@ public class PlaceModule : MonoBehaviour {
 			c = Vector3.zero;	
 			d = Vector3.zero;
 
-			visGo.transform.localScale = new Vector3(0.1f,0.1f,0.1f);
-			visGo.transform.position = hit.point;
+			leModuleGO.transform.localScale = new Vector3(0.1f,0.1f,0.1f);
+			leModuleGO.transform.position = hit.point;
 			a = hit.point;
 			
 
@@ -59,8 +61,8 @@ public class PlaceModule : MonoBehaviour {
 				Destroy(gp.gameObject);
 			}
 
-			visGo.GetComponent<Renderer>().enabled = true;
-			visGo2.GetComponent<Renderer>().enabled = true;
+			leModuleGO.GetComponent<Renderer>().enabled = true;
+			go.GetComponent<Renderer>().enabled = true;
 
 		} else if(state == 1){
 			
@@ -74,49 +76,49 @@ public class PlaceModule : MonoBehaviour {
 		if(state == 0){
 
 			b = hit.point;
-			visGo.transform.position = Vector3.Lerp(a,b,0.5f);
-			visGo2.transform.position = Vector3.Lerp(a,b,0.5f);
-			Vector3 scale = visGo.transform.localScale;
+			leModuleGO.transform.position = Vector3.Lerp(a,b,0.5f);
+			go.transform.position = Vector3.Lerp(a,b,0.5f);
+			Vector3 scale = leModuleGO.transform.localScale;
 			scale.z = Vector3.Distance(a,b);
-			visGo2.transform.localScale = scale;
+			go.transform.localScale = scale;
 			float red = Modulor.GetClosestFromList(Modulor.redSeries, scale.z);
 			float blue = Modulor.GetClosestFromList(Modulor.blueSeries, scale.z);
 			float closest = Modulor.GetClosest(red,blue, scale.z);
 			scale.z = closest;
-			visGo.transform.localScale = scale;
+			leModuleGO.transform.localScale = scale;
 			t.transform.position = b;
-			visGo.transform.LookAt(t.transform);
-			visGo2.transform.LookAt(t.transform);
+			leModuleGO.transform.LookAt(t.transform);
+			go.transform.LookAt(t.transform);
 			
 		} else if(state == 1){
 
 			c = hit.point;
-			Vector3 scale = visGo.transform.localScale;
+			Vector3 scale = leModuleGO.transform.localScale;
 			scale.y = Vector3.Distance(Vector3.Lerp(a,b,0.5f),c);
-			visGo2.transform.localScale = scale;
-			Vector3 pos = visGo2.transform.position;
+			go.transform.localScale = scale;
+			Vector3 pos = go.transform.position;
 			pos.y = scale.y /2;
-			visGo2.transform.position = pos;
+			go.transform.position = pos;
 			float red = Modulor.GetClosestFromList(Modulor.redSeries, scale.y);
 			float blue = Modulor.GetClosestFromList(Modulor.blueSeries, scale.y);
 			float closest = Modulor.GetClosest(red,blue, scale.y);
 			scale.y = closest;
-			pos = visGo.transform.position;
+			pos = leModuleGO.transform.position;
 			pos.y = scale.y /2;
-			visGo.transform.position = pos;
-			visGo.transform.localScale = scale;
+			leModuleGO.transform.position = pos;
+			leModuleGO.transform.localScale = scale;
 
 		} else if(state == 2){
 			
 			d = hit.point;
-			Vector3 scale = visGo.transform.localScale;
+			Vector3 scale = leModuleGO.transform.localScale;
 			scale.x = Vector3.Distance(Vector3.Lerp(Vector3.Lerp(a,b,0.5f),c,0.5f),d);
-			visGo2.transform.localScale = scale;
+			go.transform.localScale = scale;
 			float red = Modulor.GetClosestFromList(Modulor.redSeries, scale.x);
 			float blue = Modulor.GetClosestFromList(Modulor.blueSeries, scale.x);
 			float closest = Modulor.GetClosest(red,blue, scale.x);
 			scale.x = closest;
-			visGo.transform.localScale = scale;
+			leModuleGO.transform.localScale = scale;
 		}
 	}
 

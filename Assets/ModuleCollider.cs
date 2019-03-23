@@ -19,6 +19,6 @@ public class ModuleCollider : MonoBehaviour
     {
         collider.size = childModule.size;
         if(childModule.children != null && childModule.children.Count > 0)
-            collider.enabled = childModule.meshGo.activeSelf;
+            collider.enabled = childModule.go.activeSelf;
     }
 }

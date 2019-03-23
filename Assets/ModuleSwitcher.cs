@@ -55,7 +55,7 @@ public class ModuleSwitcher : MonoBehaviour
             module.Subdivide(newAxis);
             
             foreach(var child in module.children){
-                Renderer renderer = child.meshGo.GetComponent<Renderer>();
+                Renderer renderer = child.go.GetComponent<Renderer>();
                 RandomColor(renderer);
                 child.gameObject.AddComponent<ModuleSwitcher>();
                 child.gameObject.AddComponent<ModuleCollider>();
@@ -93,7 +93,7 @@ public class ModuleSwitcher : MonoBehaviour
         // Change colour randomly
         MaterialPropertyBlock props = new MaterialPropertyBlock();
         LeModule module = childModule;
-        if(module.meshGo){
+        if(module.go){
             float r = Random.Range(0.0f, 1.0f);
             float g = Random.Range(0.0f, 1.0f);
             float b = Random.Range(0.0f, 1.0f);
@@ -116,7 +116,7 @@ public class ModuleSwitcher : MonoBehaviour
         
         MaterialPropertyBlock props = new MaterialPropertyBlock();
         LeModule module = childModule;
-        if(module.meshGo){
+        if(module.go){
             if(module.size.x > module.size.z){
                 props.SetVector("_ST", new Vector4(module.size.x * scaleFactor, module.size.y * scaleFactor,1,1));
             }else{

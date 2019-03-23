@@ -5,37 +5,41 @@ using deVoid.Utils;
 
 public class LePilotiAgent : MonoBehaviour {
 	
-	public bool hit = false;
 	public List<string> tags = new List<string>();
 	public GameObject triggerGo;
 	public Trigger[] triggers;
 	public Vector3 hitPoint = Vector3.zero;
 	public bool unTriggered = false;
-	public bool set = false;
+	public bool hitRoof = false;
+	
 	public void Update()
 	{
-		if(!hit)
-			return;
 		
-		if(!set){
-			int layermask = 9;
-			layermask = ~layermask;
-			RaycastHit[] hitInfos = Physics.RaycastAll(transform.position, Vector3.up,100, layermask, QueryTriggerInteraction.Ignore);
-			if(hitInfos != null){
-				if(hitInfos.Length > 1){
-					foreach(var hitInfo in hitInfos){
-						Debug.Log(hitInfo.collider.gameObject.name);
-						if(hitInfo.collider.gameObject.name.Contains("Roof")){
-							hitPoint = hitInfo.point;
-							triggerGo.transform.position = hitPoint;
-							set = true;
-							break;
-						}
+		bool moveTrigger = false;
+		int layermask = 9;
+		layermask = ~layermask;
+		RaycastHit[] hitInfos = Physics.RaycastAll(transform.position, Vector3.up, 117773.5f, layermask, QueryTriggerInteraction.Ignore);
+		if(hitInfos != null){
+			if(hitInfos.Length > 1){
+				foreach(var hitInfo in hitInfos){
+					if(hitInfo.collider.gameObject.name.Contains("Roof")){
+						Debug.Log(string.Format("{0} hit roof", transform.position));
+						hitRoof = true;
+						hitPoint = hitInfo.point;
+						triggerGo.transform.position = hitPoint;
+						moveTrigger = true;
 					}
 				}
 			}
 		}
 		
+		if(!moveTrigger){
+			triggerGo.transform.localPosition = Vector3.zero;
+		}
+
+		if(moveTrigger){
+
+		}
 		
 		// if(hitPoint != Vector3.zero){
 		// 	Vector3 floorHeight = transform.position;
@@ -65,18 +69,12 @@ public class LePilotiAgent : MonoBehaviour {
 
 	private void OnDrawGizmos()
 	{
-		// Vector3 floorHeight = transform.position;
-		// if(hitPoint != Vector3.zero){
-		// 	Gizmos.color = Color.yellow;
-		// 	Gizmos.DrawLine(floorHeight, hitPoint);
-		// 	Gizmos.color = Color.magenta;
-		// 	Gizmos.DrawCube(floorHeight, Vector3.one * 0.05f);
-		// }else{
+		if(hitRoof)
 			Gizmos.color = Color.cyan;
-			Gizmos.DrawCube(transform.position, Vector3.one);
-			Gizmos.DrawLine(transform.position, triggerGo.transform.position);
-			Gizmos.color = Color.cyan;
-			Gizmos.DrawCube(triggerGo.transform.position, Vector3.one);
-		// }
+		else
+			Gizmos.color = Color.magenta;
+		Gizmos.DrawCube(transform.position, Vector3.one);
+		Gizmos.DrawLine(transform.position, triggerGo.transform.position);
+		Gizmos.DrawCube(triggerGo.transform.position, Vector3.one);
 	}
 }

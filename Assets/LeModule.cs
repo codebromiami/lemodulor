@@ -15,16 +15,16 @@ public class LeModule : MonoBehaviour {
 	public LeModule parent;
 	public List<LeModule> children;
 	public Vector3 size = Vector3.one;
-	public GameObject meshGo;
+	public GameObject go;
 
 	private void Start()
 	{
 		gameObject.name = id;
-		if(!meshGo){
+		if(!go){
 			var prefab = Resources.Load<GameObject>("Prefabs/Cube");
-			meshGo = GameObject.Instantiate(prefab, this.transform);
-			meshGo.transform.localPosition = Vector3.zero;
-			meshGo.transform.localScale = size;
+			go = GameObject.Instantiate(prefab, this.transform);
+			go.transform.localPosition = Vector3.zero;
+			go.transform.localScale = size;
 		}
 		uid = GetInstanceID().ToString();
 		gameObject.name += uid;
@@ -52,7 +52,7 @@ public class LeModule : MonoBehaviour {
 					Debug.Log(string.Format("{0} removed children: {1}", parent.uid, child.uid));
 				}
 				parent.children = null;
-				parent.meshGo.SetActive(true);
+				parent.go.SetActive(true);
 				parent.GetComponent<BoxCollider>().enabled = true;
 			}
 		}
@@ -73,10 +73,10 @@ public class LeModule : MonoBehaviour {
 			children.Add(node);
 			node.parent = this;
 			var prefab = Resources.Load<GameObject>("Prefabs/Cube");
-			node.meshGo = GameObject.Instantiate(prefab);
-			node.meshGo.transform.SetParent(node.transform);
-			node.meshGo.transform.localPosition = Vector3.zero;
-			node.meshGo.transform.localRotation = Quaternion.identity;
+			node.go = GameObject.Instantiate(prefab);
+			node.go.transform.SetParent(node.transform);
+			node.go.transform.localPosition = Vector3.zero;
+			node.go.transform.localRotation = Quaternion.identity;
 			Debug.Log( uid + " Added child");
 		}
 		if(children != null){
@@ -127,7 +127,7 @@ public class LeModule : MonoBehaviour {
 			}
 		}
 		foreach (LeModule child in children) {
-			var scale = child.meshGo.transform.localScale;
+			var scale = child.go.transform.localScale;
 			switch(subdivisionAxis){
 				case axis.x:
 					scale.x = child.size.x;
@@ -145,7 +145,7 @@ public class LeModule : MonoBehaviour {
 					scale.z = child.size.z;
 				break;					
 			}
-			child.meshGo.transform.localScale = scale;
+			child.go.transform.localScale = scale;
 		}
 
 		// Effect position
@@ -216,8 +216,8 @@ public class LeModule : MonoBehaviour {
 		// Hide self
 		foreach (LeModule item in children)
 		{
-			item.meshGo.SetActive(true);
+			item.go.SetActive(true);
 		}
-		meshGo.SetActive(false);
+		go.SetActive(false);
 	}	
 }

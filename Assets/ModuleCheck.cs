@@ -33,8 +33,8 @@ public class ModuleCheck : MonoBehaviour
 	void Start () {
 		
 		module = GetComponent<LeModule>();
-		if(module.meshGo){
-			var filter = module.meshGo.GetComponent<MeshFilter>();
+		if(module.go){
+			var filter = module.go.GetComponent<MeshFilter>();
 			if(filter){
 				var bounds = filter.sharedMesh.bounds;
 				var center = bounds.center;
@@ -49,7 +49,7 @@ public class ModuleCheck : MonoBehaviour
 	public void Update () {
 		
 		var size = module.size;
-        if(module.meshGo.activeSelf){
+        if(module.go.activeSelf){
 
             for(int i = 0; i < dirs.Length; i++){
                 RaycastHit hit;

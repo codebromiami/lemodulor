@@ -47,7 +47,6 @@ public class PilotiController : MonoBehaviour {
             GameObject prefab = Resources.Load<GameObject>("Prefabs/LePilotiAgent");
             foreach(var line in lines){
                 points.AddRange(line.points);
-				Debug.Log(line.points.Length);
             }
             foreach(var p in points){
                 var go = Instantiate(prefab,p, Quaternion.identity, transform);

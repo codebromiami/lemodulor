@@ -45,7 +45,7 @@ public class ModuleSwitchScene : MonoBehaviour
                     switcher.childModule.Subdivide(newAxis);
                     bool active = switcher.GetComponent<ModuleMove>().active;
                     foreach(var child in switcher.childModule.children){
-                        Renderer renderer = child.meshGo.GetComponent<Renderer>();
+                        Renderer renderer = child.go.GetComponent<Renderer>();
                         
                         var childSwitch = child.gameObject.AddComponent<ModuleSwitcher>();
                         childSwitch.RandomColorFromList(renderer, LeModular.colours);
@@ -91,7 +91,7 @@ public class ModuleSwitchScene : MonoBehaviour
                 Transform[] ts = go.GetComponentsInChildren<Transform>();
                 foreach(Transform t in ts){
                     if(t.gameObject.name.Contains("Ground") & !t.gameObject.name.Contains("Roof")){
-                        if(t.gameObject.GetComponent<LeModule>().meshGo.activeInHierarchy)
+                        if(t.gameObject.GetComponent<LeModule>().go.activeInHierarchy)
                             pilotiGos.Add(t.gameObject);
                     }
                 }
@@ -104,9 +104,8 @@ public class ModuleSwitchScene : MonoBehaviour
            foreach(LePilotiAgent pilotiAgent in pilotiController.pilotiAgents){
                 var colliderA = pilotiAgent.GetComponent<Collider>();
                 foreach(var module in pilotiController.pilotiModules){
-                    var colliderB = module.meshGo.GetComponent<Collider>();
+                    var colliderB = module.go.GetComponent<Collider>();
                     if(colliderA.bounds.Intersects(colliderB.bounds)){
-                        pilotiAgent.hit = true;
                         pilotiAgent.tags.Add(colliderB.gameObject.name);
                     }
                 }

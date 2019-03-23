@@ -122,17 +122,17 @@ public class ModuleMove : MonoBehaviour
         if(!Application.isPlaying)
             return;
             
-        for(int i = 0; i < dirs.Count; i++){
+        // for(int i = 0; i < dirs.Count; i++){
            
-            RaycastHit hit;
-            if(Physics.Raycast(transform.position, dirs[i] * lengths[i], out hit)){
-                Gizmos.color = Color.red;
-            }else{
-                Gizmos.color = Color.white;
-            }
-            if(hitBoys.Contains(true)){
-                Gizmos.DrawRay(transform.position, dirs[i] * lengths[i]);
-            }
-        }
+        //     RaycastHit hit;
+        //     if(Physics.Raycast(transform.position, dirs[i] * lengths[i], out hit)){
+        //         Gizmos.color = Color.red;
+        //     }else{
+        //         Gizmos.color = Color.white;
+        //     }
+        //     if(hitBoys.Contains(true)){
+        //         Gizmos.DrawRay(transform.position, dirs[i] * lengths[i]);
+        //     }
+        // }
     }
 }
