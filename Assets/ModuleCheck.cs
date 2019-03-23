@@ -5,7 +5,6 @@ using UnityEngine;
 public class ModuleCheck : MonoBehaviour
 {
     public LeModule module;
-	public BoundingPoints boundingPoints;	
 	Vector3[] dirs = new Vector3[]{
 			new Vector3(1,0,0),
 			new Vector3(-1,0,0),
@@ -39,8 +38,6 @@ public class ModuleCheck : MonoBehaviour
 				var bounds = filter.sharedMesh.bounds;
 				var center = bounds.center;
 				var size = module.size;
-				boundingPoints = new BoundingPoints(center, new Vector3(size.x, size.y, size.z));
-				// Debug.LogFormat("x{0} y{1} z{2}",size.x, size.y, size.z);
 			}
 		}
 	}
@@ -161,6 +158,7 @@ public class ModuleCheck : MonoBehaviour
             if(!name.Contains(tag))
                 name += tag + " "; 
         }
+
         gameObject.name = name;
 	}
 
